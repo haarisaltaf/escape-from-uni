@@ -55,7 +55,7 @@ public class Player extends GameObject implements RenderableComponent {
     }
     @Override
     public void render(SpriteBatch batch,Vector2 cameraPosition) {
-        playerSprite.setPosition(position.x - cameraPosition.x, position.y - cameraPosition.y);
+        playerSprite.setPosition(position.x - cameraPosition.x - playerSprite.getWidth() / 2f, position.y - cameraPosition.y - playerSprite.getWidth() / 2f);
         playerSprite.draw(batch);
     }
     /**
