@@ -1,6 +1,8 @@
 package com.escapefromuni.main;
 
 import com.badlogic.gdx.ApplicationAdapter;
+import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.Input;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.utils.ScreenUtils;
@@ -21,6 +23,9 @@ public class Main extends ApplicationAdapter {
         ScreenUtils.clear(0.15f, 0.15f, 0.2f, 1f);
         player.movePlayer();
         batch.begin();
+        if(Gdx.input.isKeyPressed(Input.Keys.F)){
+            player.speedUp();
+        }
         player.playerSprite.draw(batch);
         batch.end();
     }
