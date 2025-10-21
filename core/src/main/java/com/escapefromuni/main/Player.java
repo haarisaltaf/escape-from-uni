@@ -60,7 +60,7 @@ public class Player extends GameObject implements RenderableComponent {
     }
     /**
      * Get the desired direction that the player wants to move in from using the arrow keys or WASD.
-     * @return A vector representing the players desired move direction, that has a magnitude of <1.
+     * @return A vector representing the players desired move direction, that has a magnitude of <=1.
      */
     public Vector2 getDesiredDirection(){
         Vector2 direction = new Vector2();
