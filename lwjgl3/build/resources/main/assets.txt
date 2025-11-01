@@ -1,2 +1,5 @@
+TestMap.tmx
+TestSet.tsx
+TestTileset.png
 libgdx.png
 player.png
