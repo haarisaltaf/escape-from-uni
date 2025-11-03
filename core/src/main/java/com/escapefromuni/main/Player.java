@@ -12,7 +12,7 @@ import com.escapefromuni.main.components.RenderableComponent;
 
 public class Player extends GameObject implements RenderableComponent {
 
-    // Texture and Sprite class used from the libGXD library.
+    // Texture and Sprite class used from the libGDX library.
     Texture playerTexture;
     Sprite playerSprite;
     // Player speed attribute makes it possible to alter speed during the game.

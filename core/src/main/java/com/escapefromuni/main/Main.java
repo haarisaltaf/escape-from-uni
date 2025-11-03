@@ -4,6 +4,8 @@ import com.badlogic.gdx.ApplicationAdapter;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
 import com.badlogic.gdx.graphics.OrthographicCamera;
+import com.badlogic.gdx.graphics.Texture;
+import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.utils.ScreenUtils;
@@ -12,8 +14,11 @@ import java.util.List;
 /** {@link com.badlogic.gdx.ApplicationListener} implementation shared by all platforms. */
 public class Main extends ApplicationAdapter {
     private SpriteBatch batch;
+    Sprite titleImage;
+    Sprite playButton;
     Player player;
     GameMap map;
+    String gameState = "title";
     OrthographicCamera GameCamera;
     //TODO: move player into this list (and all future GameObjects)
     List<GameObject> gameObjects;
@@ -21,6 +26,10 @@ public class Main extends ApplicationAdapter {
     @Override
     public void create() {
         batch = new SpriteBatch();
+        titleImage = new Sprite(new Texture(Gdx.files.internal("titleGraphic.png")));
+        titleImage.setPosition((Gdx.graphics.getWidth() - titleImage.getTexture().getWidth()) / 2f, (Gdx.graphics.getHeight() * 1.5f - titleImage.getTexture().getHeight()) / 2f);
+        playButton = new Sprite(new Texture(Gdx.files.internal("playButton.png")));
+        playButton.setPosition((Gdx.graphics.getWidth() - playButton.getTexture().getWidth()) / 2f, (Gdx.graphics.getHeight() / 2f - playButton.getTexture().getHeight()) / 2f);
         // Define a camera which the game will be seen through. This is currently centered around (0,0)
         GameCamera = new OrthographicCamera();
         GameCamera.setToOrtho(false,540,360);
@@ -33,19 +42,35 @@ public class Main extends ApplicationAdapter {
 
     @Override
     public void render() {
+        if (gameState == "title") {
+            //TODO: hardcoded to default screen size, fix later
+            if (Gdx.input.getX() >= 340 && Gdx.input.getX() <= 740 && 
+                Gdx.input.getY() >= 440 && Gdx.input.getY() <= 640 && 
+                Gdx.input.isButtonPressed(Input.Buttons.LEFT)) {
+                    gameState = "main";
+            }
+            ScreenUtils.clear(1f, 1f, 1f, 1f);
+            batch.begin();
+            titleImage.draw(batch);
+            playButton.draw(batch);
+            batch.end();
+        }
         //TODO: Iterate through every GameObject with the RenderableComponent and run render()
         //TODO: Camera system / Camera position
-        ScreenUtils.clear(0.15f, 0.15f, 0.2f, 1f);
-        batch.begin();
-        map.RenderMap();
-        player.update(Gdx.graphics.getDeltaTime());
-        if(Gdx.input.isKeyPressed(Input.Keys.F)){
-            player.speedUp();
+        else if (gameState == "main") {
+            ScreenUtils.clear(0.15f, 0.15f, 0.2f, 1f);
+            batch.begin();
+            map.RenderMap();
+            player.update(Gdx.graphics.getDeltaTime());
+            if(Gdx.input.isKeyPressed(Input.Keys.F)){
+                player.speedUp();
+            }
+            //TODO: Change cameraPosition to a GameObject with a CameraComponent to control easier
+            Vector2 cameraPosition = new Vector2(-Gdx.graphics.getWidth() / 2f,-Gdx.graphics.getHeight() / 2f);
+            player.render(batch,cameraPosition);
+            batch.end();
         }
-        //TODO: Change cameraPosition to a GameObject with a CameraComponent to control easier
-        Vector2 cameraPosition = new Vector2(-Gdx.graphics.getWidth() / 2f,-Gdx.graphics.getHeight() / 2f);
-        player.render(batch,cameraPosition);
-        batch.end();
+        
     }
 
     @Override
