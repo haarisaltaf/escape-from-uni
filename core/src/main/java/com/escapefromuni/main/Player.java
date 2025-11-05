@@ -50,12 +50,15 @@ public class Player extends GameObject implements RenderableComponent {
             speedTimer = 0;
             playerSpeed = 200f;
         }
+        if(Gdx.input.isKeyPressed(Input.Keys.F)){
+                speedUp();
+        }
         Vector2 result = getDesiredDirection().scl(playerSpeed * deltaTime);
         position.add(result.x, result.y);
     }
     @Override
     public void render(SpriteBatch batch,Vector2 cameraPosition) {
-        playerSprite.setPosition(position.x - cameraPosition.x - playerSprite.getWidth() / 2f, position.y - cameraPosition.y - playerSprite.getWidth() / 2f);
+        playerSprite.setPosition(position.x - playerSprite.getWidth() / 2f, position.y - playerSprite.getWidth() / 2f);
         playerSprite.draw(batch);
     }
     /**
