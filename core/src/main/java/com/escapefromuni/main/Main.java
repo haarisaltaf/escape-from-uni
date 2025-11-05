@@ -43,11 +43,12 @@ public class Main extends ApplicationAdapter {
     @Override
     public void render() {
         if (gameState == "title") {
-            //TODO: hardcoded to default screen size, fix later
-            if (Gdx.input.getX() >= 340 && Gdx.input.getX() <= 740 && 
-                Gdx.input.getY() >= 440 && Gdx.input.getY() <= 640 && 
-                Gdx.input.isButtonPressed(Input.Buttons.LEFT)) {
+            //Detect clicking on the play button
+            if (Gdx.input.isButtonPressed(Input.Buttons.LEFT)) {
+                if (Gdx.input.getX() >= playButton.getX() && Gdx.input.getX() <= (playButton.getX() + playButton.getWidth())
+                &&  Gdx.input.getY() >= (Gdx.graphics.getHeight() - (playButton.getY() + playButton.getHeight())) && Gdx.input.getY() <= (Gdx.graphics.getHeight() - playButton.getY())) {
                     gameState = "main";
+                }
             }
             ScreenUtils.clear(1f, 1f, 1f, 1f);
             batch.begin();
