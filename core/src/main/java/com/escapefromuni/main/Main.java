@@ -29,9 +29,9 @@ public class Main extends ApplicationAdapter {
         gameObjects = new ArrayList<GameObject>();
         renderableComponents = new ArrayList<RenderableComponent>();
         //Create the Main Menu UI and position it
-        titleImage = new Sprite(new Texture(Gdx.files.internal("player.png")));
+        titleImage = new Sprite(new Texture(Gdx.files.internal("titleGraphic.png")));
         titleImage.setPosition((Gdx.graphics.getWidth() - titleImage.getTexture().getWidth()) / 2f, (Gdx.graphics.getHeight() * 1.5f - titleImage.getTexture().getHeight()) / 2f);
-        playButton = new Sprite(new Texture(Gdx.files.internal("player.png")));
+        playButton = new Sprite(new Texture(Gdx.files.internal("playButton.png")));
         playButton.setPosition((Gdx.graphics.getWidth() - playButton.getTexture().getWidth()) / 2f, (Gdx.graphics.getHeight() / 2f - playButton.getTexture().getHeight()) / 2f);
         //Create the Game World:
         //Define a camera and add it to GameObjects
