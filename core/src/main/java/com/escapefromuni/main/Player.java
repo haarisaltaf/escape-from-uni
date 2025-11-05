@@ -6,9 +6,12 @@ import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g3d.Renderable;
+import com.badlogic.gdx.maps.tiled.TiledMap;
+import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.math.Vector2;
 import com.escapefromuni.main.components.PhysicsComponent;
 import com.escapefromuni.main.components.RenderableComponent;
+import java.util.ArrayList;
 
 public class Player extends GameObject implements RenderableComponent {
 
@@ -18,6 +21,7 @@ public class Player extends GameObject implements RenderableComponent {
     // Player speed attribute makes it possible to alter speed during the game.
     float playerSpeed = 200f;
     float speedTimer = 0;
+    Rectangle hitbox;
 
     public Player(Vector2 position, float rotation, String playerTexturePath) {
         super(position, rotation);
@@ -32,15 +36,19 @@ public class Player extends GameObject implements RenderableComponent {
     public Player(Vector2 position) {
         super(position);
         // Player texture defaults to placeholder player.png
-        playerTexture = new Texture(Gdx.files.internal("player.png"));
+
     }
 
     public void start(){
         // Generates a Sprite object using the player.png texture
+        playerTexture = new Texture(Gdx.files.internal("player.png"));
         playerSprite = new Sprite(playerTexture);
+        float rectX = position.x;
+        float rectY = position.y;
+        this.hitbox = new Rectangle(rectX,rectY,playerSprite.getWidth(),playerSprite.getHeight());
     }
 
-    public void update(float deltaTime) {
+    public void update(float deltaTime, GameMap Map) {
         // Check that the player has time left on their speed-up.
         if(speedTimer > 0){
             speedTimer -= deltaTime;
@@ -53,7 +61,37 @@ public class Player extends GameObject implements RenderableComponent {
         if(Gdx.input.isKeyPressed(Input.Keys.F)){
                 speedUp();
         }
+
         Vector2 result = getDesiredDirection().scl(playerSpeed * deltaTime);
+        ArrayList<Rectangle> collisionMap = Map.CollisonMap;
+        for(Rectangle rect : collisionMap){
+            hitbox.setPosition(position.x + result.x - hitbox.getWidth()/2f, position.y - hitbox.getHeight()/2f);
+            if(rect.overlaps(this.hitbox)){
+                // Handle collision in x first
+                if(result.x > 0){
+                    // The player will be moving right into the left of the rectangle
+                    result.x = 0;
+                }else if(result.x < 0){
+                    // The player will be moving left into the right of the rectangle
+                    result.x = 0;
+                }
+            }
+            hitbox.setPosition(position.x - hitbox.getWidth()/2f, position.y + result.y - hitbox.getHeight()/2f);
+            if(rect.overlaps(this.hitbox)) {
+                if (result.y > 0) {
+                    System.out.println("Hitbox size "+ hitbox.getWidth() +","+hitbox.getHeight());
+                    System.out.println("Player size "+ playerSprite.getWidth() +","+playerSprite.getHeight());
+                    System.out.println("Hitbox pos "+ hitbox.getX() +","+hitbox.getY());
+                    System.out.println("Player sprite pos "+ playerSprite.getX() +","+playerSprite.getY());
+                    System.out.println("Player pos "+ position.x +","+position.y);
+                    // The player will be moving up into the bottom of the rectangle
+                    result.y = 0;
+                } else if (result.y < 0) {
+                    // The player will be moving down into the top of the rectangle
+                    result.y = 0;
+                }
+            }
+        }
         position.add(result.x, result.y);
     }
     @Override
