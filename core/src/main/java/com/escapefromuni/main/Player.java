@@ -19,6 +19,7 @@ public class Player extends GameObject implements RenderableComponent {
     Texture playerTexture;
     Sprite playerSprite;
     // Player speed attribute makes it possible to alter speed during the game.
+    boolean sugarCrash = false;
     float playerSpeed = 200f;
     float speedTimer = 0;
     Rectangle hitbox;
@@ -57,6 +58,7 @@ public class Player extends GameObject implements RenderableComponent {
         else if(speedTimer <= 0){
             speedTimer = 0;
             playerSpeed = 200f;
+            sugarCrash = false;
         }
         if(Gdx.input.isKeyPressed(Input.Keys.F)){
                 speedUp();
@@ -128,6 +130,12 @@ public class Player extends GameObject implements RenderableComponent {
      */
     public void speedUp(){
         speedTimer += 30;
-        playerSpeed = 300f;
+        if(speedTimer > 45 || this.sugarCrash){
+            this.sugarCrash = true;
+            playerSpeed = 100f;
+        }else{
+            playerSpeed = 300f;
+        }
+
     }
 }

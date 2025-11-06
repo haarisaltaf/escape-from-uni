@@ -40,11 +40,15 @@ public class Main extends ApplicationAdapter {
         addGameObject(activeCamera);
 
         //Add the player
-        var player = addGameObject(new Player(new Vector2(100,100)));
+        var player = new Player(new Vector2(100,100));
+        addGameObject(player);
         activeCamera.SetTarget(player);
         //Add the Map
         Map = new GameMap(activeCamera);
         addGameObject(new GameMap(activeCamera));
+        addGameObject(new GameTimer(player));
+        addGameObject(new Collectible(new Vector2(200,200),player));
+        addGameObject(new Collectible(new Vector2(400,200),player));
     }
 
     @Override
@@ -111,4 +115,5 @@ public class Main extends ApplicationAdapter {
         gameObject.start();
         return gameObject;
     }
+
 }
