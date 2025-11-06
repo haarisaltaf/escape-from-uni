@@ -6,30 +6,29 @@ import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.math.Vector2;
+import com.escapefromuni.main.components.CollisionComponent;
 import com.escapefromuni.main.components.RenderableComponent;
 
-public class NPC extends GameObject implements RenderableComponent {
+public class NPC extends GameObject implements RenderableComponent, CollisionComponent {
 
-    Texture npcTexture;
-    Sprite npcSprite;
-    Rectangle npcHitbox;
-    Player player;
+    Texture texture;
+    Sprite sprite;
+    Rectangle hitbox;
 
-    public NPC(Vector2 position, Player player){
+    public NPC(Vector2 position){
         this.position = position;
-        npcTexture = new Texture(Gdx.files.internal("professor.png"));
-        npcSprite = new Sprite(npcTexture);
-        npcHitbox = new Rectangle(position.x, position.y, npcTexture.getWidth(),npcTexture.getHeight());
-        this.player =player;
+        texture = new Texture(Gdx.files.internal("professor.png"));
+        sprite = new Sprite(texture);
+        hitbox = new Rectangle(position.x, position.y, texture.getWidth(), texture.getHeight());
     }
 
     @Override
     public void update(float deltaTime) {
-        if(npcHitbox.overlaps(player.hitbox)){
-            if(player.getKey()){
+        if(Game.isCollidingWithLayer(hitbox,CollisionLayer.PLAYER)){
+            if(Player.hasKey()){
                 // make player win the game
                 System.out.println("You win");
-                player.wonGame = true;
+                //player.wonGame = true;
             }else{
                 System.out.println("You need the key");
             }
@@ -38,7 +37,22 @@ public class NPC extends GameObject implements RenderableComponent {
 
     @Override
     public void render(SpriteBatch batch, Vector2 cameraPosition) {
-        npcSprite.setPosition(position.x, position.y);
-        npcSprite.draw(batch);
+        sprite.setPosition(position.x, position.y);
+        sprite.draw(batch);
+    }
+
+    @Override
+    public CollisionLayer getCollisionLayer() {
+        return CollisionLayer.NPC;
+    }
+
+    @Override
+    public Boolean isCollidingWith(Rectangle hitboxCheck) {
+        return hitbox.overlaps(hitboxCheck);
+    }
+
+    @Override
+    public Boolean isCollisionEnabled() {
+        return true;
     }
 }

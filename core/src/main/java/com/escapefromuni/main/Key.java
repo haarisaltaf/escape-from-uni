@@ -6,19 +6,12 @@ import com.escapefromuni.main.components.RenderableComponent;
 
 public class Key extends Collectible implements RenderableComponent {
     Player holder;
-
-    public Key(Vector2 givenPosition, Player player) {
-        super(givenPosition, player);
-        super.imagePath = "Key.png";
+    public Key(Vector2 givenPosition) {
+        super(givenPosition,"Key.png");
     }
-
-//    @Override
-//    public void update(float deltaTime) {
-//        if(this.hitbox.overlaps(player.hitbox)){
-//            player.giveKey();
-//            this.active = false;
-//        }
-//    }
+    public Key(Vector2 givenPosition,String imagePath) {
+        super(givenPosition,imagePath);
+    }
     @Override
     public void pickup(Player player){
         super.pickup(player);

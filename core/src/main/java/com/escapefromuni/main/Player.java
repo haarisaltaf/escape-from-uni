@@ -24,6 +24,7 @@ public class Player extends GameObject implements RenderableComponent, Collision
     float playerSpeed = 200f;
     float speedTimer = 0;
     Rectangle hitbox;
+    public static ArrayList<Item> items = new ArrayList<>();
 
     public Player(Vector2 position, float rotation, String playerTexturePath) {
         super(position, rotation);
@@ -142,8 +143,10 @@ public class Player extends GameObject implements RenderableComponent, Collision
         this.hasKey = true;
     }
 
-    public boolean getKey() {
-        return this.hasKey;
+    public static boolean hasKey() {
+        System.out.println("TODO: Detect if has key");
+        //return this.hasKey;
+        return false;
     }
 
     @Override

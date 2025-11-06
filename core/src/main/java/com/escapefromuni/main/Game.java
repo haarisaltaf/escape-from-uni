@@ -55,10 +55,10 @@ public class Game extends ApplicationAdapter {
         Map = new GameMap(activeCamera);
         addGameObject(new GameMap(activeCamera));
         addGameObject(new GameTimer(player));
-        addGameObject(new Collectible(new Vector2(200,200),player));
-        addGameObject(new Collectible(new Vector2(400,200),player));
-        addGameObject(new NPC(new Vector2(800,600),player));
-        addGameObject(new Key(new Vector2(1600,600),player));
+        addGameObject(new SpeedCollectible(new Vector2(200,200)));
+        addGameObject(new SpeedCollectible(new Vector2(400,200)));
+        addGameObject(new NPC(new Vector2(800,600)));
+        addGameObject(new Key(new Vector2(1600,600)));
     }
 
     @Override
@@ -143,6 +143,16 @@ public class Game extends ApplicationAdapter {
             }
         }
         return overlappingGameObjects;
+    }
+    public static GameObject getFirstCollidingObjectInLayer(Rectangle hitbox, CollisionComponent.CollisionLayer type){
+        if (!collidingComponents.containsKey(type)) return null;
+        for(CollisionComponent collider : collidingComponents.get(type)){
+            if (!collider.getCollisionLayer().equals(type)) throw new IllegalArgumentException("Layer cannot change after added to game.");
+            if (collider.isCollisionEnabled() && collider.isCollidingWith(hitbox)){
+                return (GameObject) collider;
+            }
+        }
+        return null;
     }
     /**
      * Adds a gameObject to the game world and runs the start() procedure.

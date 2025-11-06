@@ -9,18 +9,20 @@ import com.badlogic.gdx.math.Vector2;
 import com.escapefromuni.main.components.CollisionComponent;
 import com.escapefromuni.main.components.RenderableComponent;
 
-public class Collectible extends GameObject implements RenderableComponent, CollisionComponent {
+public abstract class Collectible extends GameObject implements RenderableComponent, CollisionComponent {
 
     String imagePath = "defaultCollectible.png";
     Texture collecitibleTexture;
     Sprite collectibleSprite;
     Rectangle hitbox;
-    //Player player;
     boolean active = true;
 
-    public Collectible(Vector2 givenPosition,Player player){
-        position = givenPosition;
-        //this.player = player;
+    public Collectible(Vector2 position){
+        this.position = position;
+    }
+    public Collectible(Vector2 position,String imagePath){
+        this.position = position;
+        this.imagePath = imagePath;
     }
 
     @Override
@@ -41,14 +43,6 @@ public class Collectible extends GameObject implements RenderableComponent, Coll
     public void pickup(Player player){
         active = false;
     }
-
-//    @Override
-//    public void update(float deltaTime) {
-//        if(this.hitbox.overlaps(player.hitbox) && this.active){
-//            this.active = false;
-//            player.speedUp();
-//        }
-//    }
 
     @Override
     public CollisionLayer getCollisionLayer() {

@@ -7,6 +7,6 @@ public interface CollisionComponent extends BaseComponent{
     public Boolean isCollidingWith(Rectangle hitboxCheck);
     public Boolean isCollisionEnabled();
     public enum CollisionLayer{
-        NONE,WALL,COLLECTIBLE,PLAYER
+        NONE,WALL,COLLECTIBLE, NPC, PLAYER
     }
 }
