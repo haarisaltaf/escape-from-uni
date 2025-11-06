@@ -24,7 +24,11 @@ public class GameTimer extends GameObject implements RenderableComponent {
 
     @Override
     public void update(float deltaTime){
-        time += deltaTime;
+        if(!Player.wonGame) {
+            time += deltaTime;
+        } else if (time + deltaTime > 300){
+            System.out.println("Time Up");
+        }
     }
 
 

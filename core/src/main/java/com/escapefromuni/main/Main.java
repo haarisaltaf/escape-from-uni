@@ -25,6 +25,7 @@ public class Main extends ApplicationAdapter {
     List<GameObject> gameObjects;
     List<RenderableComponent> renderableComponents;
     GameMap Map;
+    Player player;
     @Override
     public void create() {
         batch = new SpriteBatch();
@@ -43,7 +44,7 @@ public class Main extends ApplicationAdapter {
         addGameObject(activeCamera);
 
         //Add the player
-        var player = new Player(new Vector2(100,100));
+        player = new Player(new Vector2(100,100));
         addGameObject(player);
         activeCamera.SetTarget(player);
         //Add the Map
@@ -52,6 +53,8 @@ public class Main extends ApplicationAdapter {
         addGameObject(new GameTimer(player));
         addGameObject(new Collectible(new Vector2(200,200),player));
         addGameObject(new Collectible(new Vector2(400,200),player));
+        addGameObject(new NPC(new Vector2(800,600),player));
+        addGameObject(new Key(new Vector2(1600,600),player));
     }
 
     @Override
@@ -102,6 +105,7 @@ public class Main extends ApplicationAdapter {
             } 
             ScreenUtils.clear(1f, 1f, 1f, 1f);
             batch.begin();
+            pausedSprite.setPosition(player.position.x - 200,player.position.y);
             pausedSprite.draw(batch);
             batch.end();
         }

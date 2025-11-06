@@ -20,6 +20,8 @@ public class Player extends GameObject implements RenderableComponent {
     Sprite playerSprite;
     // Player speed attribute makes it possible to alter speed during the game.
     boolean sugarCrash = false;
+    boolean hasKey = false;
+    boolean wonGame = false;
     float playerSpeed = 200f;
     float speedTimer = 0;
     Rectangle hitbox;
@@ -98,7 +100,7 @@ public class Player extends GameObject implements RenderableComponent {
     }
     @Override
     public void render(SpriteBatch batch,Vector2 cameraPosition) {
-        playerSprite.setPosition(position.x - playerSprite.getWidth() / 2f, position.y - playerSprite.getWidth() / 2f);
+        playerSprite.setPosition(position.x - playerSprite.getWidth() / 2f, position.y - playerSprite.getWidth() / 2f -12f);
         playerSprite.draw(batch);
     }
     /**
@@ -138,4 +140,13 @@ public class Player extends GameObject implements RenderableComponent {
         }
 
     }
+
+    public void giveKey(){
+        this.hasKey = true;
+    }
+
+    public boolean getKey(){
+        return this.hasKey;
+    }
+
 }

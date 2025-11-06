@@ -10,6 +10,7 @@ import com.escapefromuni.main.components.RenderableComponent;
 
 public class Collectible extends GameObject implements RenderableComponent {
 
+    String imagePath = "defaultCollectible.png";
     Texture collecitibleTexture;
     Sprite collectibleSprite;
     Rectangle hitbox;
@@ -18,10 +19,14 @@ public class Collectible extends GameObject implements RenderableComponent {
 
     public Collectible(Vector2 givenPosition,Player player){
         position = givenPosition;
-        this.collecitibleTexture = new Texture(Gdx.files.internal("defaultCollectible.png"));
+        this.player = player;
+    }
+
+    @Override
+    public void start() {
+        this.collecitibleTexture = new Texture(Gdx.files.internal(imagePath));
         this.collectibleSprite = new Sprite(collecitibleTexture);
         hitbox = new Rectangle(position.x, position.y,collectibleSprite.getWidth(),collectibleSprite.getHeight());
-        this.player = player;
     }
 
     @Override
