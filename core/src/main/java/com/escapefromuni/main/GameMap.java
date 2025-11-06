@@ -47,13 +47,13 @@ public class GameMap extends GameObject implements RenderableComponent {
 
     public void generateCollisionMap(){
         TiledMapTileLayer collisionLayer = (TiledMapTileLayer)this.TestMap.getLayers().get("Collision");
-        for(int x = 0; x <15 ; x++){
-            for(int y = 0; y<10; y++){
+        for(int x = 0; x <collisionLayer.getWidth() ; x++){
+            for(int y = 0; y<collisionLayer.getHeight(); y++){
                 TiledMapTileLayer.Cell cell = collisionLayer.getCell(x,y);
                 //Ignore blank (invalid) tiles
                 if (cell == null) continue;
                 // The tile indicating the collision map has ID = 5
-                if(cell.getTile().getId() == 5){
+                if(cell.getTile().getId() == 1){
                     //todo: find out why you have to add offset
                     CollisonMap.add(new Rectangle(x*72f,y*72f ,72f,72f));
                 }
