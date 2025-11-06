@@ -6,20 +6,21 @@ import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.math.Vector2;
+import com.escapefromuni.main.components.CollisionComponent;
 import com.escapefromuni.main.components.RenderableComponent;
 
-public class Collectible extends GameObject implements RenderableComponent {
+public class Collectible extends GameObject implements RenderableComponent, CollisionComponent {
 
     String imagePath = "defaultCollectible.png";
     Texture collecitibleTexture;
     Sprite collectibleSprite;
     Rectangle hitbox;
-    Player player;
+    //Player player;
     boolean active = true;
 
     public Collectible(Vector2 givenPosition,Player player){
         position = givenPosition;
-        this.player = player;
+        //this.player = player;
     }
 
     @Override
@@ -37,12 +38,31 @@ public class Collectible extends GameObject implements RenderableComponent {
         }
 
     }
+    public void pickup(Player player){
+        active = false;
+    }
+
+//    @Override
+//    public void update(float deltaTime) {
+//        if(this.hitbox.overlaps(player.hitbox) && this.active){
+//            this.active = false;
+//            player.speedUp();
+//        }
+//    }
 
     @Override
-    public void update(float deltaTime) {
-        if(this.hitbox.overlaps(player.hitbox) && this.active){
-            this.active = false;
-            player.speedUp();
-        }
+    public CollisionLayer getCollisionLayer() {
+        return CollisionLayer.COLLECTIBLE;
+    }
+
+    @Override
+    public Boolean isCollidingWith(Rectangle hitboxCheck) {
+        return hitbox.overlaps(hitboxCheck);
+    }
+
+    @Override
+    public Boolean isCollisionEnabled() {
+        //only collide when object is active
+        return active;
     }
 }

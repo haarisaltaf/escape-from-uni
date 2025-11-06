@@ -6,31 +6,36 @@ import com.badlogic.gdx.Input;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
+import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.utils.ScreenUtils;
+import com.escapefromuni.main.components.CollisionComponent;
 import com.escapefromuni.main.components.RenderableComponent;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 
 /** {@link com.badlogic.gdx.ApplicationListener} implementation shared by all platforms. */
-public class Main extends ApplicationAdapter {
+public class Game extends ApplicationAdapter {
     private SpriteBatch batch;
     Sprite titleImage;
     Sprite playButton;
     Sprite pausedSprite;
     //The camera which is active and rendering the scene
-    CameraController activeCamera;
-    String gameState = "title";
-    List<GameObject> gameObjects;
-    List<RenderableComponent> renderableComponents;
+    static CameraController activeCamera;
+    static String gameState = "title";
+    static List<GameObject> gameObjects;
+    static List<RenderableComponent> renderableComponents;
+    static HashMap<CollisionComponent.CollisionLayer,List<CollisionComponent>> collidingComponents;
     GameMap Map;
     Player player;
     @Override
     public void create() {
         batch = new SpriteBatch();
-        gameObjects = new ArrayList<GameObject>();
-        renderableComponents = new ArrayList<RenderableComponent>();
+        gameObjects = new ArrayList<>();
+        renderableComponents = new ArrayList<>();
+        collidingComponents = new HashMap<>();
         //Create the Main Menu UI and position it
         titleImage = new Sprite(new Texture(Gdx.files.internal("titleGraphic.png")));
         titleImage.setPosition((Gdx.graphics.getWidth() - titleImage.getTexture().getWidth()) / 2f, (Gdx.graphics.getHeight() * 1.5f - titleImage.getTexture().getHeight()) / 2f);
@@ -42,7 +47,6 @@ public class Main extends ApplicationAdapter {
         //Define a camera and add it to GameObjects
         activeCamera = new CameraController(null);
         addGameObject(activeCamera);
-
         //Add the player
         player = new Player(new Vector2(100,100));
         addGameObject(player);
@@ -119,18 +123,46 @@ public class Main extends ApplicationAdapter {
             gameObject.dispose();
         }
     }
-
+    public static Boolean isCollidingWithLayer(Rectangle hitbox, CollisionComponent.CollisionLayer type){
+        if (!collidingComponents.containsKey(type)) return false;
+        for(CollisionComponent collider : collidingComponents.get(type)){
+            if (!collider.getCollisionLayer().equals(type)) throw new IllegalArgumentException("Layer cannot change after added to game.");
+            if (collider.isCollisionEnabled() && collider.isCollidingWith(hitbox)){
+                return true;
+            }
+        }
+        return false;
+    }
+    public static ArrayList<GameObject> getAllCollidingObjects(Rectangle hitbox, CollisionComponent.CollisionLayer type){
+        if (!collidingComponents.containsKey(type)) return null;
+        ArrayList<GameObject> overlappingGameObjects = new ArrayList<>();
+        for(CollisionComponent collider : collidingComponents.get(type)){
+            if (!collider.getCollisionLayer().equals(type)) throw new IllegalArgumentException("Layer cannot change after added to game.");
+            if (collider.isCollisionEnabled() && collider.isCollidingWith(hitbox)){
+                overlappingGameObjects.add((GameObject) collider);
+            }
+        }
+        return overlappingGameObjects;
+    }
     /**
      * Adds a gameObject to the game world and runs the start() procedure.
-     * @param gameObject The gameobject to add.
+     * @param gameObject The gameObject to add.
      * @return the gameObject added if successful, null if not.
      */
     //todo: return null if fail
     public GameObject addGameObject(GameObject gameObject){
         gameObjects.add(gameObject);
         //If the object has a renderableComponent, then add it to the list of renderableComponents
-        if (gameObject instanceof RenderableComponent) {
-            renderableComponents.add((RenderableComponent) gameObject);
+        if (gameObject instanceof RenderableComponent renderObject) {
+            renderableComponents.add(renderObject);
+        }
+        //If the object has a collisionComponent, then add it to the relevant dictionary of colliders depending on the objects layer
+        if (gameObject instanceof CollisionComponent collisionObject){
+            var layer = collisionObject.getCollisionLayer();
+            if (!collidingComponents.containsKey(layer)){
+                collidingComponents.put(layer,new ArrayList<>());
+            }
+            collidingComponents.get(layer).add(collisionObject);
         }
         gameObject.start();
         return gameObject;

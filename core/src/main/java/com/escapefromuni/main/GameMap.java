@@ -3,21 +3,20 @@ package com.escapefromuni.main;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.maps.tiled.TiledMap;
-import com.badlogic.gdx.maps.tiled.TiledMapTile;
 import com.badlogic.gdx.maps.tiled.TiledMapTileLayer;
 import com.badlogic.gdx.maps.tiled.TmxMapLoader;
 import com.badlogic.gdx.maps.tiled.renderers.OrthogonalTiledMapRenderer;
 import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.math.Vector2;
+import com.escapefromuni.main.components.CollisionComponent;
 import com.escapefromuni.main.components.RenderableComponent;
 import java.util.ArrayList;
-import java.util.List;
 
-public class GameMap extends GameObject implements RenderableComponent {
+public class GameMap extends GameObject implements RenderableComponent, CollisionComponent {
     TiledMap TestMap;
     OrthogonalTiledMapRenderer renderer;
     OrthographicCamera camera;
-    ArrayList<Rectangle> CollisonMap = new ArrayList<>(150);
+    ArrayList<Rectangle> CollisionMap = new ArrayList<>(150);
 
     /**
      * Create a renderer object to load the map.
@@ -54,11 +53,29 @@ public class GameMap extends GameObject implements RenderableComponent {
                 if (cell == null) continue;
                 // The tile indicating the collision map has ID = 5
                 if(cell.getTile().getId() == 1){
-                    //todo: find out why you have to add offset
-                    CollisonMap.add(new Rectangle(x*72f,y*72f ,72f,72f));
+                    CollisionMap.add(new Rectangle(x*72f,y*72f ,72f,72f));
                 }
             }
         }
     }
 
+    @Override
+    public CollisionLayer getCollisionLayer() {
+        return CollisionLayer.WALL;
+    }
+
+    @Override
+    public Boolean isCollidingWith(Rectangle hitboxCheck) {
+        for(Rectangle rect : CollisionMap) {
+            if (rect.overlaps(hitboxCheck)){
+                return true;
+            }
+        }
+        return false;
+    }
+
+    @Override
+    public Boolean isCollisionEnabled() {
+        return true;
+    }
 }
