@@ -18,6 +18,7 @@ public class Main extends ApplicationAdapter {
     private SpriteBatch batch;
     Sprite titleImage;
     Sprite playButton;
+    Sprite pausedSprite;
     //The camera which is active and rendering the scene
     CameraController activeCamera;
     String gameState = "title";
@@ -34,6 +35,8 @@ public class Main extends ApplicationAdapter {
         titleImage.setPosition((Gdx.graphics.getWidth() - titleImage.getTexture().getWidth()) / 2f, (Gdx.graphics.getHeight() * 1.5f - titleImage.getTexture().getHeight()) / 2f);
         playButton = new Sprite(new Texture(Gdx.files.internal("playButton.png")));
         playButton.setPosition((Gdx.graphics.getWidth() - playButton.getTexture().getWidth()) / 2f, (Gdx.graphics.getHeight() / 2f - playButton.getTexture().getHeight()) / 2f);
+        pausedSprite = new Sprite(new Texture(Gdx.files.internal("pausedGraphic.png")));
+        pausedSprite.setPosition((Gdx.graphics.getWidth() - pausedSprite.getTexture().getWidth()) / 2f, (Gdx.graphics.getHeight() * 1.5f - pausedSprite.getTexture().getHeight()) / 2f);
         //Create the Game World:
         //Define a camera and add it to GameObjects
         activeCamera = new CameraController(null);
@@ -54,11 +57,12 @@ public class Main extends ApplicationAdapter {
     @Override
     public void render() {
         if (gameState.equals("title")) {
-            //TODO: hardcoded to default screen size, fix later
-            if (Gdx.input.getX() >= 340 && Gdx.input.getX() <= 740 && 
-                Gdx.input.getY() >= 440 && Gdx.input.getY() <= 640 && 
-                Gdx.input.isButtonPressed(Input.Buttons.LEFT)) {
+            //Detect clicking on the play button
+            if (Gdx.input.isButtonJustPressed(Input.Buttons.LEFT)) {
+                if (Gdx.input.getX() >= playButton.getX() && Gdx.input.getX() <= (playButton.getX() + playButton.getWidth())
+                &&  Gdx.input.getY() >= (Gdx.graphics.getHeight() - (playButton.getY() + playButton.getHeight())) && Gdx.input.getY() <= (Gdx.graphics.getHeight() - playButton.getY())) {
                     gameState = "main";
+                }
             }
             ScreenUtils.clear(1f, 1f, 1f, 1f);
             batch.begin();
@@ -67,6 +71,9 @@ public class Main extends ApplicationAdapter {
             batch.end();
         }
         else if (gameState.equals("main")) {
+            if (Gdx.input.isKeyJustPressed(111)) {
+                gameState = "paused";
+            }
             ScreenUtils.clear(0.15f, 0.15f, 0.2f, 1f);
             //cache the delta time
             float deltaTime = Gdx.graphics.getDeltaTime();
@@ -87,6 +94,15 @@ public class Main extends ApplicationAdapter {
                 //todo cameraPosition is obsolete, which is why its (0,0)
                 renderable.render(batch,new Vector2(0,0));
             }
+            batch.end();
+        }
+        else if (gameState.equals("paused")) {
+            if (Gdx.input.isKeyJustPressed(111)) {
+                gameState = "main";
+            } 
+            ScreenUtils.clear(1f, 1f, 1f, 1f);
+            batch.begin();
+            pausedSprite.draw(batch);
             batch.end();
         }
     }
