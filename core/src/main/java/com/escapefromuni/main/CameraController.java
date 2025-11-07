@@ -2,12 +2,14 @@ package com.escapefromuni.main;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
+import com.badlogic.gdx.graphics.Camera;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.math.Vector2;
+import com.escapefromuni.main.components.CameraComponent;
 import com.escapefromuni.main.components.RenderableComponent;
 
-public class CameraController extends GameObject implements RenderableComponent {
+public class CameraController extends GameObject implements CameraComponent {
     OrthographicCamera camera;
     GameObject target;
     public void SetTarget(GameObject target) {
@@ -38,11 +40,22 @@ public class CameraController extends GameObject implements RenderableComponent 
     }
 
     @Override
-    public void render(SpriteBatch batch) {
+    public void updateCamera(SpriteBatch batch) {
         camera.position.set(position.x,position.y,0);
         camera.update();
         batch.setProjectionMatrix(camera.combined);
     }
+
+    @Override
+    public Vector2 getCameraPosition() {
+        return position;
+    }
+
+    @Override
+    public OrthographicCamera getCamera() {
+        return camera;
+    }
+
     public CameraController (GameObject target) {
         this.target = target;
     }

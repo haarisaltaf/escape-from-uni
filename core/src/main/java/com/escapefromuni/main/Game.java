@@ -11,9 +11,11 @@ import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.utils.ScreenUtils;
 import com.escapefromuni.main.collectables.Key;
 import com.escapefromuni.main.collectables.SpeedCollectable;
+import com.escapefromuni.main.components.CameraComponent;
 import com.escapefromuni.main.components.CollisionComponent;
 import com.escapefromuni.main.components.RenderableComponent;
 import com.escapefromuni.main.components.UIComponent;
+import com.escapefromuni.main.ui.GameTimer;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -28,8 +30,8 @@ public class Game extends ApplicationAdapter {
     Sprite playButton;
     Sprite pausedSprite;
     //The camera which is active and rendering the scene
-    static CameraController activeCamera;
-    static GameState gameState = GameState.MENU;
+    private static CameraComponent activeCamera;
+    public static GameState gameState = GameState.MENU;
     static List<GameObject> gameObjects = new ArrayList<>();
     static List<RenderableComponent> renderableComponents = new ArrayList<>();
     static List<UIComponent> uiComponents = new ArrayList<>();
@@ -47,14 +49,15 @@ public class Game extends ApplicationAdapter {
         pausedSprite.setPosition((Gdx.graphics.getWidth() - pausedSprite.getTexture().getWidth()) / 2f, (Gdx.graphics.getHeight() * 1.5f - pausedSprite.getTexture().getHeight()) / 2f);
         //Create the Game World:
         //Define a camera and add it to GameObjects
-        activeCamera = new CameraController(null);
-        addGameObject(activeCamera);
+        var camera = new CameraController(null);
+        addGameObject(camera);
+        SetActiveCamera(camera);
         //Add the player
         var player = new Player(new Vector2(100, 100));
         addGameObject(player);
-        activeCamera.SetTarget(player);
+        camera.SetTarget(player);
         //Add the Map
-        addGameObject(new GameMap(activeCamera));
+        addGameObject(new GameMap(camera));
         addGameObject(new GameTimer(new Vector2(-0.9f, 0.9f)));
         addGameObject(new SpeedCollectable(new Vector2(200, 200)));
         addGameObject(new SpeedCollectable(new Vector2(400, 200)));
@@ -69,7 +72,7 @@ public class Game extends ApplicationAdapter {
     public void render() {
         switch (gameState) {
             case MENU:
-                activeCamera.position.set(0,0);
+                //TODO: Change these to UIElements
                 //Detect clicking on the play button
                 if (Gdx.input.isButtonJustPressed(Input.Buttons.LEFT)) {
                     if (Gdx.input.getX() >= playButton.getX() && Gdx.input.getX() <= (playButton.getX() + playButton.getWidth())
@@ -95,7 +98,8 @@ public class Game extends ApplicationAdapter {
                     gameObject.update(deltaTime);
                 }
                 //set view to active camera
-                batch.setProjectionMatrix(activeCamera.GetCamera().combined);
+                //batch.setProjectionMatrix(activeCamera.GetCamera().combined);
+                activeCamera.updateCamera(batch);
                 //For all gameObjects that render, render them
                 batch.begin();
                 for (var renderable : renderableComponents) {
@@ -104,7 +108,7 @@ public class Game extends ApplicationAdapter {
                 //Render the UI components after the rest so they are on top
                 Vector2 screenSize = new Vector2(Gdx.graphics.getWidth(),Gdx.graphics.getHeight());
                 for(var ui : uiComponents){
-                    ui.positionOnScreen(activeCamera.position,screenSize);
+                    ui.positionOnScreen(activeCamera.getCameraPosition(),screenSize);
                     ui.render(batch);
                 }
                 batch.end();
@@ -116,7 +120,8 @@ public class Game extends ApplicationAdapter {
                 }
                 ScreenUtils.clear(1f, 1f, 1f, 1f);
                 batch.begin();
-                pausedSprite.setPosition(activeCamera.position.x - 200, activeCamera.position.y);
+                //TODO: Change these to UIElements
+                pausedSprite.setPosition(activeCamera.getCameraPosition().x - 200, activeCamera.getCameraPosition().y);
                 pausedSprite.draw(batch);
                 batch.end();
                 break;
@@ -176,15 +181,19 @@ public class Game extends ApplicationAdapter {
         }
         return null;
     }
+    public void SetActiveCamera(CameraComponent newActiveCamera){
+        activeCamera = newActiveCamera;
+    }
+    public CameraComponent GetActiveCamera(){
+        return activeCamera;
+    }
 
     /**
      * Adds a gameObject to the game world and runs the start() procedure.
      *
      * @param gameObject The gameObject to add.
-     * @return the gameObject added if successful, null if not.
      */
-    //todo: return null if fail
-    public GameObject addGameObject(GameObject gameObject) {
+    public void addGameObject(GameObject gameObject) {
         gameObjects.add(gameObject);
         //If the object is UI
         if (gameObject instanceof UIComponent uiObject) {
@@ -203,9 +212,8 @@ public class Game extends ApplicationAdapter {
             collidingComponents.get(layer).add(collisionObject);
         }
         gameObject.start();
-        return gameObject;
     }
-    enum GameState{
+    public enum GameState{
         MENU, PLAYING, PAUSED, WIN, LOSE
     }
 }

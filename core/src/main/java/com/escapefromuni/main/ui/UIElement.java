@@ -1,9 +1,7 @@
-package com.escapefromuni.main;
+package com.escapefromuni.main.ui;
 
-import com.badlogic.gdx.Gdx;
-import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.math.Vector2;
-import com.escapefromuni.main.components.RenderableComponent;
+import com.escapefromuni.main.GameObject;
 import com.escapefromuni.main.components.UIComponent;
 
 public abstract class UIElement extends GameObject implements UIComponent {

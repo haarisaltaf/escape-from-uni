@@ -1,13 +1,12 @@
 package com.escapefromuni.main;
 
-import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.maps.tiled.TiledMap;
 import com.badlogic.gdx.maps.tiled.TiledMapTileLayer;
 import com.badlogic.gdx.maps.tiled.TmxMapLoader;
 import com.badlogic.gdx.maps.tiled.renderers.OrthogonalTiledMapRenderer;
 import com.badlogic.gdx.math.Rectangle;
-import com.badlogic.gdx.math.Vector2;
+import com.escapefromuni.main.components.CameraComponent;
 import com.escapefromuni.main.components.CollisionComponent;
 import com.escapefromuni.main.components.RenderableComponent;
 import java.util.ArrayList;
@@ -15,19 +14,19 @@ import java.util.ArrayList;
 public class GameMap extends GameObject implements RenderableComponent, CollisionComponent {
     TiledMap TestMap;
     OrthogonalTiledMapRenderer renderer;
-    OrthographicCamera camera;
+    CameraComponent cameraComponent;
     ArrayList<Rectangle> CollisionMap = new ArrayList<>(150);
 
     /**
      * Create a renderer object to load the map.
      * Utilises the game camera created at the start of the program
      */
-    public GameMap(CameraController cameraController){
+    public GameMap(CameraComponent cameraComponent){
         TestMap = new TmxMapLoader().load("TestMap.tmx");
         generateCollisionMap();
         renderer = new OrthogonalTiledMapRenderer(TestMap,2.25f);
-        camera = cameraController.GetCamera();
-        renderer.setView(camera);
+        this.cameraComponent = cameraComponent;
+        renderer.setView(cameraComponent.getCamera());
     }
 
     /**
@@ -40,7 +39,7 @@ public class GameMap extends GameObject implements RenderableComponent, Collisio
 
     @Override
     public void render(SpriteBatch batch) {
-        renderer.setView(camera);
+        renderer.setView(cameraComponent.getCamera());
         renderer.render();
     }
 
