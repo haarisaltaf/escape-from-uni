@@ -7,5 +7,5 @@ public interface RenderableComponent extends BaseComponent {
     /**
      Handles Rendering.
      */
-    public void render(SpriteBatch batch, Vector2 cameraPosition);
+    public void render(SpriteBatch batch);
 }

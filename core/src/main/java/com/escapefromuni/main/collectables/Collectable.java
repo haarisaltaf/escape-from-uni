@@ -1,4 +1,4 @@
-package com.escapefromuni.main;
+package com.escapefromuni.main.collectables;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Texture;
@@ -6,21 +6,22 @@ import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.math.Vector2;
+import com.escapefromuni.main.GameObject;
+import com.escapefromuni.main.Player;
 import com.escapefromuni.main.components.CollisionComponent;
 import com.escapefromuni.main.components.RenderableComponent;
 
-public abstract class Collectible extends GameObject implements RenderableComponent, CollisionComponent {
-
+public abstract class Collectable extends GameObject implements RenderableComponent, CollisionComponent {
     String imagePath = "defaultCollectible.png";
     Texture collecitibleTexture;
     Sprite collectibleSprite;
     Rectangle hitbox;
     boolean active = true;
 
-    public Collectible(Vector2 position){
+    public Collectable(Vector2 position){
         this.position = position;
     }
-    public Collectible(Vector2 position,String imagePath){
+    public Collectable(Vector2 position, String imagePath){
         this.position = position;
         this.imagePath = imagePath;
     }
@@ -33,7 +34,7 @@ public abstract class Collectible extends GameObject implements RenderableCompon
     }
 
     @Override
-    public void render(SpriteBatch batch, Vector2 cameraPosition) {
+    public void render(SpriteBatch batch) {
         if(active){
             collectibleSprite.setPosition(position.x, position.y);
             collectibleSprite.draw(batch);

@@ -39,7 +39,7 @@ public class GameMap extends GameObject implements RenderableComponent, Collisio
     }
 
     @Override
-    public void render(SpriteBatch batch, Vector2 cameraPosition) {
+    public void render(SpriteBatch batch) {
         renderer.setView(camera);
         renderer.render();
     }

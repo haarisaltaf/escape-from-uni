@@ -1,40 +1,52 @@
 package com.escapefromuni.main;
 
+import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.math.Vector2;
 import com.escapefromuni.main.components.RenderableComponent;
+import com.escapefromuni.main.components.UIComponent;
 
 import javax.swing.text.NumberFormatter;
 import java.text.DecimalFormat;
 import java.text.NumberFormat;
+import java.time.LocalTime;
+import java.util.concurrent.TimeUnit;
 
-public class GameTimer extends GameObject implements RenderableComponent {
+public class GameTimer extends UIElement {
 
     float time;
     BitmapFont font;
-    Player Player;
-    NumberFormat formatter = new DecimalFormat("0.00");
 
-    public GameTimer(Player player){
-        time = 0;
+    public GameTimer(Vector2 relativeScreenPosition){
+        super(relativeScreenPosition);
+        time = 300;
         font = new BitmapFont();
-        Player = player;
+        font.getData().setScale(2);
     }
 
     @Override
     public void update(float deltaTime){
-        if(!Player.wonGame) {
-            time += deltaTime;
-        } else if (time + deltaTime > 300){
+        if(Game.gameState == Game.GameState.PLAYING) {
+            time -= deltaTime;
+        } else if (time < 0){
             System.out.println("Time Up");
         }
     }
-
-
-    @Override
-    public void render(SpriteBatch batch, Vector2 cameraPosition) {
-        font.draw(batch,"Time : " + String.format("%.2f",time),Player.playerSprite.getX() - 520,Player.playerSprite.getY() + 360);
+    public static String GetTimeString(float timeSeconds){
+        float hours = timeSeconds / 3600;
+        float minutes = (timeSeconds % 3600) / 60;
+        float seconds = timeSeconds % 60;
+        float milliSeconds = timeSeconds % 1f;
+        if (hours > 1){
+            return String.format("%02d:%02d:%02d:%02d", (int)Math.floor(hours), (int)Math.floor(minutes), (int)Math.floor(seconds),(int)Math.floor(milliSeconds * 100));
+        }else{
+            return String.format("%02d:%02d:%02d", (int)Math.floor(minutes), (int)Math.floor(seconds),(int)Math.floor(milliSeconds * 100));
+        }
     }
 
+    @Override
+    public void render(SpriteBatch batch) {
+        font.draw(batch,"Time : " + GetTimeString(time), position.x,position.y);
+    }
 }

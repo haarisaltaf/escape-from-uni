@@ -7,10 +7,13 @@ import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.math.Vector2;
+import com.escapefromuni.main.collectables.Collectable;
+import com.escapefromuni.main.collectables.Item;
 import com.escapefromuni.main.components.CollisionComponent;
 import com.escapefromuni.main.components.RenderableComponent;
 
 import java.util.ArrayList;
+import java.util.Objects;
 
 public class Player extends GameObject implements RenderableComponent, CollisionComponent {
 
@@ -24,7 +27,7 @@ public class Player extends GameObject implements RenderableComponent, Collision
     float playerSpeed = 200f;
     float speedTimer = 0;
     Rectangle hitbox;
-    public static ArrayList<Item> items = new ArrayList<>();
+    ArrayList<Item> items = new ArrayList<>();
 
     public Player(Vector2 position, float rotation, String playerTexturePath) {
         super(position, rotation);
@@ -49,8 +52,8 @@ public class Player extends GameObject implements RenderableComponent, Collision
         float rectY = position.y;
         this.hitbox = new Rectangle(rectX, rectY, playerSprite.getWidth(), playerSprite.getHeight());
     }
-
-    public void update(float deltaTime, GameMap Map) {
+    @Override
+    public void update(float deltaTime) {
         // Check that the player has time left on their speed-up.
         if (speedTimer > 0) {
             speedTimer -= deltaTime;
@@ -69,8 +72,11 @@ public class Player extends GameObject implements RenderableComponent, Collision
         ArrayList<GameObject> pickups = Game.getAllCollidingObjects(hitbox,CollisionLayer.COLLECTIBLE);
         assert pickups != null;
         for (var pickup : pickups){
-            if (pickup instanceof Collectible collectible){
-                collectible.pickup(this);
+            if (pickup instanceof Collectable collectable){
+                collectable.pickup(this);
+            }
+            if (pickup instanceof Item item){
+                items.add(item);
             }
         }
 
@@ -80,6 +86,8 @@ public class Player extends GameObject implements RenderableComponent, Collision
         Vector2 resolvedVelocity = CollideWithWalls(desiredVelocity);
         //The resultant velocity is applied to the player
         position.add(resolvedVelocity.x, resolvedVelocity.y);
+        //Simulate "drag" using velocity
+        displayItems(resolvedVelocity.x);
     }
     public Vector2 CollideWithWalls(Vector2 desiredVelocity){
         Vector2 newVelocity = new Vector2(desiredVelocity.x,desiredVelocity.y);
@@ -97,7 +105,7 @@ public class Player extends GameObject implements RenderableComponent, Collision
     }
 
     @Override
-    public void render(SpriteBatch batch, Vector2 cameraPosition) {
+    public void render(SpriteBatch batch) {
         playerSprite.setPosition(position.x - playerSprite.getWidth() / 2f, position.y - playerSprite.getWidth() / 2f - 12f);
         playerSprite.draw(batch);
     }
@@ -147,6 +155,37 @@ public class Player extends GameObject implements RenderableComponent, Collision
         System.out.println("TODO: Detect if has key");
         //return this.hasKey;
         return false;
+    }
+    public void displayItems(float drag){
+        for (int i = 0; i < items.size(); i++) {
+            items.get(i).position.set(position.x - drag * i * 0.4f,position.y + i * 20);
+        }
+    }
+    public void AddItem(Item newItem){
+        items.add(newItem);
+    }
+    public boolean HasItem(String itemType){
+        for (int i = 0; i < items.size(); i++) {
+            if (Objects.equals(items.get(i).itemType, itemType)){
+                return true;
+            }
+        }
+        return false;
+    }
+    public boolean TakeItem(String itemType){
+        int itemToRemove = -1;
+        for (int i = 0; i < items.size(); i++) {
+            if (Objects.equals(items.get(i).itemType, itemType)){
+                itemToRemove = i;
+                break;
+            }
+        }
+        if (itemToRemove != -1){
+            items.remove(itemToRemove);
+            return true;
+        }else{
+            return false;
+        }
     }
 
     @Override

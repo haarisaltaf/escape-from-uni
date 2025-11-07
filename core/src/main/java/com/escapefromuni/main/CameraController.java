@@ -34,11 +34,12 @@ public class CameraController extends GameObject implements RenderableComponent 
         if (Gdx.input.isKeyPressed(Input.Keys.E)) {
             camera.zoom -= 0.02f;
         }
+        position.set(target.position);
     }
 
     @Override
-    public void render(SpriteBatch batch, Vector2 cameraPosition) {
-        camera.position.set(target.position.x,target.position.y,0);
+    public void render(SpriteBatch batch) {
+        camera.position.set(position.x,position.y,0);
         camera.update();
         batch.setProjectionMatrix(camera.combined);
     }

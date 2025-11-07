@@ -14,29 +14,35 @@ public class NPC extends GameObject implements RenderableComponent, CollisionCom
     Texture texture;
     Sprite sprite;
     Rectangle hitbox;
+    String requiredItem;
 
-    public NPC(Vector2 position){
+    public NPC(Vector2 position,String textureDir,String requiredItem){
         this.position = position;
-        texture = new Texture(Gdx.files.internal("professor.png"));
+        texture = new Texture(Gdx.files.internal(textureDir));
         sprite = new Sprite(texture);
         hitbox = new Rectangle(position.x, position.y, texture.getWidth(), texture.getHeight());
+        this.requiredItem = requiredItem;
     }
 
     @Override
     public void update(float deltaTime) {
-        if(Game.isCollidingWithLayer(hitbox,CollisionLayer.PLAYER)){
-            if(Player.hasKey()){
-                // make player win the game
-                System.out.println("You win");
-                //player.wonGame = true;
+        GameObject playerObject = Game.getFirstCollidingObjectInLayer(hitbox,CollisionLayer.PLAYER);
+        if(playerObject != null){
+            if (playerObject instanceof Player player){
+                boolean success =  player.TakeItem(requiredItem);
+                if (success){
+                    Game.gameState = Game.GameState.WIN;
+                }else{
+                    System.out.println("You need the " + requiredItem);
+                }
             }else{
-                System.out.println("You need the key");
+                throw new RuntimeException("Unexpected item in the bagging area");
             }
         }
     }
 
     @Override
-    public void render(SpriteBatch batch, Vector2 cameraPosition) {
+    public void render(SpriteBatch batch) {
         sprite.setPosition(position.x, position.y);
         sprite.draw(batch);
     }
