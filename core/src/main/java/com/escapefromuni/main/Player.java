@@ -24,7 +24,8 @@ public class Player extends GameObject implements RenderableComponent, Collision
     boolean sugarCrash = false;
     boolean hasKey = false;
     boolean wonGame = false;
-    float playerSpeed = 200f;
+    float baseSpeed = 200f;
+    float speed = baseSpeed;
     float speedTimer = 0;
     Rectangle hitbox;
     ArrayList<Item> items = new ArrayList<>();
@@ -37,7 +38,7 @@ public class Player extends GameObject implements RenderableComponent, Collision
     public Player(Vector2 position, float rotation) {
         super(position, rotation);
         // Player texture defaults to placeholder player.png
-        playerTexture = new Texture(Gdx.files.internal("player.png"));
+        playerTexture = new Texture(Gdx.files.internal("Player/player_2.png"));
     }
 
     public Player(Vector2 position) {
@@ -46,11 +47,12 @@ public class Player extends GameObject implements RenderableComponent, Collision
 
     public void start() {
         // Generates a Sprite object using the player.png texture
-        playerTexture = new Texture(Gdx.files.internal("player.png"));
+        playerTexture = new Texture(Gdx.files.internal("Player/player_2.png"));
         playerSprite = new Sprite(playerTexture);
         float rectX = position.x;
         float rectY = position.y;
         this.hitbox = new Rectangle(rectX, rectY, playerSprite.getWidth(), playerSprite.getHeight());
+        playerSprite.setScale(4);
     }
     @Override
     public void update(float deltaTime) {
@@ -61,7 +63,7 @@ public class Player extends GameObject implements RenderableComponent, Collision
         // If player is out of time reset the speed and ensure counter is at 0.
         else if (speedTimer <= 0) {
             speedTimer = 0;
-            playerSpeed = 200f;
+            baseSpeed = 200f;
             sugarCrash = false;
         }
         if (Gdx.input.isKeyPressed(Input.Keys.F)) {
@@ -81,7 +83,7 @@ public class Player extends GameObject implements RenderableComponent, Collision
         }
 
         //normalise to have consistent speed regardless of direction, and then scale by move speed and time
-        Vector2 desiredVelocity = getInputVector().nor().scl(playerSpeed * deltaTime);
+        Vector2 desiredVelocity = getInputVector().nor().scl(baseSpeed * deltaTime);
         //Velocity after accounting for collision with walls
         Vector2 resolvedVelocity = CollideWithWalls(desiredVelocity);
         //The resultant velocity is applied to the player
@@ -140,9 +142,9 @@ public class Player extends GameObject implements RenderableComponent, Collision
         speedTimer += 30;
         if (speedTimer > 45 || this.sugarCrash) {
             this.sugarCrash = true;
-            playerSpeed = 100f;
+            baseSpeed = 100f;
         } else {
-            playerSpeed = 300f;
+            baseSpeed = 300f;
         }
 
     }

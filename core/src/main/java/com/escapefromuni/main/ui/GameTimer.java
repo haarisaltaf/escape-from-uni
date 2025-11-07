@@ -14,7 +14,6 @@ public class GameTimer extends UIElement {
         super(relativeScreenPosition);
         time = 300;
         font = new BitmapFont();
-        font.getData().setScale(2);
     }
 
     @Override
@@ -40,5 +39,10 @@ public class GameTimer extends UIElement {
     @Override
     public void render(SpriteBatch batch) {
         font.draw(batch,"Time : " + GetTimeString(time), position.x,position.y);
+    }
+    @Override
+    public void positionOnScreen(Vector2 cameraPosition, Vector2 screenSize,float zoom) {
+        super.positionOnScreen(cameraPosition,screenSize,zoom);
+        font.getData().setScale(3 * zoom);
     }
 }

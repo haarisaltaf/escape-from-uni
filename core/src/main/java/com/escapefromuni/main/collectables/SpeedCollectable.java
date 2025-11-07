@@ -9,7 +9,7 @@ public class SpeedCollectable extends Collectable {
     }
 
     public SpeedCollectable(Vector2 position) {
-        super(position);
+        super(position,"soda.png");
     }
 
     @Override

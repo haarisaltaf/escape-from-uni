@@ -20,8 +20,8 @@ public abstract class UIElement extends GameObject implements UIComponent {
     }
 
     @Override
-    public void positionOnScreen(Vector2 cameraPosition, Vector2 screenSize) {
-        position.set(cameraPosition.x + relativeScreenPosition.x * screenSize.x * 0.5f,
-                cameraPosition.y + relativeScreenPosition.y * screenSize.y * 0.5f);
+    public void positionOnScreen(Vector2 cameraPosition, Vector2 screenSize,float zoom) {
+        position.set(cameraPosition.x + relativeScreenPosition.x * screenSize.x * 0.5f * zoom,
+                cameraPosition.y + relativeScreenPosition.y * screenSize.y * 0.5f * zoom);
     }
 }

@@ -33,6 +33,7 @@ public interface UIComponent extends RenderableComponent{
      * position to a fixed point on the screen depending on the relative screen position
      * @param cameraPosition the position of the camera
      * @param screenSize the size of the game window.
+     * @param zoom How zoomed in the camera is
      */
-    public void positionOnScreen(Vector2 cameraPosition, Vector2 screenSize);
+    public void positionOnScreen(Vector2 cameraPosition, Vector2 screenSize,float zoom);
 }

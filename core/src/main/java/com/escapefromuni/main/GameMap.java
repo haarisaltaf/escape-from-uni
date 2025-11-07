@@ -24,7 +24,7 @@ public class GameMap extends GameObject implements RenderableComponent, Collisio
     public GameMap(CameraComponent cameraComponent){
         TestMap = new TmxMapLoader().load("TestMap.tmx");
         generateCollisionMap();
-        renderer = new OrthogonalTiledMapRenderer(TestMap,2.25f);
+        renderer = new OrthogonalTiledMapRenderer(TestMap,4f);
         this.cameraComponent = cameraComponent;
         renderer.setView(cameraComponent.getCamera());
     }
@@ -52,7 +52,7 @@ public class GameMap extends GameObject implements RenderableComponent, Collisio
                 if (cell == null) continue;
                 // The tile indicating the collision map has ID = 5
                 if(cell.getTile().getId() == 1){
-                    CollisionMap.add(new Rectangle(x*72f,y*72f ,72f,72f));
+                    CollisionMap.add(new Rectangle(x*128,y*128 ,128,128));
                 }
             }
         }

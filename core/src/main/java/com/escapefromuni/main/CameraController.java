@@ -9,6 +9,9 @@ import com.badlogic.gdx.math.Vector2;
 import com.escapefromuni.main.components.CameraComponent;
 import com.escapefromuni.main.components.RenderableComponent;
 
+/**
+ * A gameGbject which makes the camera which follows a given target.
+ */
 public class CameraController extends GameObject implements CameraComponent {
     OrthographicCamera camera;
     GameObject target;
@@ -29,6 +32,12 @@ public class CameraController extends GameObject implements CameraComponent {
     }
     @Override
     public void update(float delta) {
+        position.set(target.position);
+    }
+
+    @Override
+    public void updateCamera(SpriteBatch batch) {
+        camera.position.set(position.x,position.y,0);
         if (Gdx.input.isKeyPressed(Input.Keys.Q)) {
             System.out.println("zoom in");
             camera.zoom += 0.02f;
@@ -36,12 +45,6 @@ public class CameraController extends GameObject implements CameraComponent {
         if (Gdx.input.isKeyPressed(Input.Keys.E)) {
             camera.zoom -= 0.02f;
         }
-        position.set(target.position);
-    }
-
-    @Override
-    public void updateCamera(SpriteBatch batch) {
-        camera.position.set(position.x,position.y,0);
         camera.update();
         batch.setProjectionMatrix(camera.combined);
     }

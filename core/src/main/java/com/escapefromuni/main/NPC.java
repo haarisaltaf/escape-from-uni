@@ -20,6 +20,7 @@ public class NPC extends GameObject implements RenderableComponent, CollisionCom
         this.position = position;
         texture = new Texture(Gdx.files.internal(textureDir));
         sprite = new Sprite(texture);
+        sprite.setScale(4);
         hitbox = new Rectangle(position.x, position.y, texture.getWidth(), texture.getHeight());
         this.requiredItem = requiredItem;
     }

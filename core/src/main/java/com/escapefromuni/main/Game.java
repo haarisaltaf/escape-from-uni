@@ -53,19 +53,19 @@ public class Game extends ApplicationAdapter {
         addGameObject(camera);
         SetActiveCamera(camera);
         //Add the player
-        var player = new Player(new Vector2(100, 100));
+        var player = new Player(new Vector2(256, 256));
         addGameObject(player);
         camera.SetTarget(player);
         //Add the Map
         addGameObject(new GameMap(camera));
         addGameObject(new GameTimer(new Vector2(-0.9f, 0.9f)));
-        addGameObject(new SpeedCollectable(new Vector2(200, 200)));
-        addGameObject(new SpeedCollectable(new Vector2(400, 200)));
-        addGameObject(new NPC(new Vector2(800, 600),"professor.png","key"));
-        addGameObject(new Key(new Vector2(1600, 600)));
-        addGameObject(new Key(new Vector2(1630, 600)));
-        addGameObject(new Key(new Vector2(1660, 600)));
-        addGameObject(new Key(new Vector2(1690, 600)));
+        addGameObject(new SpeedCollectable(new Vector2(400, 400)));
+        addGameObject(new SpeedCollectable(new Vector2(800, 200)));
+        addGameObject(new NPC(new Vector2(1400, 1000),"npc1.png","key"));
+        addGameObject(new Key(new Vector2(2000, 1000)));
+        addGameObject(new Key(new Vector2(2300, 1000)));
+        addGameObject(new Key(new Vector2(2600, 1000)));
+        addGameObject(new Key(new Vector2(2900, 1000)));
     }
 
     @Override
@@ -108,7 +108,7 @@ public class Game extends ApplicationAdapter {
                 //Render the UI components after the rest so they are on top
                 Vector2 screenSize = new Vector2(Gdx.graphics.getWidth(),Gdx.graphics.getHeight());
                 for(var ui : uiComponents){
-                    ui.positionOnScreen(activeCamera.getCameraPosition(),screenSize);
+                    ui.positionOnScreen(activeCamera.getCameraPosition(),screenSize,activeCamera.getCamera().zoom);
                     ui.render(batch);
                 }
                 batch.end();

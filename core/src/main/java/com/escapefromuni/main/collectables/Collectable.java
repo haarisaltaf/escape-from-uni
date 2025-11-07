@@ -30,6 +30,7 @@ public abstract class Collectable extends GameObject implements RenderableCompon
     public void start() {
         this.collecitibleTexture = new Texture(Gdx.files.internal(imagePath));
         this.collectibleSprite = new Sprite(collecitibleTexture);
+        collectibleSprite.setScale(4);
         hitbox = new Rectangle(position.x, position.y,collectibleSprite.getWidth(),collectibleSprite.getHeight());
     }
 
