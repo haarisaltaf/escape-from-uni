@@ -34,6 +34,9 @@ public class Game extends ApplicationAdapter {
     Sprite controlsHelp;
     Sprite pausedSprite;
     Sprite quitButton;
+    Sprite winImage;
+    Sprite loseImage;
+    Sprite returnToMain;
     Music music;
     static GameTimer timer;
     //The camera which is active and rendering the scene
@@ -58,6 +61,12 @@ public class Game extends ApplicationAdapter {
         pausedSprite.setPosition((Gdx.graphics.getWidth() - pausedSprite.getTexture().getWidth()) / 2f, (Gdx.graphics.getHeight() * 1.5f - pausedSprite.getTexture().getHeight()) / 2f);
         quitButton = new Sprite(new Texture(Gdx.files.internal("quitButton.png")));
         quitButton.setPosition((Gdx.graphics.getWidth() - quitButton.getTexture().getWidth()) / 2f, (Gdx.graphics.getHeight() / 2f - quitButton.getTexture().getHeight()) / 2f);
+        winImage = new Sprite(new Texture(Gdx.files.internal("winImage.png")));
+        winImage.setPosition((Gdx.graphics.getWidth() - winImage.getTexture().getWidth()) / 2f, (Gdx.graphics.getHeight() * 1.5f - winImage.getTexture().getHeight()) / 2f + 60);
+        loseImage = new Sprite(new Texture(Gdx.files.internal("loseImage.png")));
+        loseImage.setPosition((Gdx.graphics.getWidth() - loseImage.getTexture().getWidth()) / 2f, (Gdx.graphics.getHeight() * 1.5f - loseImage.getTexture().getHeight()) / 2f + 60);
+        returnToMain = new Sprite(new Texture(Gdx.files.internal("returnToMain.png")));
+        returnToMain.setPosition((Gdx.graphics.getWidth() - returnToMain.getTexture().getWidth()) / 2f, (Gdx.graphics.getHeight() - returnToMain.getTexture().getHeight()) / 2f + 40);
         //Create the Game World:
         //Define a camera and add it to GameObjects
         var camera = new CameraController(null);
@@ -165,14 +174,60 @@ public class Game extends ApplicationAdapter {
                 batch.end();
                 break;
             case WIN:
-                //Placeholder, just instantly reset back to main menu
-                //TODO: needs to properly reset the game state
-                gameState = GameState.MENU;
+                if (Gdx.input.isButtonJustPressed(Input.Buttons.LEFT)) {
+                    System.out.println(Gdx.input.getY());
+                    //Super hardcoded, MUST adjust if screen resized
+                    if (Gdx.input.getX() >= 340 && Gdx.input.getX() <= 740
+                    &&  Gdx.input.getY() >= 220 && Gdx.input.getY() <= 420) {
+                        gameState = GameState.MENU;
+                    }
+                }
+                if (Gdx.input.isButtonJustPressed(Input.Buttons.LEFT)) {
+                    System.out.println(Gdx.input.getY());
+                    //Super hardcoded, MUST adjust if screen resized
+                    if (Gdx.input.getX() >= 340 && Gdx.input.getX() <= 740
+                    &&  Gdx.input.getY() >= 440 && Gdx.input.getY() <= 640) {
+                        Gdx.app.exit();
+                    }
+                }
+                activeCamera.getCamera().zoom = 1;
+                activeCamera.getCamera().position.set(Gdx.graphics.getWidth()/2f,Gdx.graphics.getHeight()/2f,0);
+                activeCamera.getCamera().update();
+                batch.setProjectionMatrix(activeCamera.getCamera().combined);
+                ScreenUtils.clear(1f, 1f, 1f, 1f);
+                batch.begin();
+                winImage.draw(batch);
+                returnToMain.draw(batch);
+                quitButton.draw(batch);
+                batch.end();
                 break;
             case LOSE:
-                //Placeholder, just instantly reset back to main menu
-                //TODO: needs to properly reset the game state
-                gameState = GameState.MENU;
+                if (Gdx.input.isButtonJustPressed(Input.Buttons.LEFT)) {
+                    System.out.println(Gdx.input.getY());
+                    //Super hardcoded, MUST adjust if screen resized
+                    if (Gdx.input.getX() >= 340 && Gdx.input.getX() <= 740
+                    &&  Gdx.input.getY() >= 220 && Gdx.input.getY() <= 420) {
+                        gameState = GameState.MENU;
+                    }
+                }
+                if (Gdx.input.isButtonJustPressed(Input.Buttons.LEFT)) {
+                    System.out.println(Gdx.input.getY());
+                    //Super hardcoded, MUST adjust if screen resized
+                    if (Gdx.input.getX() >= 340 && Gdx.input.getX() <= 740
+                    &&  Gdx.input.getY() >= 440 && Gdx.input.getY() <= 640) {
+                        Gdx.app.exit();
+                    }
+                }
+                activeCamera.getCamera().zoom = 1;
+                activeCamera.getCamera().position.set(Gdx.graphics.getWidth()/2f,Gdx.graphics.getHeight()/2f,0);
+                activeCamera.getCamera().update();
+                batch.setProjectionMatrix(activeCamera.getCamera().combined);
+                ScreenUtils.clear(1f, 1f, 1f, 1f);
+                batch.begin();
+                winImage.draw(batch);
+                returnToMain.draw(batch);
+                quitButton.draw(batch);
+                batch.end();
                 break;
         }
     }
