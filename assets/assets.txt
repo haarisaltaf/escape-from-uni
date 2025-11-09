@@ -26,6 +26,7 @@ TestSet.tsx
 TestTileset.png
 Tileset1.png
 Tileset1.png.kra
+controlsHelp.png
 defaultCollectible.png
 glasses.kra
 glasses.png

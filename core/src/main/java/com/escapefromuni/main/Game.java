@@ -33,6 +33,7 @@ public class Game extends ApplicationAdapter {
     Sprite playButton;
     Sprite controlsHelp;
     Sprite pausedSprite;
+    Sprite quitButton;
     Music music;
     static GameTimer timer;
     //The camera which is active and rendering the scene
@@ -55,6 +56,8 @@ public class Game extends ApplicationAdapter {
         controlsHelp.setPosition((Gdx.graphics.getWidth() - controlsHelp.getTexture().getWidth()) / 2f, (Gdx.graphics.getHeight() - controlsHelp.getTexture().getHeight()) / 2f + 50);
         pausedSprite = new Sprite(new Texture(Gdx.files.internal("pausedGraphic.png")));
         pausedSprite.setPosition((Gdx.graphics.getWidth() - pausedSprite.getTexture().getWidth()) / 2f, (Gdx.graphics.getHeight() * 1.5f - pausedSprite.getTexture().getHeight()) / 2f);
+        quitButton = new Sprite(new Texture(Gdx.files.internal("quitButton.png")));
+        quitButton.setPosition((Gdx.graphics.getWidth() - quitButton.getTexture().getWidth()) / 2f, (Gdx.graphics.getHeight() / 2f - quitButton.getTexture().getHeight()) / 2f);
         //Create the Game World:
         //Define a camera and add it to GameObjects
         var camera = new CameraController(null);
@@ -100,7 +103,7 @@ public class Game extends ApplicationAdapter {
                 //Detect clicking on the play button
                 if (Gdx.input.isButtonJustPressed(Input.Buttons.LEFT)) {
                     if (Gdx.input.getX() >= playButton.getX() && Gdx.input.getX() <= (playButton.getX() + playButton.getWidth())
-                            && Gdx.input.getY() >= (Gdx.graphics.getHeight() - (playButton.getY() + playButton.getHeight())) && Gdx.input.getY() <= (Gdx.graphics.getHeight() - playButton.getY())) {
+                    &&  Gdx.input.getY() >= (Gdx.graphics.getHeight() - (playButton.getY() + playButton.getHeight())) && Gdx.input.getY() <= (Gdx.graphics.getHeight() - playButton.getY())) {
                         gameState = GameState.PLAYING;
                     }
                 }
@@ -144,11 +147,21 @@ public class Game extends ApplicationAdapter {
                 if (Gdx.input.isKeyJustPressed(111)) {
                     gameState = GameState.PLAYING;
                 }
+                if (Gdx.input.isButtonJustPressed(Input.Buttons.LEFT)) {
+                    System.out.println(Gdx.input.getY());
+                    //Super hardcoded, MUST adjust if screen resized
+                    if (Gdx.input.getX() >= 340 && Gdx.input.getX() <= 740
+                    &&  Gdx.input.getY() >= 410 && Gdx.input.getY() <= 610) {
+                        Gdx.app.exit();
+                    }
+                }
                 ScreenUtils.clear(1f, 1f, 1f, 1f);
                 batch.begin();
                 //TODO: Change these to UIElements
-                pausedSprite.setPosition(activeCamera.getCameraPosition().x - 200, activeCamera.getCameraPosition().y);
+                pausedSprite.setPosition(activeCamera.getCameraPosition().x - 200, activeCamera.getCameraPosition().y + 50);
                 pausedSprite.draw(batch);
+                quitButton.setPosition(activeCamera.getCameraPosition().x - 200, activeCamera.getCameraPosition().y - 250);
+                quitButton.draw(batch);
                 batch.end();
                 break;
             case WIN:
