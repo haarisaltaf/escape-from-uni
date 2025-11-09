@@ -11,6 +11,7 @@ import com.escapefromuni.main.collectables.Collectable;
 import com.escapefromuni.main.collectables.Item;
 import com.escapefromuni.main.components.CollisionComponent;
 import com.escapefromuni.main.components.RenderableComponent;
+import com.escapefromuni.main.ui.GameMessageHandler;
 
 import java.util.ArrayList;
 import java.util.Objects;
@@ -21,12 +22,11 @@ public class Player extends GameObject implements RenderableComponent, Collision
     Texture playerTexture;
     Sprite playerSprite;
     // Player speed attribute makes it possible to alter speed during the game.
-    boolean sugarCrash = false;
     boolean hasKey = false;
-    boolean wonGame = false;
-    float baseSpeed = 200f;
+    float baseSpeed = 300f;
     float speed = baseSpeed;
-    float speedTimer = 0;
+    //How fast the player's speed returns to normal
+    float speedRecovery = 25f;
     Rectangle hitbox;
     ArrayList<Item> items = new ArrayList<>();
 
@@ -56,19 +56,19 @@ public class Player extends GameObject implements RenderableComponent, Collision
     }
     @Override
     public void update(float deltaTime) {
-        // Check that the player has time left on their speed-up.
-        if (speedTimer > 0) {
-            speedTimer -= deltaTime;
+        //Speed slowly returns to the base movement speed
+        if (speed > baseSpeed){
+            speed = Math.max(speed - deltaTime * speedRecovery,baseSpeed);
+        }else if (speed < baseSpeed){
+            speed = Math.min(speed + deltaTime * speedRecovery,baseSpeed);
         }
-        // If player is out of time reset the speed and ensure counter is at 0.
-        else if (speedTimer <= 0) {
-            speedTimer = 0;
-            baseSpeed = 200f;
-            sugarCrash = false;
+        //If you drink too much coffee/soda, you get the unexpected event of a 'sugar crash' where your speed slows down
+        if (speed > baseSpeed * 2.5f){
+            speed = 0;
+            GameMessageHandler.ShowMessage("Sugar Crash!",5);
         }
-        if (Gdx.input.isKeyPressed(Input.Keys.F)) {
-            speedUp();
-        }
+        float targetZoom = 0.75f + (speed / baseSpeed) * 0.25f;
+        Game.GetActiveCamera().getCamera().zoom += (targetZoom - Game.GetActiveCamera().getCamera().zoom) * 0.25f;
 
         //Pick up collectibles
         ArrayList<GameObject> pickups = Game.getAllCollidingObjects(hitbox,CollisionLayer.COLLECTIBLE);
@@ -83,7 +83,7 @@ public class Player extends GameObject implements RenderableComponent, Collision
         }
 
         //normalise to have consistent speed regardless of direction, and then scale by move speed and time
-        Vector2 desiredVelocity = getInputVector().nor().scl(baseSpeed * deltaTime);
+        Vector2 desiredVelocity = getInputVector().nor().scl(speed * deltaTime);
         //Velocity after accounting for collision with walls
         Vector2 resolvedVelocity = CollideWithWalls(desiredVelocity);
         //The resultant velocity is applied to the player
@@ -136,17 +136,17 @@ public class Player extends GameObject implements RenderableComponent, Collision
     }
 
     /**
-     * Speeds the player up for 30 seconds.
+     * Speeds the player up temporarily.
      */
     public void speedUp() {
-        speedTimer += 30;
-        if (speedTimer > 45 || this.sugarCrash) {
-            this.sugarCrash = true;
-            baseSpeed = 100f;
-        } else {
-            baseSpeed = 300f;
-        }
-
+//        speedTimer += 30;
+//        if (speedTimer > 45 || this.sugarCrash) {
+//            this.sugarCrash = true;
+//            baseSpeed = 100f;
+//        } else {
+//            baseSpeed = 300f;
+//        }
+        speed += 100f;
     }
 
     public void giveKey() {

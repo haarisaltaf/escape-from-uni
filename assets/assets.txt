@@ -1,6 +1,9 @@
 Collision.png
 Collision.tsx
 Key.png
+Music/Dungeon.wav
+Music/Escape.wav
+Music/attribution.txt
 Player/player.kra
 Player/player.kra-autosave.kra
 Player/player_1.png

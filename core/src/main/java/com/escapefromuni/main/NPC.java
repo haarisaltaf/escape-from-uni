@@ -8,6 +8,7 @@ import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.math.Vector2;
 import com.escapefromuni.main.components.CollisionComponent;
 import com.escapefromuni.main.components.RenderableComponent;
+import com.escapefromuni.main.ui.GameMessageHandler;
 
 public class NPC extends GameObject implements RenderableComponent, CollisionComponent {
 
@@ -34,10 +35,10 @@ public class NPC extends GameObject implements RenderableComponent, CollisionCom
                 if (success){
                     Game.gameState = Game.GameState.WIN;
                 }else{
-                    System.out.println("You need the " + requiredItem);
+                    GameMessageHandler.ShowMessage("You need the " + requiredItem,4);
                 }
             }else{
-                throw new RuntimeException("Unexpected item in the bagging area");
+                throw new RuntimeException("Collided with object on player layer that is not of type Player.");
             }
         }
     }

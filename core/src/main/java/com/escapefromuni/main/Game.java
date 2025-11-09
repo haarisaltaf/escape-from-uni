@@ -3,9 +3,11 @@ package com.escapefromuni.main;
 import com.badlogic.gdx.ApplicationAdapter;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
+import com.badlogic.gdx.audio.Music;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
+import com.badlogic.gdx.math.Matrix4;
 import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.utils.ScreenUtils;
@@ -15,6 +17,7 @@ import com.escapefromuni.main.components.CameraComponent;
 import com.escapefromuni.main.components.CollisionComponent;
 import com.escapefromuni.main.components.RenderableComponent;
 import com.escapefromuni.main.components.UIComponent;
+import com.escapefromuni.main.ui.GameMessageHandler;
 import com.escapefromuni.main.ui.GameTimer;
 
 import java.util.ArrayList;
@@ -29,6 +32,7 @@ public class Game extends ApplicationAdapter {
     Sprite titleImage;
     Sprite playButton;
     Sprite pausedSprite;
+    Music music;
     //The camera which is active and rendering the scene
     private static CameraComponent activeCamera;
     public static GameState gameState = GameState.MENU;
@@ -59,19 +63,35 @@ public class Game extends ApplicationAdapter {
         //Add the Map
         addGameObject(new GameMap(camera));
         addGameObject(new GameTimer(new Vector2(-0.9f, 0.9f)));
+        addGameObject(new GameMessageHandler(new Vector2(0,0.2f)));
         addGameObject(new SpeedCollectable(new Vector2(400, 400)));
         addGameObject(new SpeedCollectable(new Vector2(800, 200)));
+        addGameObject(new SpeedCollectable(new Vector2(1200, 200)));
+        addGameObject(new SpeedCollectable(new Vector2(1600, 200)));
+        addGameObject(new SpeedCollectable(new Vector2(2000, 200)));
+        addGameObject(new SpeedCollectable(new Vector2(2400, 200)));
+        addGameObject(new SpeedCollectable(new Vector2(2800, 200)));
         addGameObject(new NPC(new Vector2(1400, 1000),"npc1.png","key"));
         addGameObject(new Key(new Vector2(2000, 1000)));
         addGameObject(new Key(new Vector2(2300, 1000)));
         addGameObject(new Key(new Vector2(2600, 1000)));
         addGameObject(new Key(new Vector2(2900, 1000)));
+
+        //Set up music
+        music = Gdx.audio.newMusic(Gdx.files.internal("Music/Dungeon.wav"));
+        music.setLooping(true);
+        music.setVolume(0.5f);
+        music.play();
     }
 
     @Override
     public void render() {
         switch (gameState) {
             case MENU:
+                activeCamera.getCamera().zoom = 1;
+                activeCamera.getCamera().position.set(Gdx.graphics.getWidth()/2f,Gdx.graphics.getHeight()/2f,0);
+                activeCamera.getCamera().update();
+                batch.setProjectionMatrix(activeCamera.getCamera().combined);
                 //TODO: Change these to UIElements
                 //Detect clicking on the play button
                 if (Gdx.input.isButtonJustPressed(Input.Buttons.LEFT)) {
@@ -87,6 +107,7 @@ public class Game extends ApplicationAdapter {
                 batch.end();
                 break;
             case PLAYING:
+
                 if (Gdx.input.isKeyJustPressed(111)) {
                     gameState = GameState.PAUSED;
                 }
@@ -127,10 +148,12 @@ public class Game extends ApplicationAdapter {
                 break;
             case WIN:
                 //Placeholder, just instantly reset back to main menu
+                //TODO: needs to properly reset the game state
                 gameState = GameState.MENU;
                 break;
             case LOSE:
                 //Placeholder, just instantly reset back to main menu
+                //TODO: needs to properly reset the game state
                 gameState = GameState.MENU;
                 break;
         }
@@ -181,10 +204,10 @@ public class Game extends ApplicationAdapter {
         }
         return null;
     }
-    public void SetActiveCamera(CameraComponent newActiveCamera){
+    public static void SetActiveCamera(CameraComponent newActiveCamera){
         activeCamera = newActiveCamera;
     }
-    public CameraComponent GetActiveCamera(){
+    public static CameraComponent GetActiveCamera(){
         return activeCamera;
     }
 

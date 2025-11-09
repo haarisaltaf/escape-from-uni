@@ -20,8 +20,9 @@ public class GameTimer extends UIElement {
     public void update(float deltaTime){
         if(Game.gameState == Game.GameState.PLAYING) {
             time -= deltaTime;
-        } else if (time < 0){
-            System.out.println("Time Up");
+            if (time < 0){
+                Game.gameState = Game.GameState.LOSE;
+            }
         }
     }
     public static String GetTimeString(float timeSeconds){
