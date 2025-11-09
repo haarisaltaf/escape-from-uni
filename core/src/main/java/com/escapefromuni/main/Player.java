@@ -19,7 +19,7 @@ import java.util.Objects;
 public class Player extends GameObject implements RenderableComponent, CollisionComponent {
 
     // Texture and Sprite class used from the libGDX library.
-    Texture playerTexture;
+    Texture idleTexture;
     Sprite playerSprite;
     // Player speed attribute makes it possible to alter speed during the game.
     boolean hasKey = false;
@@ -29,16 +29,24 @@ public class Player extends GameObject implements RenderableComponent, Collision
     float speedRecovery = 25f;
     Rectangle hitbox;
     ArrayList<Item> items = new ArrayList<>();
+    Texture[] animation = new Texture[]{
+            new Texture(Gdx.files.internal("Player/player_3.png")),
+            new Texture(Gdx.files.internal("Player/player_4.png")),
+            new Texture(Gdx.files.internal("Player/player_5.png")),
+            new Texture(Gdx.files.internal("Player/player_6.png"))
+    };
+    float animation_speed = 4f;
+    float animation_frame = 0;
 
     public Player(Vector2 position, float rotation, String playerTexturePath) {
         super(position, rotation);
-        this.playerTexture = new Texture(Gdx.files.internal(playerTexturePath));
+        this.idleTexture = new Texture(Gdx.files.internal(playerTexturePath));
     }
 
     public Player(Vector2 position, float rotation) {
         super(position, rotation);
         // Player texture defaults to placeholder player.png
-        playerTexture = new Texture(Gdx.files.internal("Player/player_2.png"));
+        idleTexture = new Texture(Gdx.files.internal("Player/player_2.png"));
     }
 
     public Player(Vector2 position) {
@@ -47,8 +55,8 @@ public class Player extends GameObject implements RenderableComponent, Collision
 
     public void start() {
         // Generates a Sprite object using the player.png texture
-        playerTexture = new Texture(Gdx.files.internal("Player/player_2.png"));
-        playerSprite = new Sprite(playerTexture);
+        idleTexture = new Texture(Gdx.files.internal("Player/player_2.png"));
+        playerSprite = new Sprite(idleTexture);
         float rectX = position.x;
         float rectY = position.y;
         this.hitbox = new Rectangle(rectX, rectY, playerSprite.getWidth(), playerSprite.getHeight());
@@ -88,7 +96,18 @@ public class Player extends GameObject implements RenderableComponent, Collision
         Vector2 resolvedVelocity = CollideWithWalls(desiredVelocity);
         //The resultant velocity is applied to the player
         position.add(resolvedVelocity.x, resolvedVelocity.y);
-        //Simulate "drag" using velocity
+        //Handle animation
+        if (resolvedVelocity.len2() <= 0.01){
+            playerSprite.setTexture(idleTexture);
+        }else{
+            animation_frame += deltaTime * animation_speed * (speed / baseSpeed);
+            if (Math.floor(animation_frame) >= animation.length){
+                animation_frame = 0;
+            }
+            playerSprite.setTexture(animation[(int)Math.floor(animation_frame)]);
+        }
+        playerSprite.setFlip(resolvedVelocity.x < 0,false);
+        //Simulate "drag" on items using velocity
         displayItems(resolvedVelocity.x);
     }
     public Vector2 CollideWithWalls(Vector2 desiredVelocity){
