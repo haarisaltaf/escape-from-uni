@@ -34,6 +34,7 @@ public class Game extends ApplicationAdapter {
     Sprite controlsHelp;
     Sprite pausedSprite;
     Music music;
+    static GameTimer timer;
     //The camera which is active and rendering the scene
     private static CameraComponent activeCamera;
     public static GameState gameState = GameState.MENU;
@@ -238,9 +239,17 @@ public class Game extends ApplicationAdapter {
             }
             collidingComponents.get(layer).add(collisionObject);
         }
+        if(gameObject.getClass() == GameTimer.class){
+            timer = (GameTimer)gameObject;
+        }
         gameObject.start();
     }
     public enum GameState{
         MENU, PLAYING, PAUSED, WIN, LOSE
     }
+
+    public static GameTimer getTimer(){
+        return timer;
+    }
+
 }

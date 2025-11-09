@@ -9,6 +9,7 @@ public class GameTimer extends UIElement {
 
     float time;
     BitmapFont font;
+    float eventCounter = 0;
 
     public GameTimer(Vector2 relativeScreenPosition){
         super(relativeScreenPosition);
@@ -39,11 +40,15 @@ public class GameTimer extends UIElement {
 
     @Override
     public void render(SpriteBatch batch) {
-        font.draw(batch,"Time : " + GetTimeString(time), position.x,position.y);
+        font.draw(batch,"Time : " + GetTimeString(time) + "\n Events :" + eventCounter, position.x,position.y);
     }
     @Override
     public void positionOnScreen(Vector2 cameraPosition, Vector2 screenSize,float zoom) {
         super.positionOnScreen(cameraPosition,screenSize,zoom);
         font.getData().setScale(3 * zoom);
+    }
+
+    public void setEventCounter(float eventCounter) {
+        this.eventCounter = eventCounter;
     }
 }

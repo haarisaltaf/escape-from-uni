@@ -14,7 +14,9 @@ import com.escapefromuni.main.components.RenderableComponent;
 import com.escapefromuni.main.ui.GameMessageHandler;
 
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.Objects;
+import java.util.Set;
 
 public class Player extends GameObject implements RenderableComponent, CollisionComponent {
 
@@ -37,6 +39,8 @@ public class Player extends GameObject implements RenderableComponent, Collision
     };
     float animation_speed = 4f;
     float animation_frame = 0;
+    // Event counter
+    Set<String> events = new HashSet<String>();
 
     public Player(Vector2 position, float rotation, String playerTexturePath) {
         super(position, rotation);
@@ -74,6 +78,7 @@ public class Player extends GameObject implements RenderableComponent, Collision
         if (speed > baseSpeed * 2.5f){
             speed = 0;
             GameMessageHandler.ShowMessage("Sugar Crash!",5);
+            events.add("SugarCrash");
         }
         float targetZoom = 0.75f + (speed / baseSpeed) * 0.25f;
         Game.GetActiveCamera().getCamera().zoom += (targetZoom - Game.GetActiveCamera().getCamera().zoom) * 0.25f;
@@ -109,6 +114,7 @@ public class Player extends GameObject implements RenderableComponent, Collision
         playerSprite.setFlip(resolvedVelocity.x < 0,false);
         //Simulate "drag" on items using velocity
         displayItems(resolvedVelocity.x);
+        setCount();
     }
     public Vector2 CollideWithWalls(Vector2 desiredVelocity){
         Vector2 newVelocity = new Vector2(desiredVelocity.x,desiredVelocity.y);
@@ -158,18 +164,13 @@ public class Player extends GameObject implements RenderableComponent, Collision
      * Speeds the player up temporarily.
      */
     public void speedUp() {
-//        speedTimer += 30;
-//        if (speedTimer > 45 || this.sugarCrash) {
-//            this.sugarCrash = true;
-//            baseSpeed = 100f;
-//        } else {
-//            baseSpeed = 300f;
-//        }
         speed += 100f;
+        events.add("SpdUP");
     }
 
     public void giveKey() {
         this.hasKey = true;
+        events.add("GetKey");
     }
 
     public static boolean hasKey() {
@@ -195,6 +196,7 @@ public class Player extends GameObject implements RenderableComponent, Collision
     }
     public boolean TakeItem(String itemType){
         int itemToRemove = -1;
+        events.add("TakeItem");
         for (int i = 0; i < items.size(); i++) {
             if (Objects.equals(items.get(i).itemType, itemType)){
                 itemToRemove = i;
@@ -207,6 +209,10 @@ public class Player extends GameObject implements RenderableComponent, Collision
         }else{
             return false;
         }
+    }
+
+    public void setCount(){
+        Game.getTimer().setEventCounter(this.events.size());
     }
 
     @Override
