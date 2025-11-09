@@ -43,6 +43,11 @@ public class GameMap extends GameObject implements RenderableComponent, Collisio
         renderer.render();
     }
 
+    /**
+     * Generates the collision that map uses for e.g. walls.
+     * Tiles in the "Collision" Tiled layer with ID 1 are considered
+     * 'Collision Tiles' with a square hitbox overlapping the entire tile
+     */
     public void generateCollisionMap(){
         TiledMapTileLayer collisionLayer = (TiledMapTileLayer)this.TestMap.getLayers().get("Collision");
         for(int x = 0; x <collisionLayer.getWidth() ; x++){

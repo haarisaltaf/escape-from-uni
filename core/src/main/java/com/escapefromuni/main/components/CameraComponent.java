@@ -17,6 +17,16 @@ public interface CameraComponent extends BaseComponent{
      * @param spriteBatch the spriteBatch to project to.
      */
     public void updateCamera(SpriteBatch spriteBatch);
+
+    /**
+     * Gets the position of the camera.
+     * @return The position of the camera. This should be the gameObjects position.
+     */
     public Vector2 getCameraPosition();
+
+    /**
+     * Gets the OrthographicCamera used to render the scene
+     * @return The OrthographicCamera this component uses.
+     */
     public OrthographicCamera getCamera();
 }

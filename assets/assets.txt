@@ -31,12 +31,16 @@ defaultCollectible.png
 glasses.kra
 glasses.png
 libgdx.png
+loseImage.png
 npc1.kra
 npc1.png
 pausedGraphic.png
 playButton.png
 player.png
 professor.png
+quitButton.png
+returnToMain.png
 soda.kra
 soda.png
 titleGraphic.png
+winImage.png

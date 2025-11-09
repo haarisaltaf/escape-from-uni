@@ -15,12 +15,13 @@ import com.escapefromuni.main.components.RenderableComponent;
 public class CameraController extends GameObject implements CameraComponent {
     OrthographicCamera camera;
     GameObject target;
+
+    /**
+     * Set's the target gameObject that this CameraController should track.
+     * @param target the gameObject to follow.
+     */
     public void SetTarget(GameObject target) {
         this.target = target;
-    }
-    public OrthographicCamera GetCamera()
-    {
-        return camera;
     }
     @Override
     public void start() {
@@ -38,13 +39,6 @@ public class CameraController extends GameObject implements CameraComponent {
     @Override
     public void updateCamera(SpriteBatch batch) {
         camera.position.set(position.x,position.y,0);
-        if (Gdx.input.isKeyPressed(Input.Keys.Q)) {
-            System.out.println("zoom in");
-            camera.zoom += 0.02f;
-        }
-        if (Gdx.input.isKeyPressed(Input.Keys.E)) {
-            camera.zoom -= 0.02f;
-        }
         camera.update();
         batch.setProjectionMatrix(camera.combined);
     }

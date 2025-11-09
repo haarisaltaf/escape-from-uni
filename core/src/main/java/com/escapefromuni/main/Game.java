@@ -114,6 +114,7 @@ public class Game extends ApplicationAdapter {
                     if (Gdx.input.getX() >= playButton.getX() && Gdx.input.getX() <= (playButton.getX() + playButton.getWidth())
                     &&  Gdx.input.getY() >= (Gdx.graphics.getHeight() - (playButton.getY() + playButton.getHeight())) && Gdx.input.getY() <= (Gdx.graphics.getHeight() - playButton.getY())) {
                         gameState = GameState.PLAYING;
+                        GameMessageHandler.ShowMessage("WASD to move\nESC to pause",3);
                     }
                 }
                 ScreenUtils.clear(1f, 1f, 1f, 1f);
@@ -241,6 +242,13 @@ public class Game extends ApplicationAdapter {
         }
     }
 
+    /**
+     * Checks a rectangle hitbox against the array of all hitboxes inside a certain collision layer, and then
+     * returns true if there are any overlapping hitboxes
+     * @param hitbox A rectangle which is compared against every hitbox inside a layer
+     * @param type The type of layer which is checked
+     * @return True if a CollisionComponent's hitbox overlaps the input, false otherwise.
+     */
     public static Boolean isCollidingWithLayer(Rectangle hitbox, CollisionComponent.CollisionLayer type) {
         if (!collidingComponents.containsKey(type)) return false;
         for (CollisionComponent collider : collidingComponents.get(type)) {
@@ -252,7 +260,13 @@ public class Game extends ApplicationAdapter {
         }
         return false;
     }
-
+    /**
+     * Returns a list of all overlapping hitboxes inside a certain collision layer, from
+     * a given Rectangle hitbox which is used to compare against.
+     * @param hitbox A rectangle which is compared against every hitbox inside the layer
+     * @param type The type of layer which is checked
+     * @return An arrayList of GameObjects including all CollisionComponents that collided with the hitbox.
+     */
     public static ArrayList<GameObject> getAllCollidingObjects(Rectangle hitbox, CollisionComponent.CollisionLayer type) {
         if (!collidingComponents.containsKey(type)) return null;
         ArrayList<GameObject> overlappingGameObjects = new ArrayList<>();
@@ -265,7 +279,15 @@ public class Game extends ApplicationAdapter {
         }
         return overlappingGameObjects;
     }
-
+    /**
+     * Returns the first overlapping hitbox inside a certain collision layer, from
+     * a given Rectangle hitbox which is used to compare against. This function is
+     * useful if you know that a layer will only contain one gameObject, i.e. the
+     * Player layer (should) only be used for the player class.
+     * @param hitbox A rectangle which is compared against every hitbox inside the layer
+     * @param type The type of layer which is checked
+     * @return The CollisionComponent that collided with the hitbox.
+     */
     public static GameObject getFirstCollidingObjectInLayer(Rectangle hitbox, CollisionComponent.CollisionLayer type) {
         if (!collidingComponents.containsKey(type)) return null;
         for (CollisionComponent collider : collidingComponents.get(type)) {
@@ -277,9 +299,20 @@ public class Game extends ApplicationAdapter {
         }
         return null;
     }
+
+    /**
+     * Set's the camera that the Game is actively using as the main game camera.
+     * Changing the active camera could be useful for cutscenes etc. There can
+     * only be one active camera at a time.
+     * @param newActiveCamera The new CameraComponent which replaces the old active camera.
+     */
     public static void SetActiveCamera(CameraComponent newActiveCamera){
         activeCamera = newActiveCamera;
     }
+    /**
+     * Returns the camera that the Game is actively using as the main game camera.
+     * @return The new CameraComponent which replaces the old active camera.
+     */
     public static CameraComponent GetActiveCamera(){
         return activeCamera;
     }

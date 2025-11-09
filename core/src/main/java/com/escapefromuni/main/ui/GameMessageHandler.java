@@ -27,6 +27,15 @@ public class GameMessageHandler extends UIElement{
             }
         }
     }
+
+    /**
+     * Displays a message onto the screen. This can be good for simple text messages or
+     * output that you want to display onto the screen. This will also overwrite any
+     * previous messages that are currently displaying on screen but haven't disappeared
+     * yet.
+     * @param message A standard string text message.
+     * @param time How long the message remains on screen, in seconds.
+     */
     public static void ShowMessage(String message,float time){
         instance.time = time;
         instance.message = message;

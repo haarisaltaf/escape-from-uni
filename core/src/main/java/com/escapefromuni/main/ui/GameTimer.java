@@ -26,6 +26,13 @@ public class GameTimer extends UIElement {
             }
         }
     }
+
+    /**
+     * Converts a time given in seconds to a standard 'stopwatch' format.
+     * @param timeSeconds The input time in seconds.
+     * @return A formatted string in the form MM:SS:DD (where D is milliseconds)
+     *      Or, if time exceeds 60 minutes, the form HH:MM:SS:DD where H is time in hours.
+     */
     public static String GetTimeString(float timeSeconds){
         float hours = timeSeconds / 3600;
         float minutes = (timeSeconds % 3600) / 60;
