@@ -31,6 +31,7 @@ public class Game extends ApplicationAdapter {
     private SpriteBatch batch;
     Sprite titleImage;
     Sprite playButton;
+    Sprite controlsHelp;
     Sprite pausedSprite;
     Music music;
     //The camera which is active and rendering the scene
@@ -49,6 +50,8 @@ public class Game extends ApplicationAdapter {
         titleImage.setPosition((Gdx.graphics.getWidth() - titleImage.getTexture().getWidth()) / 2f, (Gdx.graphics.getHeight() * 1.5f - titleImage.getTexture().getHeight()) / 2f);
         playButton = new Sprite(new Texture(Gdx.files.internal("playButton.png")));
         playButton.setPosition((Gdx.graphics.getWidth() - playButton.getTexture().getWidth()) / 2f, (Gdx.graphics.getHeight() / 2f - playButton.getTexture().getHeight()) / 2f);
+        controlsHelp = new Sprite(new Texture(Gdx.files.internal("controlsHelp.png")));
+        controlsHelp.setPosition((Gdx.graphics.getWidth() - controlsHelp.getTexture().getWidth()) / 2f, (Gdx.graphics.getHeight() - controlsHelp.getTexture().getHeight()) / 2f + 50);
         pausedSprite = new Sprite(new Texture(Gdx.files.internal("pausedGraphic.png")));
         pausedSprite.setPosition((Gdx.graphics.getWidth() - pausedSprite.getTexture().getWidth()) / 2f, (Gdx.graphics.getHeight() * 1.5f - pausedSprite.getTexture().getHeight()) / 2f);
         //Create the Game World:
@@ -104,6 +107,7 @@ public class Game extends ApplicationAdapter {
                 batch.begin();
                 titleImage.draw(batch);
                 playButton.draw(batch);
+                controlsHelp.draw(batch);
                 batch.end();
                 break;
             case PLAYING:
