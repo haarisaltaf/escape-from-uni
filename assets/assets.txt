@@ -5,7 +5,6 @@ Music/Dungeon.wav
 Music/Escape.wav
 Music/attribution.txt
 Player/player.kra
-Player/player.kra-autosave.kra
 Player/player_1.png
 Player/player_10.png
 Player/player_11.png
