@@ -42,6 +42,12 @@ public abstract class Collectable extends GameObject implements RenderableCompon
         }
 
     }
+
+    /**
+     *
+     * @param player Player object
+     * Disables the collectible once the player has collected.
+     */
     public void pickup(Player player){
         active = false;
     }

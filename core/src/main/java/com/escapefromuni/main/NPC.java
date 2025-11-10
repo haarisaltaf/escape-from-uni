@@ -12,6 +12,9 @@ import com.escapefromuni.main.ui.GameMessageHandler;
 
 public class NPC extends GameObject implements RenderableComponent, CollisionComponent {
 
+    // Stores the texture and sprit for the npc
+    // Stores the hitbox of the npc
+    // Stores the item needed to interract with the npc
     Texture texture;
     Sprite sprite;
     Rectangle hitbox;
@@ -26,6 +29,10 @@ public class NPC extends GameObject implements RenderableComponent, CollisionCom
         this.requiredItem = requiredItem;
     }
 
+    /**
+     * Update the NPC to check if it has been interracted with.
+     * @param deltaTime : The time in ms since the last update
+     */
     @Override
     public void update(float deltaTime) {
         GameObject playerObject = Game.getFirstCollidingObjectInLayer(hitbox,CollisionLayer.PLAYER);
@@ -43,22 +50,26 @@ public class NPC extends GameObject implements RenderableComponent, CollisionCom
         }
     }
 
+    // Renderer for the npc
     @Override
     public void render(SpriteBatch batch) {
         sprite.setPosition(position.x, position.y);
         sprite.draw(batch);
     }
 
+    //Returns the collsion layer of the npc
     @Override
     public CollisionLayer getCollisionLayer() {
         return CollisionLayer.NPC;
     }
 
+    //Returns true if the given hitbox collides with npc hitbox
     @Override
     public Boolean isCollidingWith(Rectangle hitboxCheck) {
         return hitbox.overlaps(hitboxCheck);
     }
 
+    //Returns true if the hitbox has collision
     @Override
     public Boolean isCollisionEnabled() {
         return true;

@@ -6,7 +6,8 @@ import com.badlogic.gdx.math.Vector2;
 import com.escapefromuni.main.Game;
 
 public class GameTimer extends UIElement {
-
+    // Store the game time and event counter
+    // Creates a font used to output time
     float time;
     BitmapFont font;
     float eventCounter = 0;
@@ -17,6 +18,10 @@ public class GameTimer extends UIElement {
         font = new BitmapFont();
     }
 
+    /**
+     * If the game time drops below zero the GameState is set to lose.
+     * @param deltaTime : The time in ms since the last update
+     */
     @Override
     public void update(float deltaTime){
         if(Game.gameState == Game.GameState.PLAYING) {
@@ -45,16 +50,24 @@ public class GameTimer extends UIElement {
         }
     }
 
+    // Returns the time left on the timer
+    public float GetTime(){
+        return time;
+    }
+
+    //Render the timer
     @Override
     public void render(SpriteBatch batch) {
         font.draw(batch,"Time : " + GetTimeString(time) + "\n Events :" + eventCounter, position.x,position.y);
     }
+    // Set position on screen
     @Override
     public void positionOnScreen(Vector2 cameraPosition, Vector2 screenSize,float zoom) {
         super.positionOnScreen(cameraPosition,screenSize,zoom);
         font.getData().setScale(3 * zoom);
     }
 
+    // Sets the event counter
     public void setEventCounter(float eventCounter) {
         this.eventCounter = eventCounter;
     }

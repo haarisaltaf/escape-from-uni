@@ -180,14 +180,18 @@ public class Game extends ApplicationAdapter {
                         Gdx.app.exit();
                     }
                 }
+                String time = GameTimer.GetTimeString(timer.GetTime());
                 activeCamera.getCamera().zoom = 1;
                 activeCamera.getCamera().position.set(Gdx.graphics.getWidth()/2f,Gdx.graphics.getHeight()/2f,0);
                 activeCamera.getCamera().update();
                 batch.setProjectionMatrix(activeCamera.getCamera().combined);
-                ScreenUtils.clear(1f, 1f, 1f, 1f);
+                ScreenUtils.clear(0.25f, 0.75f, 0f, 1f);
                 batch.begin();
                 winImage.draw(batch);
                 quitButton.draw(batch);
+                GameMessageHandler.ShowMessage("Time left : " + time,1);
+                GameMessageHandler.instance.positionOnScreen(new Vector2(0,0),new Vector2(Gdx.graphics.getWidth(),Gdx.graphics.getHeight()),1);
+                GameMessageHandler.instance.render(batch);
                 batch.end();
                 break;
             case LOSE:

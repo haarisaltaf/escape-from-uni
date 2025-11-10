@@ -7,7 +7,7 @@ import com.escapefromuni.main.Game;
 
 public class GameMessageHandler extends UIElement{
     BitmapFont font;
-    static GameMessageHandler instance;
+    public static GameMessageHandler instance;
     float time;
     String message;
     Boolean visible = false;
