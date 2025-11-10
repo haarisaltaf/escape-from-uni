@@ -36,7 +36,6 @@ public class Game extends ApplicationAdapter {
     Sprite quitButton;
     Sprite winImage;
     Sprite loseImage;
-    Sprite returnToMain;
     Music music;
     static GameTimer timer;
     //The camera which is active and rendering the scene
@@ -65,8 +64,6 @@ public class Game extends ApplicationAdapter {
         winImage.setPosition((Gdx.graphics.getWidth() - winImage.getTexture().getWidth()) / 2f, (Gdx.graphics.getHeight() * 1.5f - winImage.getTexture().getHeight()) / 2f + 60);
         loseImage = new Sprite(new Texture(Gdx.files.internal("loseImage.png")));
         loseImage.setPosition((Gdx.graphics.getWidth() - loseImage.getTexture().getWidth()) / 2f, (Gdx.graphics.getHeight() * 1.5f - loseImage.getTexture().getHeight()) / 2f + 60);
-        returnToMain = new Sprite(new Texture(Gdx.files.internal("returnToMain.png")));
-        returnToMain.setPosition((Gdx.graphics.getWidth() - returnToMain.getTexture().getWidth()) / 2f, (Gdx.graphics.getHeight() - returnToMain.getTexture().getHeight()) / 2f + 40);
         //Create the Game World:
         //Define a camera and add it to GameObjects
         var camera = new CameraController(null);
@@ -179,14 +176,6 @@ public class Game extends ApplicationAdapter {
                     System.out.println(Gdx.input.getY());
                     //Super hardcoded, MUST adjust if screen resized
                     if (Gdx.input.getX() >= 340 && Gdx.input.getX() <= 740
-                    &&  Gdx.input.getY() >= 220 && Gdx.input.getY() <= 420) {
-                        gameState = GameState.MENU;
-                    }
-                }
-                if (Gdx.input.isButtonJustPressed(Input.Buttons.LEFT)) {
-                    System.out.println(Gdx.input.getY());
-                    //Super hardcoded, MUST adjust if screen resized
-                    if (Gdx.input.getX() >= 340 && Gdx.input.getX() <= 740
                     &&  Gdx.input.getY() >= 440 && Gdx.input.getY() <= 640) {
                         Gdx.app.exit();
                     }
@@ -198,7 +187,6 @@ public class Game extends ApplicationAdapter {
                 ScreenUtils.clear(1f, 1f, 1f, 1f);
                 batch.begin();
                 winImage.draw(batch);
-                returnToMain.draw(batch);
                 quitButton.draw(batch);
                 batch.end();
                 break;
@@ -207,14 +195,6 @@ public class Game extends ApplicationAdapter {
                     System.out.println(Gdx.input.getY());
                     //Super hardcoded, MUST adjust if screen resized
                     if (Gdx.input.getX() >= 340 && Gdx.input.getX() <= 740
-                    &&  Gdx.input.getY() >= 220 && Gdx.input.getY() <= 420) {
-                        gameState = GameState.MENU;
-                    }
-                }
-                if (Gdx.input.isButtonJustPressed(Input.Buttons.LEFT)) {
-                    System.out.println(Gdx.input.getY());
-                    //Super hardcoded, MUST adjust if screen resized
-                    if (Gdx.input.getX() >= 340 && Gdx.input.getX() <= 740
                     &&  Gdx.input.getY() >= 440 && Gdx.input.getY() <= 640) {
                         Gdx.app.exit();
                     }
@@ -225,8 +205,7 @@ public class Game extends ApplicationAdapter {
                 batch.setProjectionMatrix(activeCamera.getCamera().combined);
                 ScreenUtils.clear(1f, 1f, 1f, 1f);
                 batch.begin();
-                winImage.draw(batch);
-                returnToMain.draw(batch);
+                loseImage.draw(batch);
                 quitButton.draw(batch);
                 batch.end();
                 break;
