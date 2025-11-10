@@ -37,8 +37,8 @@ public class Player extends GameObject implements RenderableComponent, Collision
             new Texture(Gdx.files.internal("Player/player_5.png")),
             new Texture(Gdx.files.internal("Player/player_6.png"))
     };
-    float animation_speed = 4f;
-    float animation_frame = 0;
+    float animationSpeed = 4f;
+    float animationFrame = 0;
     // Event counter
     Set<String> events = new HashSet<String>();
 
@@ -105,11 +105,11 @@ public class Player extends GameObject implements RenderableComponent, Collision
         if (resolvedVelocity.len2() <= 0.01){
             playerSprite.setTexture(idleTexture);
         }else{
-            animation_frame += deltaTime * animation_speed * (speed / baseSpeed);
-            if (Math.floor(animation_frame) >= animation.length){
-                animation_frame = 0;
+            animationFrame += deltaTime * animationSpeed * (speed / baseSpeed);
+            if (Math.floor(animationFrame) >= animation.length){
+                animationFrame = 0;
             }
-            playerSprite.setTexture(animation[(int)Math.floor(animation_frame)]);
+            playerSprite.setTexture(animation[(int)Math.floor(animationFrame)]);
         }
         playerSprite.setFlip(resolvedVelocity.x < 0,false);
         //Simulate "drag" on items using velocity
@@ -230,3 +230,4 @@ public class Player extends GameObject implements RenderableComponent, Collision
         return true;
     }
 }
+
