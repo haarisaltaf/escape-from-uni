@@ -39,7 +39,6 @@ playButton.png
 player.png
 professor.png
 quitButton.png
-returnToMain.png
 soda.kra
 soda.png
 titleGraphic.png
