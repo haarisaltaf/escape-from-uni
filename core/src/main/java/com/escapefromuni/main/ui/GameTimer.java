@@ -55,11 +55,17 @@ public class GameTimer extends UIElement {
         return time;
     }
 
+    // Adds 5 seconds to timer
+    public void addTime(float seconds){
+	time += seconds;
+    }
+
     //Render the timer
     @Override
     public void render(SpriteBatch batch) {
         font.draw(batch,"Time : " + GetTimeString(time) + "\n Events :" + eventCounter, position.x,position.y);
     }
+
     // Set position on screen
     @Override
     public void positionOnScreen(Vector2 cameraPosition, Vector2 screenSize,float zoom) {

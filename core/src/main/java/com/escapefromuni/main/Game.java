@@ -12,6 +12,7 @@ import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.utils.ScreenUtils;
 import com.escapefromuni.main.collectables.Key;
+import com.escapefromuni.main.collectables.TimeStop;
 import com.escapefromuni.main.collectables.SpeedCollectable;
 import com.escapefromuni.main.components.CameraComponent;
 import com.escapefromuni.main.components.CollisionComponent;
@@ -37,7 +38,7 @@ public class Game extends ApplicationAdapter {
     Sprite winImage;
     Sprite loseImage;
     Music music;
-    static GameTimer timer;
+    public static GameTimer timer;
     //The camera which is active and rendering the scene
     private static CameraComponent activeCamera;
     public static GameState gameState = GameState.MENU;
@@ -78,6 +79,7 @@ public class Game extends ApplicationAdapter {
         addGameObject(new GameTimer(new Vector2(-0.9f, 0.9f)));
         addGameObject(new GameMessageHandler(new Vector2(0,0.2f)));
         addGameObject(new SpeedCollectable(new Vector2(400, 400)));
+	addGameObject(new TimeStop(new Vector2(500, 500)));
         addGameObject(new SpeedCollectable(new Vector2(800, 200)));
         addGameObject(new SpeedCollectable(new Vector2(1200, 200)));
         addGameObject(new SpeedCollectable(new Vector2(1600, 200)));
