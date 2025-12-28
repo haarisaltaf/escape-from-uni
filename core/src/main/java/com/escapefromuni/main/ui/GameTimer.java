@@ -10,7 +10,7 @@ public class GameTimer extends UIElement {
     // Creates a font used to output time
     float time;
     BitmapFont font;
-    float eventCounter = 0;
+    int eventCounter = 0;
 
     public GameTimer(Vector2 relativeScreenPosition){
         super(relativeScreenPosition);
@@ -33,21 +33,15 @@ public class GameTimer extends UIElement {
     }
 
     /**
-     * Converts a time given in seconds to a standard 'stopwatch' format.
+     * Converts a time given in seconds to minutes and seconds instead.
      * @param timeSeconds The input time in seconds.
-     * @return A formatted string in the form MM:SS:DD (where D is milliseconds)
-     *      Or, if time exceeds 60 minutes, the form HH:MM:SS:DD where H is time in hours.
+     * @return A formatted string in the form MM:SS
      */
     public static String GetTimeString(float timeSeconds){
-        float hours = timeSeconds / 3600;
         float minutes = (timeSeconds % 3600) / 60;
         float seconds = timeSeconds % 60;
-        float milliSeconds = timeSeconds % 1f;
-        if (hours > 1){
-            return String.format("%02d:%02d:%02d:%02d", (int)Math.floor(hours), (int)Math.floor(minutes), (int)Math.floor(seconds),(int)Math.floor(milliSeconds * 100));
-        }else{
-            return String.format("%02d:%02d:%02d", (int)Math.floor(minutes), (int)Math.floor(seconds),(int)Math.floor(milliSeconds * 100));
-        }
+
+        return String.format("%02d:%02d", (int)Math.floor(minutes), (int)Math.floor(seconds));
     }
 
     // Returns the time left on the timer
@@ -63,7 +57,7 @@ public class GameTimer extends UIElement {
     //Render the timer
     @Override
     public void render(SpriteBatch batch) {
-        font.draw(batch,"Time : " + GetTimeString(time) + "\n Events :" + eventCounter, position.x,position.y);
+        font.draw(batch,"Time Left : " + GetTimeString(time) + "\n Events : " + eventCounter, position.x,position.y);
     }
 
     // Set position on screen
@@ -74,7 +68,7 @@ public class GameTimer extends UIElement {
     }
 
     // Sets the event counter
-    public void setEventCounter(float eventCounter) {
+    public void setEventCounter(int eventCounter) {
         this.eventCounter = eventCounter;
     }
 }

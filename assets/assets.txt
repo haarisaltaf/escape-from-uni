@@ -33,8 +33,6 @@ controlsHelp.png
 defaultCollectible.png
 glasses.kra
 glasses.png
-hs_err_pid94962.log
-hs_err_pid96077.log
 libgdx.png
 loseImage.png
 npc1.kra
