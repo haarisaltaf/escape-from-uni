@@ -16,6 +16,7 @@ import com.escapefromuni.main.collectables.TimeStop;
 import com.escapefromuni.main.collectables.SpeedCollectable;
 import com.escapefromuni.main.collectables.NauseaCollectable;
 import com.escapefromuni.main.collectables.DeathCollectable;
+import com.escapefromuni.main.collectables.BinocularsItem;
 import com.escapefromuni.main.components.CameraComponent;
 import com.escapefromuni.main.components.CollisionComponent;
 import com.escapefromuni.main.components.RenderableComponent;
@@ -95,6 +96,7 @@ public class Game extends ApplicationAdapter {
         addGameObject(new Key(new Vector2(2300, 1000)));
         addGameObject(new Key(new Vector2(2600, 1000)));
         addGameObject(new Key(new Vector2(2900, 1000)));
+        addGameObject(new BinocularsItem(new Vector2(2750, 600)));
 
         //Set up music
         music = Gdx.audio.newMusic(Gdx.files.internal("Music/Dungeon.wav"));

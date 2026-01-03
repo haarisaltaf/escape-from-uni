@@ -20,6 +20,10 @@ public class CameraController extends GameObject implements CameraComponent {
     float nauseaTimer = 0f;
     private float amplitude = 20f; // How much the camera moves
     private float frequency = 5f; // How fast it oscillates
+
+    // Variable to control zoom using Binoculars item
+    int numOfBinoculars = 0;
+
     /**
      * Set's the target gameObject that this CameraController should track.
      * @param target the gameObject to follow.
@@ -39,6 +43,8 @@ public class CameraController extends GameObject implements CameraComponent {
     public void update(float delta) {
 
         position.set(target.position);
+        // Camera zooms out when binoculars are picked up
+        camera.zoom += numOfBinoculars * 0.1;
 
         // Nausea Effect
         if (nauseaTimer > 0) {
@@ -81,5 +87,9 @@ public class CameraController extends GameObject implements CameraComponent {
     }
     public void nausea() {
         nauseaTimer = 10f;
+    }
+    
+    public void binoculars() {
+        numOfBinoculars += 1;
     }
 }

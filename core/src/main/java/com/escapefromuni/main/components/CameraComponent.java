@@ -34,4 +34,9 @@ public interface CameraComponent extends BaseComponent{
     * Calls the nausea method.
     */
     public void nausea();
+
+    /**
+    * Calls the binoculars method.
+    */
+    public void binoculars();
 }
