@@ -71,7 +71,7 @@ public class Game extends ApplicationAdapter {
         addGameObject(camera);
         SetActiveCamera(camera);
         //Add the player
-        var player = new Player(new Vector2(256, 256));
+        var player = new Player(new Vector2(2500, 256));
         addGameObject(player);
         camera.SetTarget(player);
         //Add the Map
@@ -79,7 +79,7 @@ public class Game extends ApplicationAdapter {
         addGameObject(new GameTimer(new Vector2(-0.9f, 0.9f)));
         addGameObject(new GameMessageHandler(new Vector2(0,0.2f)));
         addGameObject(new SpeedCollectable(new Vector2(400, 400)));
-	addGameObject(new TimeStop(new Vector2(500, 500)));
+	    addGameObject(new TimeStop(new Vector2(500, 500)));
         addGameObject(new SpeedCollectable(new Vector2(800, 200)));
         addGameObject(new SpeedCollectable(new Vector2(1200, 200)));
         addGameObject(new SpeedCollectable(new Vector2(1600, 200)));

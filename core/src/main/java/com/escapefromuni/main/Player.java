@@ -133,7 +133,7 @@ public class Player extends GameObject implements RenderableComponent, Collision
 
     @Override
     public void render(SpriteBatch batch) {
-        playerSprite.setPosition(position.x - playerSprite.getWidth() / 2f, position.y - playerSprite.getWidth() / 2f - 12f);
+        playerSprite.setPosition(position.x - playerSprite.getWidth() / 2f, position.y - playerSprite.getWidth() / 2f + 40f);
         playerSprite.draw(batch);
     }
 
@@ -180,7 +180,7 @@ public class Player extends GameObject implements RenderableComponent, Collision
     }
     public void displayItems(float drag){
         for (int i = 0; i < items.size(); i++) {
-            items.get(i).position.set(position.x - drag * i * 0.4f,position.y + i * 20);
+            items.get(i).position.set(position.x - 15 - drag * i * 2.9f,position.y + 55 + i * 20);
         }
     }
     public void AddItem(Item newItem){
