@@ -14,6 +14,7 @@ import com.badlogic.gdx.utils.ScreenUtils;
 import com.escapefromuni.main.collectables.Key;
 import com.escapefromuni.main.collectables.TimeStop;
 import com.escapefromuni.main.collectables.SpeedCollectable;
+import com.escapefromuni.main.collectables.NauseaCollectable;
 import com.escapefromuni.main.components.CameraComponent;
 import com.escapefromuni.main.components.CollisionComponent;
 import com.escapefromuni.main.components.RenderableComponent;
@@ -86,6 +87,7 @@ public class Game extends ApplicationAdapter {
         addGameObject(new SpeedCollectable(new Vector2(2000, 200)));
         addGameObject(new SpeedCollectable(new Vector2(2400, 200)));
         addGameObject(new SpeedCollectable(new Vector2(2800, 200)));
+        addGameObject(new NauseaCollectable(new Vector2(2500, 400)));
         addGameObject(new NPC(new Vector2(1400, 1000),"npc1.png","key"));
         addGameObject(new Key(new Vector2(2000, 1000)));
         addGameObject(new Key(new Vector2(2300, 1000)));

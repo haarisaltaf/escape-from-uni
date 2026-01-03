@@ -29,4 +29,9 @@ public interface CameraComponent extends BaseComponent{
      * @return The OrthographicCamera this component uses.
      */
     public OrthographicCamera getCamera();
+
+    /**
+    * Calls the nausea method.
+    */
+    public void nausea();
 }

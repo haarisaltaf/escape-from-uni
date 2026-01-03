@@ -15,7 +15,11 @@ import com.escapefromuni.main.components.RenderableComponent;
 public class CameraController extends GameObject implements CameraComponent {
     OrthographicCamera camera;
     GameObject target;
-
+    
+    // Variables to control nausea effect
+    float nauseaTimer = 0f;
+    private float amplitude = 20f; // How much the camera moves
+    private float frequency = 5f; // How fast it oscillates
     /**
      * Set's the target gameObject that this CameraController should track.
      * @param target the gameObject to follow.
@@ -33,7 +37,26 @@ public class CameraController extends GameObject implements CameraComponent {
     }
     @Override
     public void update(float delta) {
+
         position.set(target.position);
+
+        // Nausea Effect
+        if (nauseaTimer > 0) {
+        nauseaTimer -= delta;
+        // Uses Sine wave to oscillate x position
+        float sway = (float) Math.sin(nauseaTimer * frequency) * amplitude;
+        position.x += sway;
+        // Uses Cosine wave to oscillate y position
+        float bob = (float) Math.cos(nauseaTimer * frequency * 2) * (amplitude / 2);
+        position.y += bob;
+        // Camera Rotation for nausea
+        float rotation = (float) Math.sin(nauseaTimer * frequency * 0.5) * 2f;
+        camera.up.set(0, 1, 0);
+        camera.rotate(rotation);
+        // Camera zoom for nausea
+        float zoom = (float) Math.sin(nauseaTimer * frequency/2 + 45) / 10;
+        camera.zoom += zoom;
+        }
     }
 
     @Override
@@ -55,5 +78,8 @@ public class CameraController extends GameObject implements CameraComponent {
 
     public CameraController (GameObject target) {
         this.target = target;
+    }
+    public void nausea() {
+        nauseaTimer = 10f;
     }
 }
