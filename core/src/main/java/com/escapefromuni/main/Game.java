@@ -14,6 +14,9 @@ import com.badlogic.gdx.utils.ScreenUtils;
 import com.escapefromuni.main.collectables.Key;
 import com.escapefromuni.main.collectables.TimeStop;
 import com.escapefromuni.main.collectables.SpeedCollectable;
+import com.escapefromuni.main.collectables.NauseaCollectable;
+import com.escapefromuni.main.collectables.DeathCollectable;
+import com.escapefromuni.main.collectables.BinocularsItem;
 import com.escapefromuni.main.components.CameraComponent;
 import com.escapefromuni.main.components.CollisionComponent;
 import com.escapefromuni.main.components.RenderableComponent;
@@ -73,13 +76,14 @@ public class Game extends ApplicationAdapter {
         SetActiveCamera(camera);
         //Add the player
         var player = new Player(locations.get("player_start"));
+        var player = new Player(new Vector2(2500, 256));
         addGameObject(player);
         camera.SetTarget(player);
         //Add the Map
         addGameObject(new GameMap(camera));
         addGameObject(new GameTimer(new Vector2(-0.9f, 0.9f)));
         addGameObject(new GameMessageHandler(new Vector2(0,0.2f)));
-	addGameObject(new TimeStop(locations.get("timestop_top_right")));
+	    addGameObject(new TimeStop(locations.get("timestop_top_right")));
 
         addGameObject(new SpeedCollectable(locations.get("speed_north_west")));
         addGameObject(new SpeedCollectable(locations.get("speed_near_start")));
@@ -95,6 +99,11 @@ public class Game extends ApplicationAdapter {
         addGameObject(new Key(locations.get("key_2")));
         addGameObject(new Key(locations.get("key_3")));
         addGameObject(new Key(locations.get("key_4")));
+
+        addGameObject(new NauseaCollectable(locations.get("nausea")));
+        addGameObject(new DeathCollectable(locations.get("death")));
+        addGameObject(new BinocularsItem(locations.get("binoculars")));
+
 
         //Set up music
         music = Gdx.audio.newMusic(Gdx.files.internal("Music/Dungeon.wav"));
@@ -366,6 +375,11 @@ public class Game extends ApplicationAdapter {
 	locations.put("key_2",               new Vector2(2300, 1000));
 	locations.put("key_3",               new Vector2(2600, 1000));
 	locations.put("key_4",               new Vector2(2900, 1000));
+
+    // Debuffs
+    locations.put("nausea", new Vector2(2500, 400)));
+    locations.put("death", new Vector2(2750, 400)));
+    locations.put("binoculars", new Vector2(2750, 600)));
 
 	return locations;
     }
