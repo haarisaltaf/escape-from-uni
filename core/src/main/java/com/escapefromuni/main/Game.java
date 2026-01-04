@@ -24,7 +24,6 @@ import com.escapefromuni.main.ui.GameTimer;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
-
 /**
  * {@link com.badlogic.gdx.ApplicationListener} implementation shared by all platforms.
  */
@@ -38,6 +37,8 @@ public class Game extends ApplicationAdapter {
     Sprite winImage;
     Sprite loseImage;
     Music music;
+    HashMap<String, Vector2> locations = defineLocations();
+
     public static GameTimer timer;
     //The camera which is active and rendering the scene
     private static CameraComponent activeCamera;
@@ -71,26 +72,29 @@ public class Game extends ApplicationAdapter {
         addGameObject(camera);
         SetActiveCamera(camera);
         //Add the player
-        var player = new Player(new Vector2(256, 256));
+        var player = new Player(locations.get("player_start"));
         addGameObject(player);
         camera.SetTarget(player);
         //Add the Map
         addGameObject(new GameMap(camera));
         addGameObject(new GameTimer(new Vector2(-0.9f, 0.9f)));
         addGameObject(new GameMessageHandler(new Vector2(0,0.2f)));
-        addGameObject(new SpeedCollectable(new Vector2(400, 400)));
-	addGameObject(new TimeStop(new Vector2(500, 500)));
-        addGameObject(new SpeedCollectable(new Vector2(800, 200)));
-        addGameObject(new SpeedCollectable(new Vector2(1200, 200)));
-        addGameObject(new SpeedCollectable(new Vector2(1600, 200)));
-        addGameObject(new SpeedCollectable(new Vector2(2000, 200)));
-        addGameObject(new SpeedCollectable(new Vector2(2400, 200)));
-        addGameObject(new SpeedCollectable(new Vector2(2800, 200)));
-        addGameObject(new NPC(new Vector2(1400, 1000),"npc1.png","key"));
-        addGameObject(new Key(new Vector2(2000, 1000)));
-        addGameObject(new Key(new Vector2(2300, 1000)));
-        addGameObject(new Key(new Vector2(2600, 1000)));
-        addGameObject(new Key(new Vector2(2900, 1000)));
+	addGameObject(new TimeStop(locations.get("timestop_top_right")));
+
+        addGameObject(new SpeedCollectable(locations.get("speed_north_west")));
+        addGameObject(new SpeedCollectable(locations.get("speed_near_start")));
+        addGameObject(new SpeedCollectable(locations.get("speed_middle_entrance")));
+        addGameObject(new SpeedCollectable(locations.get("speed_middle_north")));
+        addGameObject(new SpeedCollectable(locations.get("speed_west")));
+        addGameObject(new SpeedCollectable(locations.get("speed_east")));
+        addGameObject(new SpeedCollectable(locations.get("speed_middle_west")));
+
+        addGameObject(new NPC(locations.get("npc_central_hub"),"npc1.png","key"));
+
+        addGameObject(new Key(locations.get("key_1")));
+        addGameObject(new Key(locations.get("key_2")));
+        addGameObject(new Key(locations.get("key_3")));
+        addGameObject(new Key(locations.get("key_4")));
 
         //Set up music
         music = Gdx.audio.newMusic(Gdx.files.internal("Music/Dungeon.wav"));
@@ -336,6 +340,34 @@ public class Game extends ApplicationAdapter {
 
     public static GameTimer getTimer(){
         return timer;
+    }
+
+    private static HashMap<String, Vector2> defineLocations() {
+	HashMap<String, Vector2> locations = new HashMap<>();
+	// Player Start Location
+	locations.put("player_start", new Vector2(4090, 500));
+
+	// Power-ups
+	locations.put("speed_near_start",        new Vector2(2950, 1280));
+	locations.put("speed_middle_entrance",   new Vector2(3584, 7040)); 
+	locations.put("speed_middle_north",      new Vector2(4352, 7296));
+	locations.put("speed_middle_west",       new Vector2(3072, 7296));
+	locations.put("speed_east",         new Vector2(7680, 6784));
+	locations.put("speed_north_west",        new Vector2(512, 1920));
+	locations.put("speed_west",     new Vector2(768, 2432));
+
+	locations.put("timestop_top_right",      new Vector2(7040, 1408));
+
+	// NPC
+	locations.put("npc_central_hub",         new Vector2(4096, 4096));
+
+	// Keys
+	locations.put("key_1",               new Vector2(2000, 1000));
+	locations.put("key_2",               new Vector2(2300, 1000));
+	locations.put("key_3",               new Vector2(2600, 1000));
+	locations.put("key_4",               new Vector2(2900, 1000));
+
+	return locations;
     }
 
 }
