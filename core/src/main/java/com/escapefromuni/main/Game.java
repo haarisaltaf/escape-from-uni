@@ -76,7 +76,6 @@ public class Game extends ApplicationAdapter {
         SetActiveCamera(camera);
         //Add the player
         var player = new Player(locations.get("player_start"));
-        var player = new Player(new Vector2(2500, 256));
         addGameObject(player);
         camera.SetTarget(player);
         //Add the Map
@@ -376,10 +375,10 @@ public class Game extends ApplicationAdapter {
 	locations.put("key_3",               new Vector2(2600, 1000));
 	locations.put("key_4",               new Vector2(2900, 1000));
 
-    // Debuffs
-    locations.put("nausea", new Vector2(2500, 400)));
-    locations.put("death", new Vector2(2750, 400)));
-    locations.put("binoculars", new Vector2(2750, 600)));
+	// Debuffs
+	locations.put("nausea", new Vector2(2500, 400));
+	locations.put("death", new Vector2(2750, 400));
+	locations.put("binoculars", new Vector2(2750, 600));
 
 	return locations;
     }
