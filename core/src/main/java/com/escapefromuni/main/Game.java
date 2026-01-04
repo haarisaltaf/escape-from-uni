@@ -91,6 +91,7 @@ public class Game extends ApplicationAdapter {
         addGameObject(new SpeedCollectable(locations.get("speed_west")));
         addGameObject(new SpeedCollectable(locations.get("speed_east")));
         addGameObject(new SpeedCollectable(locations.get("speed_middle_west")));
+        addGameObject(new BinocularsItem(locations.get("binoculars")));
 
         addGameObject(new NPC(locations.get("npc_central_hub"),"npc1.png","key"));
 
@@ -101,7 +102,7 @@ public class Game extends ApplicationAdapter {
 
         addGameObject(new NauseaCollectable(locations.get("nausea")));
         addGameObject(new DeathCollectable(locations.get("death")));
-        addGameObject(new BinocularsItem(locations.get("binoculars")));
+       
 
 
         //Set up music
@@ -363,6 +364,7 @@ public class Game extends ApplicationAdapter {
 	locations.put("speed_east",         new Vector2(7680, 6784));
 	locations.put("speed_north_west",        new Vector2(512, 1920));
 	locations.put("speed_west",     new Vector2(768, 2432));
+    locations.put("binoculars", new Vector2(2750, 600));
 
 	locations.put("timestop_top_right",      new Vector2(7040, 1408));
 
@@ -378,7 +380,7 @@ public class Game extends ApplicationAdapter {
 	// Debuffs
 	locations.put("nausea", new Vector2(2500, 400));
 	locations.put("death", new Vector2(2750, 400));
-	locations.put("binoculars", new Vector2(2750, 600));
+	
 
 	return locations;
     }

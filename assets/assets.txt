@@ -1,6 +1,7 @@
 Binoculars.png
 Collision.png
 Collision.tsx
+Death.png
 Key.png
 Music/Dungeon.wav
 Music/Escape.wav
