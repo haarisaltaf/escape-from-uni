@@ -366,7 +366,7 @@ public class Game extends ApplicationAdapter {
 	locations.put("speed_west",     new Vector2(768, 2432));
     locations.put("binoculars", new Vector2(2750, 600));
 
-	locations.put("timestop_top_right",      new Vector2(7040, 1408));
+	locations.put("timestop_top_right",      new Vector2(6850, 1308));
 
 	// NPC
 	locations.put("npc_central_hub",         new Vector2(4096, 4096));

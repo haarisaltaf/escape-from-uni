@@ -29,6 +29,7 @@ TestSet.tsx
 TestTileset.png
 Tileset1.png
 Tileset1.png.kra
+TimeStop.png
 Wall_Tileset.png
 Walls.tsx
 controlsHelp.png
