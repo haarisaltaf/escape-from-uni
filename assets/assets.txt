@@ -1,3 +1,4 @@
+Binoculars.png
 Collision.png
 Collision.tsx
 Key.png
