@@ -10,7 +10,7 @@ public class TimeStop extends Collectable {
     }
 
     public TimeStop(Vector2 position) {
-        super(position,"loseImage.png");
+        super(position,"soda.png");
     }
 
     @Override
