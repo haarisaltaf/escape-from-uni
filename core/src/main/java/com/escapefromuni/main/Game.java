@@ -23,6 +23,8 @@ import com.escapefromuni.main.components.RenderableComponent;
 import com.escapefromuni.main.components.UIComponent;
 import com.escapefromuni.main.ui.GameMessageHandler;
 import com.escapefromuni.main.ui.GameTimer;
+import com.escapefromuni.main.ui.Leaderboard;
+import com.badlogic.gdx.graphics.g2d.BitmapFont;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -51,6 +53,11 @@ public class Game extends ApplicationAdapter {
     static List<UIComponent> uiComponents = new ArrayList<>();
     static HashMap<CollisionComponent.CollisionLayer, List<CollisionComponent>> collidingComponents = new HashMap<>();
 
+    private BitmapFont font;
+    public Leaderboard leaderboard = new Leaderboard();
+    // leaderboard.init();
+    public String top5;
+
     @Override
     public void create() {
         batch = new SpriteBatch();
@@ -59,6 +66,11 @@ public class Game extends ApplicationAdapter {
         titleImage.setPosition((Gdx.graphics.getWidth() - titleImage.getTexture().getWidth()) / 2f, (Gdx.graphics.getHeight() * 1.5f - titleImage.getTexture().getHeight()) / 2f);
         playButton = new Sprite(new Texture(Gdx.files.internal("playButton.png")));
         playButton.setPosition((Gdx.graphics.getWidth() - playButton.getTexture().getWidth()) / 2f, (Gdx.graphics.getHeight() / 2f - playButton.getTexture().getHeight()) / 2f);
+
+	// adding leaderboard
+	font = new BitmapFont();
+        leaderboard.init();
+
         controlsHelp = new Sprite(new Texture(Gdx.files.internal("controlsHelp.png")));
         controlsHelp.setPosition((Gdx.graphics.getWidth() - controlsHelp.getTexture().getWidth()) / 2f, (Gdx.graphics.getHeight() - controlsHelp.getTexture().getHeight()) / 2f + 50);
         pausedSprite = new Sprite(new Texture(Gdx.files.internal("pausedGraphic.png")));
@@ -82,7 +94,7 @@ public class Game extends ApplicationAdapter {
         addGameObject(new GameMap(camera));
         addGameObject(new GameTimer(new Vector2(-0.9f, 0.9f)));
         addGameObject(new GameMessageHandler(new Vector2(0,0.2f)));
-	    addGameObject(new TimeStop(locations.get("timestop_top_right")));
+        addGameObject(new TimeStop(locations.get("timestop_top_right")));
 
         addGameObject(new SpeedCollectable(locations.get("speed_north_west")));
         addGameObject(new SpeedCollectable(locations.get("speed_near_start")));
@@ -102,8 +114,6 @@ public class Game extends ApplicationAdapter {
 
         addGameObject(new NauseaCollectable(locations.get("nausea")));
         addGameObject(new DeathCollectable(locations.get("death")));
-       
-
 
         //Set up music
         music = Gdx.audio.newMusic(Gdx.files.internal("Music/Dungeon.wav"));
@@ -111,6 +121,7 @@ public class Game extends ApplicationAdapter {
         music.setVolume(0.5f);
         music.play();
     }
+
 
     @Override
     public void render() {
@@ -121,6 +132,7 @@ public class Game extends ApplicationAdapter {
                 activeCamera.getCamera().update();
                 batch.setProjectionMatrix(activeCamera.getCamera().combined);
                 //TODO: Change these to UIElements
+
                 //Detect clicking on the play button
                 if (Gdx.input.isButtonJustPressed(Input.Buttons.LEFT)) {
                     if (Gdx.input.getX() >= playButton.getX() && Gdx.input.getX() <= (playButton.getX() + playButton.getWidth())
@@ -130,14 +142,18 @@ public class Game extends ApplicationAdapter {
                     }
                 }
                 ScreenUtils.clear(1f, 1f, 1f, 1f);
+			// TODO: FIX THIS
+		// top5 = leaderboard.getTopFive();
                 batch.begin();
                 titleImage.draw(batch);
                 playButton.draw(batch);
                 controlsHelp.draw(batch);
+			//TODO: AND THIS
+		// font.draw(batch, top5, 50, 300);
                 batch.end();
                 break;
-            case PLAYING:
 
+            case PLAYING:
                 if (Gdx.input.isKeyJustPressed(111)) {
                     gameState = GameState.PAUSED;
                 }
@@ -212,7 +228,7 @@ public class Game extends ApplicationAdapter {
             case LOSE:
                 if (Gdx.input.isButtonJustPressed(Input.Buttons.LEFT)) {
                     System.out.println(Gdx.input.getY());
-                    //Super hardcoded, MUST adjust if screen resized
+                    //WARNING: Super hardcoded, MUST adjust if screen resized
                     if (Gdx.input.getX() >= 340 && Gdx.input.getX() <= 740
                     &&  Gdx.input.getY() >= 440 && Gdx.input.getY() <= 640) {
                         Gdx.app.exit();
@@ -356,33 +372,32 @@ public class Game extends ApplicationAdapter {
 	// Player Start Location
 	locations.put("player_start", new Vector2(4090, 500));
 
-	// Power-ups
+	// Power-ups -- speed names are meant to just give a relative idea for which is which on the map
+	locations.put("speed_north_west",        new Vector2(512, 1920));
+	locations.put("speed_west",              new Vector2(768, 2432));
 	locations.put("speed_near_start",        new Vector2(2950, 1280));
 	locations.put("speed_middle_entrance",   new Vector2(3584, 7040)); 
-	locations.put("speed_middle_north",      new Vector2(4352, 7296));
-	locations.put("speed_middle_west",       new Vector2(3072, 7296));
-	locations.put("speed_east",         new Vector2(7680, 6784));
-	locations.put("speed_north_west",        new Vector2(512, 1920));
-	locations.put("speed_west",     new Vector2(768, 2432));
-    locations.put("binoculars", new Vector2(2750, 600));
+	locations.put("speed_middle_west",       new Vector2(4352, 7296));
+	locations.put("speed_middle_north",      new Vector2(3072, 7296));
+	locations.put("speed_east",              new Vector2(7680, 6784));
 
-	locations.put("timestop_top_right",      new Vector2(6850, 1308));
+	locations.put("binoculars", new Vector2(2750, 600));
+
+	locations.put("timestop_top_right", new Vector2(6850, 1308));
 
 	// NPC
-	locations.put("npc_central_hub",         new Vector2(4096, 4096));
+	locations.put("npc_central_hub", new Vector2(4096, 4096));
 
 	// Keys
-	locations.put("key_1",               new Vector2(2000, 1000));
-	locations.put("key_2",               new Vector2(2300, 1000));
-	locations.put("key_3",               new Vector2(2600, 1000));
-	locations.put("key_4",               new Vector2(2900, 1000));
+	locations.put("key_1", new Vector2(2000, 1000));
+	locations.put("key_2", new Vector2(2300, 1000));
+	locations.put("key_3", new Vector2(2600, 1000));
+	locations.put("key_4", new Vector2(2900, 1000));
 
 	// Debuffs
 	locations.put("nausea", new Vector2(2500, 400));
 	locations.put("death", new Vector2(2750, 400));
-	
 
 	return locations;
     }
-
 }
