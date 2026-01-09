@@ -1,28 +1,30 @@
 package com.escapefromuni.main.ui;
 
-import com.badlogic.gdx.Gdx;
-import com.badlogic.gdx.files.FileHandle;
-
 import java.util.ArrayList;
 import java.io.IOException;
+import java.io.FileNotFoundException;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.StandardOpenOption;
 import java.io.BufferedReader;
+import java.io.FileReader;
 
 public class Leaderboard {
-	FileHandle leaderboardFile;
-	// FileHandle leaderboardFile = Gdx.files.local("Leaderboard.txt");
-	// leaderboardFile.writeString("test", true);
-	
-	public void init() {
-		FileHandle leaderboardFile = Gdx.files.external("escape-from-uni/Leaderboard.txt");
-		System.out.println("File loaded.");
-	}
-
 	// NOTE: line numbers are added in reading the file rather than stored in text.
+	String LEADERBOARD_LOCATION;
+	public void init() {
+		LEADERBOARD_LOCATION = System.getProperty("user.dir") + "/Leaderboard.txt";
+		System.out.println("LEADERBOARD: " + LEADERBOARD_LOCATION);
+		// TODO: CHANGE THIS:
+		appendToLeaderboard("longboi", 10000);
+	}
 	
 	public String getTopFive() {
 		StringBuilder top5 = new StringBuilder();
 		try {
-			BufferedReader reader = leaderboardFile.reader(1024);
+			BufferedReader reader = new BufferedReader(
+				new FileReader(System.getProperty("user.dir") + "/Leaderboard.txt")
+			);
 			String line;
 			for (int lineNum = 1; lineNum <= 5; lineNum++) {
 				line = reader.readLine();
@@ -31,7 +33,6 @@ public class Leaderboard {
 				}
 			}
 			reader.close();
-
 			return top5.toString();
 
 		} catch (IOException e) {
@@ -40,33 +41,40 @@ public class Leaderboard {
 		}
 	}
 
-	public ArrayList<String> getLeaderboard() {
+	public ArrayList<String> getLeaderboard() throws IOException, FileNotFoundException {
 		ArrayList<String> leaderboardList = new ArrayList<String>();
-		BufferedReader reader = leaderboardFile.reader(1024);
-		String line;
-		int lineNum = 1;
-
 		try {
-			while ((line = reader.readLine()) != null) {
-				leaderboardList.add(lineNum + ". " + line);
-				lineNum += 1;
-			}
-			reader.close();
-			return leaderboardList;
+			BufferedReader reader = new BufferedReader(
+				new FileReader(LEADERBOARD_LOCATION)
+			);
+			String line;
+			int lineNum = 1;
 
+				while ((line = reader.readLine()) != null) {
+					leaderboardList.add(lineNum + ". " + line);
+					lineNum += 1;
+				}
+				reader.close();
+				return leaderboardList;
+
+		} catch (FileNotFoundException e) {
+			System.out.println("ERRRORORORORWorking Directory = " + System.getProperty("user.dir"));
+			return new ArrayList<String>();
 		} catch (IOException e) {
 			return new ArrayList<String>();
 		}
-
-
 	}
 
 	private void appendToLeaderboard(String name, int score) {
-		String formattedString = name + " " + score + "\n\r";
-		leaderboardFile.writeString(formattedString, true);
+		try {
+			String formattedString = name + " - " + score + "\n";
+			Files.writeString(Path.of(LEADERBOARD_LOCATION), formattedString, StandardOpenOption.APPEND);
+		} catch (IOException e) {System.out.println("IO ERROR WHEN APPENDING");}
 	}
 
 	private void resetLeaderboard() {
-		leaderboardFile.writeString("", false);
+		try {
+			Files.writeString(Path.of(LEADERBOARD_LOCATION), "");
+		} catch (IOException e) {System.out.println("IO ERROR WHEN RESETTING");}
 	}
 }

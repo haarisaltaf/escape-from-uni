@@ -69,6 +69,8 @@ public class Game extends ApplicationAdapter {
 
 	// adding leaderboard
 	font = new BitmapFont();
+	font.setColor(0,0,0,1);
+	font.getData().setScale(2f);
         leaderboard.init();
 
         controlsHelp = new Sprite(new Texture(Gdx.files.internal("controlsHelp.png")));
@@ -142,14 +144,13 @@ public class Game extends ApplicationAdapter {
                     }
                 }
                 ScreenUtils.clear(1f, 1f, 1f, 1f);
-			// TODO: FIX THIS
-		// top5 = leaderboard.getTopFive();
+		top5 = leaderboard.getTopFive();
                 batch.begin();
                 titleImage.draw(batch);
                 playButton.draw(batch);
                 controlsHelp.draw(batch);
 			//TODO: AND THIS
-		// font.draw(batch, top5, 50, 300);
+		font.draw(batch, top5, 10, 700);
                 batch.end();
                 break;
 

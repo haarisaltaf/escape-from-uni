@@ -3,6 +3,7 @@ Collision.png
 Collision.tsx
 Death.png
 Key.png
+Leaderboard.txt
 Music/Dungeon.wav
 Music/Escape.wav
 Music/attribution.txt
