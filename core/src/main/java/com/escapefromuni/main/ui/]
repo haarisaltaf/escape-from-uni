@@ -14,13 +14,10 @@ public class Leaderboard {
 	// NOTE: line numbers are added in reading the file rather than stored in text.
 	String LEADERBOARD_LOCATION;
 	public void init() {
-		try {
-			LEADERBOARD_LOCATION = System.getProperty("user.dir") + "/Leaderboard.txt";
-			orderLeaderboard();
-			System.out.println("LEADERBOARD: " + LEADERBOARD_LOCATION);
-		} catch (IOException e) {
-			System.out.println("FAILED TO INIT -> IO EXCEPTION. DOES LEADERBOARD EXIST?");
-		}
+		LEADERBOARD_LOCATION = System.getProperty("user.dir") + "/Leaderboard.txt";
+		orderLeaderboard();
+		System.out.println("LEADERBOARD: " + LEADERBOARD_LOCATION);
+		// appendToLeaderboard("longboi", 10000);
 	}
 	
 	public String getTopFive() {
@@ -62,51 +59,33 @@ public class Leaderboard {
 				return leaderboardList;
 
 		} catch (FileNotFoundException e) {
-			System.out.println("ERRRORORWorking Directory = " + System.getProperty("user.dir"));
+			System.out.println("ERRRORORORORWorking Directory = " + System.getProperty("user.dir"));
 			return new ArrayList<String>();
 		} catch (IOException e) {
 			return new ArrayList<String>();
 		}
 	}
 
-	private void appendToLeaderboard(String name, int score) throws IOException {
+	private void appendToLeaderboard(String name, int score) {
 		try {
 			String formattedString = name + " - " + score + "\n";
 			Files.writeString(Path.of(LEADERBOARD_LOCATION), formattedString, StandardOpenOption.APPEND);
 		} catch (IOException e) {System.out.println("IO ERROR WHEN APPENDING");}
 	}
 
-	private void resetLeaderboard() throws IOException {
+	private void resetLeaderboard() {
 		try {
 			Files.writeString(Path.of(LEADERBOARD_LOCATION), "");
-			System.out.println("RESET LEADERBOARD");
 		} catch (IOException e) {System.out.println("IO ERROR WHEN RESETTING");}
 	}
 
-	public void orderLeaderboard() throws IOException {
+	public void orderLeaderboard() {
+		ArrayList<String> currBoard = getLeaderboard();
+		Collections.sort(currBoard);
 		try {
-			// getting leaderboard WITHOUT line nums
-			ArrayList<String> currBoard = new ArrayList<String>();
-			BufferedReader reader = new BufferedReader(
-				new FileReader(LEADERBOARD_LOCATION)
-			);
-			String line;
-			while ((line = reader.readLine()) != null) {
-				currBoard.add(line);
-			}
-			reader.close();
-
-			// sorting leaderboard based on grabbing score at end of line in Leaderboard
-			currBoard.sort((a, b) -> {
-			    int scoreA = Integer.parseInt(a.substring(a.lastIndexOf(" ") + 1));
-			    int scoreB = Integer.parseInt(b.substring(b.lastIndexOf(" ") + 1));
-			    return scoreB - scoreA;  // descending (highest first)
-			});
 			resetLeaderboard();
-			for (int i = 0; i < currBoard.size(); i++) {
-				Files.writeString(Path.of(LEADERBOARD_LOCATION), 
-					currBoard.get(i) + "\n",
-					StandardOpenOption.APPEND);
+			for (int i == 0; i < currBoard.size(); i++;) {
+				Files.writeString(Path.of(LEADERBOARD_LOCATION), currBoard[i] + "\n", StandardOpenOption.APPEND);
 			}
 		} catch (IOException e) {
 			System.out.println("FAILED TO REORDER");

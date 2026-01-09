@@ -1,5 +1,4 @@
-longboi - 10000
-longboi - 10000
-longboi - 10000
-longboi - 10000
-longboi - 10000
+test 10000
+test 10000
+haaros 1
+haaros 1

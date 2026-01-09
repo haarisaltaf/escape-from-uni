@@ -54,6 +54,7 @@ public class Game extends ApplicationAdapter {
     static List<UIComponent> uiComponents = new ArrayList<>();
     static HashMap<CollisionComponent.CollisionLayer, List<CollisionComponent>> collidingComponents = new HashMap<>();
 
+    // Leaderboard
     private BitmapFont font;
     public Leaderboard leaderboard = new Leaderboard();
     public Achievements achievements = new Achievements();
@@ -152,7 +153,6 @@ public class Game extends ApplicationAdapter {
                 playButton.draw(batch);
                 controlsHelp.draw(batch);
 		font.draw(batch, top5, 10, 700);
-		font.draw(batch, achievementsList[0], 10, 500); // TODO: do achievements and top5 properly
                 batch.end();
                 break;
 
