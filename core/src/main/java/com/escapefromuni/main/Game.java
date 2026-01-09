@@ -24,6 +24,7 @@ import com.escapefromuni.main.components.UIComponent;
 import com.escapefromuni.main.ui.GameMessageHandler;
 import com.escapefromuni.main.ui.GameTimer;
 import com.escapefromuni.main.ui.Leaderboard;
+import com.escapefromuni.main.ui.Achievements;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
 
 import java.util.ArrayList;
@@ -55,7 +56,8 @@ public class Game extends ApplicationAdapter {
 
     private BitmapFont font;
     public Leaderboard leaderboard = new Leaderboard();
-    // leaderboard.init();
+    public Achievements achievements = new Achievements();
+    String[] achievementsList = achievements.getAchievements();
     public String top5;
 
     @Override
@@ -149,8 +151,8 @@ public class Game extends ApplicationAdapter {
                 titleImage.draw(batch);
                 playButton.draw(batch);
                 controlsHelp.draw(batch);
-			//TODO: AND THIS
 		font.draw(batch, top5, 10, 700);
+		font.draw(batch, achievementsList[0], 10, 500); // TODO: do achievements and top5 properly
                 batch.end();
                 break;
 
