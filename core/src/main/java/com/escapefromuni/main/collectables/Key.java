@@ -7,6 +7,7 @@ import com.escapefromuni.main.components.RenderableComponent;
 
 public class Key extends Item implements RenderableComponent {
     Player holder;
+
     public Key(Vector2 givenPosition) {
         super(givenPosition,"glasses.png","key");
     }

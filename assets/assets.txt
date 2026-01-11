@@ -34,6 +34,8 @@ Wall_Tileset.png
 Walls.tsx
 banana.png
 controlsHelp.png
+default.fnt
+default.png
 defaultCollectible.png
 glasses.kra
 glasses.png
@@ -52,4 +54,7 @@ quitButton.png
 soda.kra
 soda.png
 titleGraphic.png
+uiskin.atlas
+uiskin.json
+uiskin.png
 winImage.png

@@ -8,7 +8,7 @@ import java.util.HashMap;
 public class Achievements {
 
 	HashMap<String, Boolean> ACHIEVEMENTS = new HashMap<String, Boolean>();
-	int SCORE_INCREMENT = 10;
+	int SCORE_CHANGE = 10;
 
 	public void init() {
 		ACHIEVEMENTS.put("Sugar Rush!", false);

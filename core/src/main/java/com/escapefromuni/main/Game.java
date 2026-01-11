@@ -27,10 +27,18 @@ import com.escapefromuni.main.ui.Leaderboard;
 import com.escapefromuni.main.ui.Achievements;
 import com.escapefromuni.main.ui.NameInput;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
+import com.badlogic.gdx.scenes.scene2d.Stage;
+import com.badlogic.gdx.scenes.scene2d.ui.TextField;
+import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
+import com.badlogic.gdx.scenes.scene2d.ui.Label;
+import com.badlogic.gdx.scenes.scene2d.ui.Skin;
+import com.badlogic.gdx.scenes.scene2d.InputEvent;
+import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
+
 /**
  * {@link com.badlogic.gdx.ApplicationListener} implementation shared by all platforms.
  */
@@ -45,6 +53,10 @@ public class Game extends ApplicationAdapter {
     Sprite loseImage;
     Music music;
     HashMap<String, Vector2> locations = defineLocations();
+
+    private Stage stage;
+    private TextField nameInput;
+    private boolean showingInput = true;
 
     public static GameTimer timer;
     //The camera which is active and rendering the scene
@@ -77,6 +89,26 @@ public class Game extends ApplicationAdapter {
 	font.getData().setScale(2f);
         leaderboard.init();
 	achievements.init();
+
+	// text/ name input
+	stage = new Stage();
+	Skin skin = new Skin(Gdx.files.internal("uiskin.json"));
+	nameInput = new TextField("", skin);
+	nameInput.setPosition(Gdx.graphics.getWidth() / 3f, 10);
+	nameInput.setSize(350,40);
+
+	nameInput.setTextFieldListener(new TextField.TextFieldListener() {
+		@Override
+		public void keyTyped(TextField textField, char c) {
+			if (c == '\n' || c == '\r') {
+				String name = textField.getText();
+				showingInput = false;
+				System.out.println(name);
+			}
+		}
+	});
+	
+	stage.addActor(nameInput);
 
         controlsHelp = new Sprite(new Texture(Gdx.files.internal("controlsHelp.png")));
         controlsHelp.setPosition((Gdx.graphics.getWidth() - controlsHelp.getTexture().getWidth()) / 2f, (Gdx.graphics.getHeight() - controlsHelp.getTexture().getHeight()) / 2f + 50);
@@ -157,6 +189,12 @@ public class Game extends ApplicationAdapter {
                 controlsHelp.draw(batch);
 		font.draw(batch, top5, 10, 700);
                 batch.end();
+		if (showingInput) {
+			Gdx.input.setInputProcessor(stage);
+			stage.setKeyboardFocus(nameInput);
+			stage.act();
+			stage.draw();
+		}
                 break;
 
             case PLAYING:
@@ -256,6 +294,7 @@ public class Game extends ApplicationAdapter {
     @Override
     public void dispose() {
         batch.dispose();
+	stage.dispose();
         //dispose every gameObject
         for (var gameObject : gameObjects) {
             gameObject.dispose();
