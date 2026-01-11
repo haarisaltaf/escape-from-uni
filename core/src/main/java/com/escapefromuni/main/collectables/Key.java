@@ -22,13 +22,12 @@ public class Key extends Item implements RenderableComponent {
     }
     @Override
     public void render(SpriteBatch batch) {
-//        if(active){
-//            collectibleSprite.setPosition(position.x, position.y);
-//        }else{
-//            collectibleSprite.setPosition(holder.position.x,holder.position.y);
-//        }
+        if (!doesExist()) {
+            return;
+        }
         collectibleSprite.setPosition(position.x,position.y);
         collectibleSprite.draw(batch);
     }
+
 
 }
