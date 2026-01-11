@@ -16,6 +16,8 @@ public class ScoreManager {
 				Score += achievementsChange;
 			}
 		}
+		if (timeRemaining <= 0 || timeRemaining > 300) {return 0;}
+
 		if (ifWon) {
 			return Score + timeRemaining + 100;
 		} else {
