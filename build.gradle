@@ -1,7 +1,3 @@
-plugins {
-    id 'jacoco'
-}
-
 buildscript {
   repositories {
     mavenCentral()
@@ -14,6 +10,10 @@ buildscript {
 
 
   }
+}
+
+plugins {
+    id 'jacoco'
 }
 
 allprojects {
