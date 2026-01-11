@@ -13,7 +13,7 @@ public class DeathCollectable extends Collectable {
     }
 
     public DeathCollectable(Vector2 position) {
-        super(position,"Death.png");
+        super(position,"poo.png");
     }
 
     @Override

@@ -59,7 +59,7 @@ public class Game extends ApplicationAdapter {
     private BitmapFont font;
     public Leaderboard leaderboard = new Leaderboard();
     public Achievements achievements = new Achievements();
-    String[] achievementsList = achievements.getAchievements();
+    HashMap<String, Boolean> achievementsList = achievements.getAchievements();
     public String top5;
 
     @Override
@@ -76,6 +76,7 @@ public class Game extends ApplicationAdapter {
 	font.setColor(0,0,0,1);
 	font.getData().setScale(2f);
         leaderboard.init();
+	achievements.init();
 
         controlsHelp = new Sprite(new Texture(Gdx.files.internal("controlsHelp.png")));
         controlsHelp.setPosition((Gdx.graphics.getWidth() - controlsHelp.getTexture().getWidth()) / 2f, (Gdx.graphics.getHeight() - controlsHelp.getTexture().getHeight()) / 2f + 50);
@@ -101,7 +102,7 @@ public class Game extends ApplicationAdapter {
         addGameObject(new GameMap(camera));
         addGameObject(new GameTimer(new Vector2(-0.9f, 0.9f)));
         addGameObject(new GameMessageHandler(new Vector2(0,0.2f)));
-        addGameObject(new TimeStop(locations.get("timestop_top_right")));
+        addGameObject(new TimeStop(locations.get("timestop_top_right"), achievements));
 
         addGameObject(new SpeedCollectable(locations.get("speed_north_west")));
         addGameObject(new SpeedCollectable(locations.get("speed_near_start")));
@@ -110,8 +111,8 @@ public class Game extends ApplicationAdapter {
         addGameObject(new SpeedCollectable(locations.get("speed_west")));
         addGameObject(new SpeedCollectable(locations.get("speed_east")));
         addGameObject(new SpeedCollectable(locations.get("speed_middle_west")));
-        addGameObject(new BinocularsItem(locations.get("binoculars")));
-
+        addGameObject(new BinocularsItem(locations.get("binoculars"), achievements));
+	
         addGameObject(new NPC(locations.get("npc_central_hub"),"npc1.png","key"));
 
         addGameObject(new Key(locations.get("key_1")));
@@ -119,7 +120,7 @@ public class Game extends ApplicationAdapter {
         addGameObject(new Key(locations.get("key_3")));
         addGameObject(new Key(locations.get("key_4")));
 
-        addGameObject(new NauseaCollectable(locations.get("nausea")));
+        addGameObject(new NauseaCollectable(locations.get("nausea"), achievements));
         addGameObject(new DeathCollectable(locations.get("death")));
 
         //Set up music

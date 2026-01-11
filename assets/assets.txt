@@ -1,7 +1,6 @@
 Binoculars.png
 Collision.png
 Collision.tsx
-Death.png
 Key.png
 Leaderboard.txt
 Music/Dungeon.wav
@@ -33,10 +32,13 @@ Tileset1.png.kra
 TimeStop.png
 Wall_Tileset.png
 Walls.tsx
+banana.png
 controlsHelp.png
 defaultCollectible.png
 glasses.kra
 glasses.png
+hs_err_pid94962.log
+hs_err_pid96077.log
 libgdx.png
 loseImage.png
 npc1.kra
@@ -44,6 +46,7 @@ npc1.png
 pausedGraphic.png
 playButton.png
 player.png
+poo.png
 professor.png
 quitButton.png
 soda.kra

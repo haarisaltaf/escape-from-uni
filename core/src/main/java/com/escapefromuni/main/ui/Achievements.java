@@ -3,26 +3,35 @@ package com.escapefromuni.main.ui;
 
 import com.escapefromuni.main.ui.GameMessageHandler;
 import java.util.Arrays;
+import java.util.HashMap;
 
 public class Achievements {
 
-	String[] ACHIEVEMENTS = {
-		"Sugar Rush!",
-		"Sugar Crash!!",
-		"Glasses on Glasses!",
-		"KEYYYYYYYYY",
-		"The End?",
-	};
+	HashMap<String, Boolean> ACHIEVEMENTS = new HashMap<String, Boolean>();
+	int SCORE_INCREMENT = 10;
 
-	public String[] getAchievements() {
+	public void init() {
+		ACHIEVEMENTS.put("Sugar Rush!", false);
+		ACHIEVEMENTS.put("Sugar Crash!!", false);
+		ACHIEVEMENTS.put("All-Purpose Telescope", false);
+		ACHIEVEMENTS.put("Contacts", false);
+		ACHIEVEMENTS.put("nana.png", false);
+		ACHIEVEMENTS.put("THE WORLD.", false);
+	}
+
+	public HashMap<String, Boolean> getAchievements() {
 		return ACHIEVEMENTS;
 	}
 
 	public Boolean achieveAchievement(String achievement) {
-		if (Arrays.asList(ACHIEVEMENTS).contains(achievement)) {
+		if (ACHIEVEMENTS.get(achievement) == false) {
 			// TODO: FIX FOR SCREEN POSITION
-			GameMessageHandler.ShowMessage(achievement,5); 
+			GameMessageHandler.ShowMessage("ACHIEVEMENT GET!\n" + achievement,5); 
+			ACHIEVEMENTS.put(achievement, true);
 			return true;
+		} else if (ACHIEVEMENTS.get(achievement) == true){
+			System.out.println("Already Achieved");
+			return false;
 		} else {
 			System.out.println("Ensure correct achievement name is used.");
 			return false;
@@ -30,8 +39,8 @@ public class Achievements {
 	}
 
 	public void testAchievement() {
-		String[] all = getAchievements();
-		if (achieveAchievement(all[0])) {
+		HashMap<String, Boolean> all = getAchievements();
+		if (achieveAchievement("Contacts")) {
 			System.out.println("Achieved Successfully");
 		} else {
 			System.out.println("Failed to Achieve");

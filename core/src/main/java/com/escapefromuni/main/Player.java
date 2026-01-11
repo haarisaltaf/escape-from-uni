@@ -85,8 +85,8 @@ public class Player extends GameObject implements RenderableComponent, Collision
         if (speed > baseSpeed * 2.5f){
             speed = 0;
             // GameMessageHandler.ShowMessage("Sugar Crash!",5);
-	    achievements.achieveAchievement("Sugar Crash!!");
-            events.add("SugarCrash");
+	    achievements.achieveAchievement("Sugar Crash!");
+            events.add("Sugar Crash!");
         }
         float targetZoom = 0.75f + (speed / baseSpeed) * 0.25f;
         Game.GetActiveCamera().getCamera().zoom += (targetZoom - Game.GetActiveCamera().getCamera().zoom) * 0.25f;
@@ -173,12 +173,13 @@ public class Player extends GameObject implements RenderableComponent, Collision
      */
     public void speedUp() {
         speed += 100f;
-        achievements.achieveAchievement("Sugar Crash!!");
+        achievements.achieveAchievement("Sugar Rush!");
         events.add("SpdUP");
     }
 
     public void giveKey() {
         this.hasKey = true;
+        achievements.achieveAchievement("Contacts");
         events.add("GetKey");
     }
 
