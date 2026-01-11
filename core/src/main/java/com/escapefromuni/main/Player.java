@@ -183,6 +183,12 @@ public class Player extends GameObject implements RenderableComponent, Collision
     // Teleports the player to a random location
     public void teleportRandom() {
         position.set(teleportLocations.get( (int) (Math.random() * 7 + 1))); // generates random number from 1-7
+        events.add("TP");
+    }
+    // Slows down the player temporarily
+    public void slowDown() {
+        speed = 0;
+        events.add("SpdDOWN");
     }
     public void giveKey() {
         this.hasKey = true;
