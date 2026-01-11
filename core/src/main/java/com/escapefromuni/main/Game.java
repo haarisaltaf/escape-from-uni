@@ -16,6 +16,7 @@ import com.escapefromuni.main.collectables.TimeStop;
 import com.escapefromuni.main.collectables.SpeedCollectable;
 import com.escapefromuni.main.collectables.NauseaCollectable;
 import com.escapefromuni.main.collectables.DeathCollectable;
+import com.escapefromuni.main.collectables.TeleportCollectable;
 import com.escapefromuni.main.collectables.BinocularsItem;
 import com.escapefromuni.main.components.CameraComponent;
 import com.escapefromuni.main.components.CollisionComponent;
@@ -154,6 +155,7 @@ public class Game extends ApplicationAdapter {
 
         addGameObject(new NauseaCollectable(locations.get("nausea"), achievements));
         addGameObject(new DeathCollectable(locations.get("death")));
+        addGameObject(new TeleportCollectable(locations.get("tp")));
 
         //Set up music
         music = Gdx.audio.newMusic(Gdx.files.internal("Music/Dungeon.wav"));
@@ -442,6 +444,9 @@ public class Game extends ApplicationAdapter {
 	// Debuffs
 	locations.put("nausea", new Vector2(2500, 400));
 	locations.put("death", new Vector2(2750, 400));
+
+    // Hidden Events
+    locations.put("tp", new Vector2(4090, 800));
 
 	return locations;
     }
