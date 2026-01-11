@@ -16,6 +16,7 @@ import com.escapefromuni.main.ui.Achievements;
 
 import java.util.ArrayList;
 import java.util.HashSet;
+import java.util.HashMap;
 import java.util.Objects;
 import java.util.Set;
 
@@ -43,7 +44,7 @@ public class Player extends GameObject implements RenderableComponent, Collision
     // Event counter
     Set<String> events = new HashSet<String>();
     Achievements achievements;
-
+    HashMap<Integer, Vector2> teleportLocations = defineTeleportLocations();
 
     public Player(Vector2 position, float rotation, String playerTexturePath) {
         super(position, rotation);
@@ -75,6 +76,9 @@ public class Player extends GameObject implements RenderableComponent, Collision
     }
     @Override
     public void update(float deltaTime) {
+        if (Gdx.input.isKeyPressed(Input.Keys.R)) {
+            position.set(4090,500);
+        }
         //Speed slowly returns to the base movement speed
         if (speed > baseSpeed){
             speed = Math.max(speed - deltaTime * speedRecovery,baseSpeed);
@@ -85,8 +89,8 @@ public class Player extends GameObject implements RenderableComponent, Collision
         if (speed > baseSpeed * 2.5f){
             speed = 0;
             // GameMessageHandler.ShowMessage("Sugar Crash!",5);
-	    achievements.achieveAchievement("Sugar Crash!");
-            events.add("Sugar Crash!");
+	    achievements.achieveAchievement("Sugar Crash!!");
+            events.add("SugarCrash");
         }
         float targetZoom = 0.75f + (speed / baseSpeed) * 0.25f;
         Game.GetActiveCamera().getCamera().zoom += (targetZoom - Game.GetActiveCamera().getCamera().zoom) * 0.25f;
@@ -173,13 +177,15 @@ public class Player extends GameObject implements RenderableComponent, Collision
      */
     public void speedUp() {
         speed += 100f;
-        achievements.achieveAchievement("Sugar Rush!");
+        achievements.achieveAchievement("Sugar Crash!!");
         events.add("SpdUP");
     }
-
+    // Teleports the player to a random location
+    public void teleportRandom() {
+        position.set(teleportLocations.get( (int) (Math.random() * 7 + 1))); // generates random number from 1-7
+    }
     public void giveKey() {
         this.hasKey = true;
-        achievements.achieveAchievement("Contacts");
         events.add("GetKey");
     }
 
@@ -244,5 +250,17 @@ public class Player extends GameObject implements RenderableComponent, Collision
     @Override
     public Boolean isCollisionEnabled() {
         return true;
+    }
+    private static HashMap<Integer, Vector2> defineTeleportLocations() {
+	HashMap<Integer, Vector2> teleportLocations = new HashMap<>();
+
+	teleportLocations.put(1, new Vector2(4090,500)); // Spawn
+    teleportLocations.put(2, new Vector2(2560,7040)); // Top Left (Key Room)
+    teleportLocations.put(3, new Vector2(448,3840)); // Middle Left
+    teleportLocations.put(4, new Vector2(6848,4096)); // Middle Right
+    teleportLocations.put(5, new Vector2(7808,6656)); // Top Right (Key Room)
+    teleportLocations.put(6, new Vector2(6848,1920)); // Bottom Right
+    teleportLocations.put(7, new Vector2(1280,1216)); // Bottom Left
+	return teleportLocations;
     }
 }
