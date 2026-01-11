@@ -12,6 +12,7 @@ import com.escapefromuni.main.collectables.Item;
 import com.escapefromuni.main.components.CollisionComponent;
 import com.escapefromuni.main.components.RenderableComponent;
 import com.escapefromuni.main.ui.GameMessageHandler;
+import com.escapefromuni.main.ui.Achievements;
 
 import java.util.ArrayList;
 import java.util.HashSet;
@@ -28,7 +29,7 @@ public class Player extends GameObject implements RenderableComponent, Collision
     float baseSpeed = 300f;
     float speed = baseSpeed;
     //How fast the player's speed returns to normal
-    float speedRecovery = 25f;
+    float speedRecovery = 45f;
     Rectangle hitbox;
     ArrayList<Item> items = new ArrayList<>();
     Texture[] animation = new Texture[]{
@@ -41,6 +42,8 @@ public class Player extends GameObject implements RenderableComponent, Collision
     float animation_frame = 0;
     // Event counter
     Set<String> events = new HashSet<String>();
+    Achievements achievements;
+
 
     public Player(Vector2 position, float rotation, String playerTexturePath) {
         super(position, rotation);
@@ -56,6 +59,10 @@ public class Player extends GameObject implements RenderableComponent, Collision
     public Player(Vector2 position) {
         super(position);
     }
+
+    public void setAchievements(Achievements achievementSys) {
+		achievements = achievementSys;
+	}
 
     public void start() {
         // Generates a Sprite object using the player.png texture
@@ -77,7 +84,8 @@ public class Player extends GameObject implements RenderableComponent, Collision
         //If you drink too much coffee/soda, you get the unexpected event of a 'sugar crash' where your speed slows down
         if (speed > baseSpeed * 2.5f){
             speed = 0;
-            GameMessageHandler.ShowMessage("Sugar Crash!",5);
+            // GameMessageHandler.ShowMessage("Sugar Crash!",5);
+	    achievements.achieveAchievement("Sugar Crash!!");
             events.add("SugarCrash");
         }
         float targetZoom = 0.75f + (speed / baseSpeed) * 0.25f;
@@ -165,6 +173,7 @@ public class Player extends GameObject implements RenderableComponent, Collision
      */
     public void speedUp() {
         speed += 100f;
+        achievements.achieveAchievement("Sugar Crash!!");
         events.add("SpdUP");
     }
 

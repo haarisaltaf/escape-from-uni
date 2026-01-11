@@ -10,6 +10,7 @@ import java.nio.file.StandardOpenOption;
 import java.io.BufferedReader;
 import java.io.FileReader;
 
+
 public class Leaderboard {
 	// NOTE: line numbers are added in reading the file rather than stored in text.
 	String LEADERBOARD_LOCATION;

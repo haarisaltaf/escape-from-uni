@@ -25,6 +25,7 @@ import com.escapefromuni.main.ui.GameMessageHandler;
 import com.escapefromuni.main.ui.GameTimer;
 import com.escapefromuni.main.ui.Leaderboard;
 import com.escapefromuni.main.ui.Achievements;
+import com.escapefromuni.main.ui.NameInput;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
 
 import java.util.ArrayList;
@@ -93,6 +94,7 @@ public class Game extends ApplicationAdapter {
         SetActiveCamera(camera);
         //Add the player
         var player = new Player(locations.get("player_start"));
+	player.setAchievements(achievements);
         addGameObject(player);
         camera.SetTarget(player);
         //Add the Map
@@ -189,7 +191,7 @@ public class Game extends ApplicationAdapter {
                     gameState = GameState.PLAYING;
                 }
                 if (Gdx.input.isButtonJustPressed(Input.Buttons.LEFT)) {
-                    System.out.println(Gdx.input.getY());
+                    // System.out.println(Gdx.input.getY());
                     //Super hardcoded, MUST adjust if screen resized
                     if (Gdx.input.getX() >= 340 && Gdx.input.getX() <= 740
                     &&  Gdx.input.getY() >= 410 && Gdx.input.getY() <= 610) {

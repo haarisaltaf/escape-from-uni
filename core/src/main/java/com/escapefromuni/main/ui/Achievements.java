@@ -10,16 +10,18 @@ public class Achievements {
 		"Sugar Rush!",
 		"Sugar Crash!!",
 		"Glasses on Glasses!",
-		"The End...?",
+		"KEYYYYYYYYY",
+		"The End?",
 	};
 
 	public String[] getAchievements() {
 		return ACHIEVEMENTS;
 	}
 
-	private Boolean achieveAchievement(String achievement) {
+	public Boolean achieveAchievement(String achievement) {
 		if (Arrays.asList(ACHIEVEMENTS).contains(achievement)) {
-			GameMessageHandler.ShowMessage(achievement,3);
+			// TODO: FIX FOR SCREEN POSITION
+			GameMessageHandler.ShowMessage(achievement,5); 
 			return true;
 		} else {
 			System.out.println("Ensure correct achievement name is used.");
@@ -36,3 +38,4 @@ public class Achievements {
 		}
 	}
 }
+
