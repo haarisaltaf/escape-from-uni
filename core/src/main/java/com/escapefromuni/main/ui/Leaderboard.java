@@ -70,9 +70,11 @@ public class Leaderboard {
 		}
 	}
 
-	private void appendToLeaderboard(String name, int score) throws IOException {
+	public void appendToLeaderboard(String name, float score) {
 		try {
-			String formattedString = name + " - " + score + "\n";
+			Float fScore = score;
+			int iScore = fScore.intValue();
+			String formattedString = name + " - " + iScore + "\n";
 			Files.writeString(Path.of(LEADERBOARD_LOCATION), formattedString, StandardOpenOption.APPEND);
 		} catch (IOException e) {System.out.println("IO ERROR WHEN APPENDING");}
 	}

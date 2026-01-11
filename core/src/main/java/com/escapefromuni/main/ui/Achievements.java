@@ -3,12 +3,12 @@ package com.escapefromuni.main.ui;
 
 import com.escapefromuni.main.ui.GameMessageHandler;
 import java.util.Arrays;
+import java.util.Collection;
 import java.util.HashMap;
 
 public class Achievements {
 
 	HashMap<String, Boolean> ACHIEVEMENTS = new HashMap<String, Boolean>();
-	int SCORE_CHANGE = 10;
 
 	public void init() {
 		ACHIEVEMENTS.put("Sugar Rush!", false);
@@ -21,6 +21,10 @@ public class Achievements {
 
 	public HashMap<String, Boolean> getAchievements() {
 		return ACHIEVEMENTS;
+	}
+
+	public Collection<Boolean> getAchieved() {
+		return ACHIEVEMENTS.values();
 	}
 
 	public Boolean achieveAchievement(String achievement) {

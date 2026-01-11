@@ -1,0 +1,25 @@
+package com.escapefromuni.main.ui;
+
+import java.util.Collection;
+
+public class ScoreManager {
+
+	private int Score = 0;
+	private float startTime = 300;
+	private int achievementsChange = 10;
+
+	public float calculateScore(Collection<Boolean> Achievements, float timeRemaining, Boolean ifWon) {
+		// given a list of booleans to iterate over to check if they
+		// are true/ achieved
+		for (Boolean Achievement : Achievements) {
+			if (Achievement) {
+				Score += achievementsChange;
+			}
+		}
+		if (ifWon) {
+			return Score + timeRemaining + 100;
+		} else {
+			return Score + timeRemaining;
+		}
+	}
+}

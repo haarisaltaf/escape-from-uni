@@ -28,6 +28,7 @@ import com.escapefromuni.main.ui.GameTimer;
 import com.escapefromuni.main.ui.Leaderboard;
 import com.escapefromuni.main.ui.Achievements;
 import com.escapefromuni.main.ui.NameInput;
+import com.escapefromuni.main.ui.ScoreManager;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.ui.TextField;
@@ -72,9 +73,14 @@ public class Game extends ApplicationAdapter {
     // Leaderboard
     private BitmapFont font;
     public Leaderboard leaderboard = new Leaderboard();
+    public String name = "longboi";
     public Achievements achievements = new Achievements();
     HashMap<String, Boolean> achievementsList = achievements.getAchievements();
     public String top5;
+    // SCORING
+    public ScoreManager scoreManager = new ScoreManager();
+    private float score;
+    private Boolean isFinished = false;
 
     @Override
     public void create() {
@@ -103,7 +109,7 @@ public class Game extends ApplicationAdapter {
 		@Override
 		public void keyTyped(TextField textField, char c) {
 			if (c == '\n' || c == '\r') {
-				String name = textField.getText();
+				name = textField.getText();
 				showingInput = false;
 				System.out.println(name);
 			}
@@ -251,6 +257,11 @@ public class Game extends ApplicationAdapter {
                 batch.end();
                 break;
             case WIN:
+		if (!isFinished) {
+			score = scoreManager.calculateScore(achievements.getAchieved(), timer.GetTime(), true);
+			leaderboard.appendToLeaderboard(name, score);
+			isFinished = true;
+		}
                 if (Gdx.input.isButtonJustPressed(Input.Buttons.LEFT)) {
                     System.out.println(Gdx.input.getY());
                     //Super hardcoded, MUST adjust if screen resized
@@ -274,6 +285,11 @@ public class Game extends ApplicationAdapter {
                 batch.end();
                 break;
             case LOSE:
+		if (!isFinished) {
+			score = scoreManager.calculateScore(achievements.getAchieved(), timer.GetTime(), false);
+			leaderboard.appendToLeaderboard(name, score);
+			isFinished = true;
+		}
                 if (Gdx.input.isButtonJustPressed(Input.Buttons.LEFT)) {
                     System.out.println(Gdx.input.getY());
                     //WARNING: Super hardcoded, MUST adjust if screen resized
@@ -290,6 +306,7 @@ public class Game extends ApplicationAdapter {
                 batch.begin();
                 loseImage.draw(batch);
                 quitButton.draw(batch);
+		font.draw(batch, "CURRENT SCORE: " + score, 10, 700);
                 batch.end();
                 break;
         }
