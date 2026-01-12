@@ -9,19 +9,19 @@ public class ScoreManager {
 	private int achievementsChange = 10;
 
 	public float calculateScore(Collection<Boolean> Achievements, float timeRemaining, Boolean ifWon) {
-		// given a list of booleans to iterate over to check if they
-		// are true/ achieved
+		int score = 0;
 		for (Boolean Achievement : Achievements) {
 			if (Achievement) {
-				Score += achievementsChange;
+			    score += achievementsChange;
 			}
 		}
-		if (timeRemaining <= 0 || timeRemaining > 300) {return 0;}
-
+		if (timeRemaining <= 0 || timeRemaining > 300) {
+			return 0;
+		}
 		if (ifWon) {
-			return Score + timeRemaining + 100;
+			return score + timeRemaining + 100;
 		} else {
-			return Score + timeRemaining;
+			return score + timeRemaining;
 		}
 	}
 }
