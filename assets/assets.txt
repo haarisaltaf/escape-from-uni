@@ -4,6 +4,7 @@ Bomb.png
 BombSign.png
 Collision.png
 Collision.tsx
+Enter-Your-Name.png
 Key.png
 Leaderboard.txt
 Music/Dungeon.wav
@@ -36,8 +37,10 @@ Tileset1.png.kra
 TimeStop.png
 Wall_Tileset.png
 Walls.tsx
+background.png
 banana.png
 controlsHelp.png
+controlsHelp_old.png
 default.fnt
 default.png
 defaultCollectible.png
@@ -49,6 +52,7 @@ npc1.kra
 npc1.png
 pausedGraphic.png
 playButton.png
+playButton_old.png
 player.png
 poo.png
 professor.png
@@ -56,6 +60,7 @@ quitButton.png
 soda.kra
 soda.png
 titleGraphic.png
+titleGraphic_old.png
 uiskin.atlas
 uiskin.json
 uiskin.png

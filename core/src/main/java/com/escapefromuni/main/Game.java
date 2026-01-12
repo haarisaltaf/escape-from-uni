@@ -53,6 +53,8 @@ public class Game extends ApplicationAdapter {
     Sprite quitButton;
     Sprite winImage;
     Sprite loseImage;
+    Sprite enterName;
+    private Texture background;
 
     Music music;
     HashMap<String, Vector2> locations = defineLocations();
@@ -88,18 +90,23 @@ public class Game extends ApplicationAdapter {
     public void create() {
         batch = new SpriteBatch();
 
+	background = new Texture("background.png");
+
         // Create menu sprites
         titleImage = new Sprite(new Texture(Gdx.files.internal("titleGraphic.png")));
         playButton = new Sprite(new Texture(Gdx.files.internal("playButton.png")));
         controlsHelp = new Sprite(new Texture(Gdx.files.internal("controlsHelp.png")));
+        controlsHelp.setScale(1.5f);
         pausedSprite = new Sprite(new Texture(Gdx.files.internal("pausedGraphic.png")));
         quitButton = new Sprite(new Texture(Gdx.files.internal("quitButton.png")));
         winImage = new Sprite(new Texture(Gdx.files.internal("winImage.png")));
         loseImage = new Sprite(new Texture(Gdx.files.internal("loseImage.png")));
+        enterName = new Sprite(new Texture(Gdx.files.internal("Enter-Your-Name.png")));
+        enterName.setScale(0.5f);
 
         // adding leaderboard
         font = new BitmapFont();
-        font.setColor(0, 0, 0, 1);
+        font.setColor(1, 1, 1, 1);
         font.getData().setScale(2f);
         leaderboard.init();
         achievements.init();
@@ -240,7 +247,7 @@ public class Game extends ApplicationAdapter {
 
         controlsHelp.setPosition(
                 (width - controlsHelp.getTexture().getWidth()) / 2f,
-                (height - controlsHelp.getTexture().getHeight()) / 2f + 50);
+                (height - controlsHelp.getTexture().getHeight()) / 2f - 100f);
 
         pausedSprite.setPosition(
                 (width - pausedSprite.getTexture().getWidth()) / 2f,
@@ -259,6 +266,8 @@ public class Game extends ApplicationAdapter {
                 (height * 1.5f - loseImage.getTexture().getHeight()) / 2f + 60);
 
         nameInput.setPosition(width / 3f, 10);
+	
+	enterName.setPosition(5, 5);
     }
 
     @Override
@@ -304,9 +313,11 @@ public class Game extends ApplicationAdapter {
                 top5 = leaderboard.getTopFive();
 
                 batch.begin();
+		batch.draw(background, 0, 0, Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
                 titleImage.draw(batch);
                 playButton.draw(batch);
                 controlsHelp.draw(batch);
+		enterName.draw(batch);
                 font.draw(batch, top5, 10, 700);
                 batch.end();
 
@@ -367,6 +378,7 @@ public class Game extends ApplicationAdapter {
                 ScreenUtils.clear(1f, 1f, 1f, 1f);
 
                 batch.begin();
+		batch.draw(background, 0, 0, Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
                 pausedSprite.setPosition(activeCamera.getCameraPosition().x - 200,
                         activeCamera.getCameraPosition().y + 50);
                 pausedSprite.draw(batch);
@@ -412,8 +424,10 @@ public class Game extends ApplicationAdapter {
                 ScreenUtils.clear(0.25f, 0.75f, 0f, 1f);
 
                 batch.begin();
+		batch.draw(background, 0, 0, Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
                 winImage.draw(batch);
                 quitButton.draw(batch);
+                font.draw(batch, top5, 10, 700);
 
                 GameMessageHandler.ShowMessage("Time left : " + time, 1);
                 GameMessageHandler.instance.positionOnScreen(
@@ -421,6 +435,7 @@ public class Game extends ApplicationAdapter {
                         new Vector2(Gdx.graphics.getWidth(), Gdx.graphics.getHeight()),
                         1);
                 GameMessageHandler.instance.render(batch);
+                font.draw(batch, "CURRENT SCORE: " + (int) score, 50, 700);
                 batch.end();
 
                 break;
@@ -459,9 +474,9 @@ public class Game extends ApplicationAdapter {
                 batch.begin();
                 loseImage.draw(batch);
                 quitButton.draw(batch);
-                font.draw(batch, "CURRENT SCORE: " + (int) score, 10, 700);
+                font.draw(batch, "CURRENT SCORE: " + (int) score, 50, 700);
+                font.draw(batch, top5, 10, 700);
                 batch.end();
-
                 break;
             }
         }
@@ -471,6 +486,7 @@ public class Game extends ApplicationAdapter {
     public void dispose() {
         batch.dispose();
         stage.dispose();
+	background.dispose();
         for (var gameObject : gameObjects) {
             gameObject.dispose();
         }
