@@ -1,0 +1,102 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>GameTimer.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">core</a> &gt; <a href="index.source.html" class="el_package">com.escapefromuni.main.ui</a> &gt; <span class="el_source">GameTimer.java</span></div><h1>GameTimer.java</h1><pre class="source lang-java linenums">package com.escapefromuni.main.ui;
+
+import com.badlogic.gdx.graphics.g2d.BitmapFont;
+import com.badlogic.gdx.graphics.g2d.SpriteBatch;
+import com.badlogic.gdx.math.Vector2;
+import com.badlogic.gdx.utils.Timer;
+import com.escapefromuni.main.Game;
+
+public class GameTimer extends UIElement {
+    // Store the game time and event counter
+    // Creates a font used to output time
+    float time;
+    BitmapFont font;
+<span class="nc" id="L14">    int eventCounter = 0;</span>
+<span class="nc" id="L15">    boolean timerPaused = false;</span>
+
+    public GameTimer(Vector2 relativeScreenPosition) {
+<span class="nc" id="L18">        super(relativeScreenPosition);</span>
+<span class="nc" id="L19">        time = 300;</span>
+<span class="nc" id="L20">        font = new BitmapFont();</span>
+<span class="nc" id="L21">    }</span>
+
+
+    /**
+     * If the game time drops below zero the GameState is set to lose.
+     * 
+     * @param deltaTime : The time in ms since the last update
+     */
+    @Override
+    public void update(float deltaTime) {
+<span class="nc bnc" id="L31" title="All 4 branches missed.">        if (Game.gameState == Game.GameState.PLAYING &amp;&amp; timerPaused == false) {</span>
+<span class="nc" id="L32">            time -= deltaTime;</span>
+<span class="nc bnc" id="L33" title="All 2 branches missed.">            if (time &lt; 0) {</span>
+<span class="nc" id="L34">                Game.gameState = Game.GameState.LOSE;</span>
+            }
+        }
+<span class="nc" id="L37">    }</span>
+
+    /**
+     * Converts a time given in seconds to minutes and seconds instead.
+     * 
+     * @param timeSeconds The input time in seconds.
+     * @return A formatted string in the form MM:SS
+     */
+    public static String GetTimeString(float timeSeconds) {
+<span class="nc bnc" id="L46" title="All 2 branches missed.">	if (timeSeconds &lt;= 0) { return &quot;00:00&quot;; }</span>
+
+<span class="nc" id="L48">        float minutes = (timeSeconds % 3600) / 60;</span>
+<span class="nc" id="L49">        float seconds = timeSeconds % 60;</span>
+
+<span class="nc" id="L51">        return String.format(&quot;%02d:%02d&quot;, (int) Math.floor(minutes), (int) Math.floor(seconds));</span>
+    }
+
+    // Returns the time left on the timer
+    public float GetTime() {
+<span class="nc" id="L56">        return time;</span>
+    }
+
+    // Adds 5 seconds to timer
+    public void addTime(float seconds) {
+<span class="nc" id="L61">        time += seconds;</span>
+<span class="nc" id="L62">    }</span>
+
+    // Pause timer
+    public void pauseTimer(float seconds) {
+<span class="nc" id="L66">        System.out.println(&quot;We here&quot;);</span>
+<span class="nc" id="L67">        timerPaused = true;</span>
+<span class="nc" id="L68">        Timer.schedule(new Timer.Task() {</span>
+            @Override
+            public void run() {
+<span class="nc" id="L71">                timerPaused = false;</span>
+<span class="nc" id="L72">            }</span>
+        }, seconds);
+<span class="nc" id="L74">    }</span>
+
+    // Render the timer
+    @Override
+    public void render(SpriteBatch batch) {
+<span class="nc" id="L79">        font.draw(batch, &quot;Time Left : &quot; + GetTimeString(time) + &quot;\n Events : &quot; + eventCounter, position.x, position.y);</span>
+<span class="nc" id="L80">    }</span>
+
+    // Set position on screen
+    @Override
+    public void positionOnScreen(Vector2 cameraPosition, Vector2 screenSize, float zoom) {
+<span class="nc" id="L85">        super.positionOnScreen(cameraPosition, screenSize, zoom);</span>
+<span class="nc" id="L86">        font.getData().setScale(3 * zoom);</span>
+<span class="nc" id="L87">    }</span>
+
+    // Sets the event counter
+    public void setEventCounter(int eventCounter) {
+<span class="nc" id="L91">        this.eventCounter = eventCounter;</span>
+<span class="nc" id="L92">    }</span>
+
+    public void setTimerPaused(boolean isPaused) {
+<span class="nc" id="L95">	timerPaused = isPaused;</span>
+<span class="nc" id="L96">    }</span>
+
+    public Boolean getTimerPaused() {
+<span class="nc" id="L99">	return timerPaused;</span>
+    }
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.13.202504020838</span></div></body></html>

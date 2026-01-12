@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>Key.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">core</a> &gt; <a href="index.source.html" class="el_package">com.escapefromuni.main.collectables</a> &gt; <span class="el_source">Key.java</span></div><h1>Key.java</h1><pre class="source lang-java linenums">package com.escapefromuni.main.collectables;
+
+import com.badlogic.gdx.graphics.g2d.SpriteBatch;
+import com.badlogic.gdx.math.Vector2;
+import com.escapefromuni.main.Player;
+import com.escapefromuni.main.components.RenderableComponent;
+
+public class Key extends Item implements RenderableComponent {
+    Player holder;
+
+    public Key(Vector2 givenPosition) {
+<span class="fc" id="L12">        super(givenPosition,&quot;glasses.png&quot;,&quot;key&quot;);</span>
+<span class="fc" id="L13">    }</span>
+    public Key(Vector2 givenPosition,String imagePath) {
+<span class="nc" id="L15">        super(givenPosition,imagePath,&quot;key&quot;);</span>
+<span class="nc" id="L16">    }</span>
+    @Override
+    public void pickup(Player player){
+<span class="nc" id="L19">        super.pickup(player);</span>
+<span class="nc" id="L20">        player.giveKey();</span>
+<span class="nc" id="L21">        holder = player;</span>
+<span class="nc" id="L22">    }</span>
+    @Override
+    public void render(SpriteBatch batch) {
+<span class="nc bnc" id="L25" title="All 2 branches missed.">        if (!doesExist()) {</span>
+<span class="nc" id="L26">            return;</span>
+        }
+<span class="nc" id="L28">        collectibleSprite.setPosition(position.x,position.y);</span>
+<span class="nc" id="L29">        collectibleSprite.draw(batch);</span>
+<span class="nc" id="L30">    }</span>
+
+
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.13.202504020838</span></div></body></html>

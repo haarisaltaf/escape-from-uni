@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<testsuite name="com.escapefromuni.ui.GameTimerTest" tests="18" skipped="0" failures="0" errors="0" timestamp="2026-01-12T10:47:59.467Z" hostname="nas-10-241-29-231.york.ac.uk" time="0.014">
+  <properties/>
+  <testcase name="testGetTimeString()" classname="com.escapefromuni.ui.GameTimerTest" time="0.001"/>
+  <testcase name="testUpdateWithZeroTimeChange()" classname="com.escapefromuni.ui.GameTimerTest" time="0.0"/>
+  <testcase name="testAddTimePositive()" classname="com.escapefromuni.ui.GameTimerTest" time="0.001"/>
+  <testcase name="testSetTimerPausedFalse()" classname="com.escapefromuni.ui.GameTimerTest" time="0.0"/>
+  <testcase name="testAddTimeNegative()" classname="com.escapefromuni.ui.GameTimerTest" time="0.0"/>
+  <testcase name="testUpdateRepeated()" classname="com.escapefromuni.ui.GameTimerTest" time="0.001"/>
+  <testcase name="testTimerPausedStartsFalse()" classname="com.escapefromuni.ui.GameTimerTest" time="0.0"/>
+  <testcase name="testUpdateDecrementsTime()" classname="com.escapefromuni.ui.GameTimerTest" time="0.0"/>
+  <testcase name="testUpdateWithSmallChange()" classname="com.escapefromuni.ui.GameTimerTest" time="0.0"/>
+  <testcase name="testConstructorInitialTime()" classname="com.escapefromuni.ui.GameTimerTest" time="0.0"/>
+  <testcase name="testAddTimeZero()" classname="com.escapefromuni.ui.GameTimerTest" time="0.0"/>
+  <testcase name="testGetTimeFloorsFloats()" classname="com.escapefromuni.ui.GameTimerTest" time="0.001"/>
+  <testcase name="testConstructorLargeTime()" classname="com.escapefromuni.ui.GameTimerTest" time="0.0"/>
+  <testcase name="testConstructorNegativeTime()" classname="com.escapefromuni.ui.GameTimerTest" time="0.0"/>
+  <testcase name="testSetTimerPausedTrue()" classname="com.escapefromuni.ui.GameTimerTest" time="0.0"/>
+  <testcase name="testGetTimeStringZeroAndNegative()" classname="com.escapefromuni.ui.GameTimerTest" time="0.0"/>
+  <testcase name="testUpdateNegativeTime()" classname="com.escapefromuni.ui.GameTimerTest" time="0.0"/>
+  <testcase name="testGetTimeStringLargeValues()" classname="com.escapefromuni.ui.GameTimerTest" time="0.001"/>
+  <system-out><![CDATA[]]></system-out>
+  <system-err><![CDATA[]]></system-err>
+</testsuite>

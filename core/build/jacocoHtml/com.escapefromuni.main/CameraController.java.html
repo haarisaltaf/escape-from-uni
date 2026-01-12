@@ -1,0 +1,96 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>CameraController.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">core</a> &gt; <a href="index.source.html" class="el_package">com.escapefromuni.main</a> &gt; <span class="el_source">CameraController.java</span></div><h1>CameraController.java</h1><pre class="source lang-java linenums">package com.escapefromuni.main;
+
+import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.Input;
+import com.badlogic.gdx.graphics.Camera;
+import com.badlogic.gdx.graphics.OrthographicCamera;
+import com.badlogic.gdx.graphics.g2d.SpriteBatch;
+import com.badlogic.gdx.math.Vector2;
+import com.escapefromuni.main.components.CameraComponent;
+import com.escapefromuni.main.components.RenderableComponent;
+
+/**
+ * A gameGbject which makes the camera which follows a given target.
+ */
+public class CameraController extends GameObject implements CameraComponent {
+    OrthographicCamera camera;
+    GameObject target;
+    
+    // Variables to control nausea effect
+<span class="nc" id="L20">    float nauseaTimer = 0f;</span>
+<span class="nc" id="L21">    private float amplitude = 20f; // How much the camera moves</span>
+<span class="nc" id="L22">    private float frequency = 5f; // How fast it oscillates</span>
+
+    // Variable to control zoom using Binoculars item
+<span class="nc" id="L25">    int numOfBinoculars = 1;</span>
+
+    /**
+     * Set's the target gameObject that this CameraController should track.
+     * @param target the gameObject to follow.
+     */
+    public void SetTarget(GameObject target) {
+<span class="nc" id="L32">        this.target = target;</span>
+<span class="nc" id="L33">    }</span>
+    @Override
+    public void start() {
+<span class="nc" id="L36">        super.start();</span>
+<span class="nc" id="L37">        camera = new OrthographicCamera();</span>
+<span class="nc" id="L38">        camera.setToOrtho(false,1080,720);</span>
+<span class="nc" id="L39">        camera.position.set(0, 0, 0);</span>
+<span class="nc" id="L40">        camera.update();</span>
+<span class="nc" id="L41">    }</span>
+    @Override
+    public void update(float delta) {
+
+<span class="nc" id="L45">        position.set(target.position);</span>
+        // Camera zooms out when binoculars are picked up
+<span class="nc" id="L47">        camera.zoom += numOfBinoculars * 0.2;</span>
+
+        // Nausea Effect
+<span class="nc bnc" id="L50" title="All 2 branches missed.">        if (nauseaTimer &gt; 0) {</span>
+<span class="nc" id="L51">        nauseaTimer -= delta;</span>
+        // Uses Sine wave to oscillate x position
+<span class="nc" id="L53">        float sway = (float) Math.sin(nauseaTimer * frequency) * amplitude;</span>
+<span class="nc" id="L54">        position.x += sway;</span>
+        // Uses Cosine wave to oscillate y position
+<span class="nc" id="L56">        float bob = (float) Math.cos(nauseaTimer * frequency * 2) * (amplitude / 2);</span>
+<span class="nc" id="L57">        position.y += bob;</span>
+        // Camera Rotation for nausea
+<span class="nc" id="L59">        float rotation = (float) Math.sin(nauseaTimer * frequency * 0.5) * 2f;</span>
+<span class="nc" id="L60">        camera.up.set(0, 1, 0);</span>
+<span class="nc" id="L61">        camera.rotate(rotation);</span>
+        // Camera zoom for nausea
+<span class="nc" id="L63">        float zoom = (float) Math.sin(nauseaTimer * frequency/2 + 45) / 10;</span>
+<span class="nc" id="L64">        camera.zoom += zoom;</span>
+        }
+<span class="nc" id="L66">    }</span>
+
+    @Override
+    public void updateCamera(SpriteBatch batch) {
+<span class="nc" id="L70">        camera.position.set(position.x,position.y,0);</span>
+<span class="nc" id="L71">        camera.update();</span>
+<span class="nc" id="L72">        batch.setProjectionMatrix(camera.combined);</span>
+<span class="nc" id="L73">    }</span>
+
+    @Override
+    public Vector2 getCameraPosition() {
+<span class="nc" id="L77">        return position;</span>
+    }
+
+    @Override
+    public OrthographicCamera getCamera() {
+<span class="nc" id="L82">        return camera;</span>
+    }
+
+<span class="nc" id="L85">    public CameraController (GameObject target) {</span>
+<span class="nc" id="L86">        this.target = target;</span>
+<span class="nc" id="L87">    }</span>
+    public void nausea() {
+<span class="nc" id="L89">        nauseaTimer = 10f;</span>
+<span class="nc" id="L90">    }</span>
+    
+    public void binoculars() {
+<span class="nc" id="L93">        numOfBinoculars += 1;</span>
+<span class="nc" id="L94">    }</span>
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.13.202504020838</span></div></body></html>

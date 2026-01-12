@@ -1,0 +1,78 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>NPC.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">core</a> &gt; <a href="index.source.html" class="el_package">com.escapefromuni.main</a> &gt; <span class="el_source">NPC.java</span></div><h1>NPC.java</h1><pre class="source lang-java linenums">package com.escapefromuni.main;
+
+import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.graphics.Texture;
+import com.badlogic.gdx.graphics.g2d.Sprite;
+import com.badlogic.gdx.graphics.g2d.SpriteBatch;
+import com.badlogic.gdx.math.Rectangle;
+import com.badlogic.gdx.math.Vector2;
+import com.escapefromuni.main.components.CollisionComponent;
+import com.escapefromuni.main.components.RenderableComponent;
+import com.escapefromuni.main.ui.GameMessageHandler;
+
+public class NPC extends GameObject implements RenderableComponent, CollisionComponent {
+
+    // Stores the texture and sprit for the npc
+    // Stores the hitbox of the npc
+    // Stores the item needed to interract with the npc
+    Texture texture;
+    Sprite sprite;
+    Rectangle hitbox;
+    String requiredItem;
+
+<span class="nc" id="L23">    public NPC(Vector2 position,String textureDir,String requiredItem){</span>
+<span class="nc" id="L24">        this.position = position;</span>
+<span class="nc" id="L25">        texture = new Texture(Gdx.files.internal(textureDir));</span>
+<span class="nc" id="L26">        sprite = new Sprite(texture);</span>
+<span class="nc" id="L27">        sprite.setScale(4);</span>
+<span class="nc" id="L28">        hitbox = new Rectangle(position.x, position.y, texture.getWidth(), texture.getHeight());</span>
+<span class="nc" id="L29">        this.requiredItem = requiredItem;</span>
+<span class="nc" id="L30">    }</span>
+
+    /**
+     * Update the NPC to check if it has been interracted with.
+     * @param deltaTime : The time in ms since the last update
+     */
+    @Override
+    public void update(float deltaTime) {
+<span class="nc" id="L38">        GameObject playerObject = Game.getFirstCollidingObjectInLayer(hitbox,CollisionLayer.PLAYER);</span>
+<span class="nc bnc" id="L39" title="All 2 branches missed.">        if(playerObject != null){</span>
+<span class="nc bnc" id="L40" title="All 2 branches missed.">            if (playerObject instanceof Player player){</span>
+<span class="nc" id="L41">                boolean success =  player.TakeItem(requiredItem);</span>
+<span class="nc bnc" id="L42" title="All 2 branches missed.">                if (success){</span>
+<span class="nc" id="L43">                    Game.gameState = Game.GameState.WIN;</span>
+                }else{
+<span class="nc" id="L45">                    GameMessageHandler.ShowMessage(&quot;You need the &quot; + requiredItem,4);</span>
+                }
+<span class="nc" id="L47">            }else{</span>
+<span class="nc" id="L48">                throw new RuntimeException(&quot;Collided with object on player layer that is not of type Player.&quot;);</span>
+            }
+        }
+<span class="nc" id="L51">    }</span>
+
+    // Renderer for the npc
+    @Override
+    public void render(SpriteBatch batch) {
+<span class="nc" id="L56">        sprite.setPosition(position.x, position.y);</span>
+<span class="nc" id="L57">        sprite.draw(batch);</span>
+<span class="nc" id="L58">    }</span>
+
+    //Returns the collsion layer of the npc
+    @Override
+    public CollisionLayer getCollisionLayer() {
+<span class="nc" id="L63">        return CollisionLayer.NPC;</span>
+    }
+
+    //Returns true if the given hitbox collides with npc hitbox
+    @Override
+    public Boolean isCollidingWith(Rectangle hitboxCheck) {
+<span class="nc" id="L69">        return hitbox.overlaps(hitboxCheck);</span>
+    }
+
+    //Returns true if the hitbox has collision
+    @Override
+    public Boolean isCollisionEnabled() {
+<span class="nc" id="L75">        return true;</span>
+    }
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.13.202504020838</span></div></body></html>

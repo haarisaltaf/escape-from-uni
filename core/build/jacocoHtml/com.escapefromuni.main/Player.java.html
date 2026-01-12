@@ -1,0 +1,336 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>Player.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">core</a> &gt; <a href="index.source.html" class="el_package">com.escapefromuni.main</a> &gt; <span class="el_source">Player.java</span></div><h1>Player.java</h1><pre class="source lang-java linenums">package com.escapefromuni.main;
+
+import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.Input;
+import com.badlogic.gdx.graphics.Texture;
+import com.badlogic.gdx.graphics.g2d.Sprite;
+import com.badlogic.gdx.graphics.g2d.SpriteBatch;
+import com.badlogic.gdx.math.Rectangle;
+import com.badlogic.gdx.math.Vector2;
+import com.escapefromuni.main.collectables.C4;
+import com.escapefromuni.main.collectables.Collectable;
+import com.escapefromuni.main.collectables.Item;
+import com.escapefromuni.main.components.CollisionComponent;
+import com.escapefromuni.main.components.RenderableComponent;
+import com.escapefromuni.main.ui.GameMessageHandler;
+import com.escapefromuni.main.ui.Achievements;
+
+import java.util.ArrayList;
+import java.util.HashSet;
+import java.util.HashMap;
+import java.util.Objects;
+import java.util.Set;
+
+<span class="nc" id="L24">public class Player extends GameObject implements RenderableComponent, CollisionComponent {</span>
+
+    // Texture and Sprite class used from the libGDX library.
+    Texture idleTexture;
+    Sprite playerSprite;
+    // Player speed attribute makes it possible to alter speed during the game.
+<span class="nc" id="L30">    boolean hasKey = false;</span>
+<span class="nc" id="L31">    float baseSpeed = 700f;</span>
+<span class="nc" id="L32">    float speed = baseSpeed;</span>
+    // How fast the player's speed returns to normal
+<span class="nc" id="L34">    float speedRecovery = 45f;</span>
+    Rectangle hitbox;
+<span class="nc" id="L36">    ArrayList&lt;Item&gt; items = new ArrayList&lt;&gt;();</span>
+<span class="nc" id="L37">    Texture[] animation = new Texture[] {</span>
+<span class="nc" id="L38">            new Texture(Gdx.files.internal(&quot;Player/player_3.png&quot;)),</span>
+<span class="nc" id="L39">            new Texture(Gdx.files.internal(&quot;Player/player_4.png&quot;)),</span>
+<span class="nc" id="L40">            new Texture(Gdx.files.internal(&quot;Player/player_5.png&quot;)),</span>
+<span class="nc" id="L41">            new Texture(Gdx.files.internal(&quot;Player/player_6.png&quot;))</span>
+    };
+<span class="nc" id="L43">    float animation_speed = 4f;</span>
+<span class="nc" id="L44">    float animation_frame = 0;</span>
+    // Event counter
+<span class="nc" id="L46">    Set&lt;String&gt; events = new HashSet&lt;String&gt;();</span>
+    Achievements achievements;
+<span class="nc" id="L48">    HashMap&lt;Integer, Vector2&gt; teleportLocations = defineTeleportLocations();</span>
+
+<span class="nc" id="L50">    int keyCounter = 0;</span>
+
+    public Player(Vector2 position, float rotation, String playerTexturePath) {
+<span class="nc" id="L53">        super(position, rotation);</span>
+<span class="nc" id="L54">        this.idleTexture = new Texture(Gdx.files.internal(playerTexturePath));</span>
+<span class="nc" id="L55">    }</span>
+
+    public Player(Vector2 position, float rotation) {
+<span class="nc" id="L58">        super(position, rotation);</span>
+        // Player texture defaults to placeholder player.png
+<span class="nc" id="L60">        idleTexture = new Texture(Gdx.files.internal(&quot;Player/player_2.png&quot;));</span>
+<span class="nc" id="L61">    }</span>
+
+    public Player(Vector2 position) {
+<span class="nc" id="L64">        super(position);</span>
+<span class="nc" id="L65">    }</span>
+
+    public void setAchievements(Achievements achievementSys) {
+<span class="nc" id="L68">        achievements = achievementSys;</span>
+<span class="nc" id="L69">    }</span>
+
+    public void start() {
+        // Generates a Sprite object using the player.png texture
+<span class="nc" id="L73">        idleTexture = new Texture(Gdx.files.internal(&quot;Player/player_2.png&quot;));</span>
+<span class="nc" id="L74">        playerSprite = new Sprite(idleTexture);</span>
+<span class="nc" id="L75">        float rectX = position.x;</span>
+<span class="nc" id="L76">        float rectY = position.y;</span>
+<span class="nc" id="L77">        this.hitbox = new Rectangle(rectX, rectY, playerSprite.getWidth(), playerSprite.getHeight());</span>
+<span class="nc" id="L78">        playerSprite.setScale(4);</span>
+<span class="nc" id="L79">    }</span>
+
+    @Override
+    public void update(float deltaTime) {
+        // if (Gdx.input.isKeyPressed(Input.Keys.R)) {
+        //     position.set(4090, 2800);
+        // }
+        // Speed slowly returns to the base movement speed
+<span class="nc bnc" id="L87" title="All 2 branches missed.">        if (speed &gt; baseSpeed) {</span>
+<span class="nc" id="L88">            speed = Math.max(speed - deltaTime * speedRecovery, baseSpeed);</span>
+<span class="nc bnc" id="L89" title="All 2 branches missed.">        } else if (speed &lt; baseSpeed) {</span>
+<span class="nc" id="L90">            speed = Math.min(speed + deltaTime * speedRecovery, baseSpeed);</span>
+        }
+        // If you drink too much coffee/soda, you get the unexpected event of a 'sugar
+        // crash' where your speed slows down
+<span class="nc bnc" id="L94" title="All 2 branches missed.">        if (speed &gt; (baseSpeed + 300f)) {</span>
+<span class="nc" id="L95">            speed = 0;</span>
+            // GameMessageHandler.ShowMessage(&quot;Sugar Crash!&quot;,5);
+<span class="nc" id="L97">            achievements.achieveAchievement(&quot;Sugar Crash!!&quot;);</span>
+<span class="nc" id="L98">            events.add(&quot;SugarCrash&quot;);</span>
+        }
+<span class="nc" id="L100">        float targetZoom = 0.75f + (speed / baseSpeed) * 0.25f;</span>
+<span class="nc" id="L101">        Game.GetActiveCamera().getCamera().zoom += (targetZoom - Game.GetActiveCamera().getCamera().zoom) * 0.25f;</span>
+
+        // Pick up collectibles
+<span class="nc" id="L104">        ArrayList&lt;GameObject&gt; pickups = Game.getAllCollidingObjects(hitbox, CollisionLayer.COLLECTIBLE);</span>
+<span class="nc bnc" id="L105" title="All 2 branches missed.">        assert pickups != null;</span>
+<span class="nc bnc" id="L106" title="All 2 branches missed.">        for (var pickup : pickups) {</span>
+<span class="nc bnc" id="L107" title="All 2 branches missed.">            if (pickup instanceof Collectable collectable) {</span>
+<span class="nc" id="L108">                collectable.pickup(this);</span>
+            }
+<span class="nc bnc" id="L110" title="All 2 branches missed.">            if (pickup instanceof Item item) {</span>
+<span class="nc" id="L111">                items.add(item);</span>
+            }
+<span class="nc" id="L113">        }</span>
+
+<span class="nc bnc" id="L115" title="All 6 branches missed.">        if (hasKey(Game.getPlayer()) &amp;&amp; GameMap.isPlayerNearAnyPlacedWall(hitbox, 80f) &amp;&amp; GameMap.DoesKeyWallExists()) {</span>
+<span class="nc" id="L116">            GameMap.removeHardcodedPlacedWalls();</span>
+<span class="nc" id="L117">            removeKey();</span>
+
+        }
+
+<span class="nc bnc" id="L121" title="All 6 branches missed.">        if (C4.doesPlayerHaveBomb() &amp;&amp; GameMap.isPlayerNearBombableWall(hitbox, 80f) &amp;&amp; GameMap.DoesBombWallExists()) {</span>
+
+<span class="nc bnc" id="L123" title="All 2 branches missed.">            if (!Gdx.input.isKeyJustPressed(Input.Keys.E)) {</span>
+<span class="nc" id="L124">                GameMessageHandler.ShowMessage(&quot;Press E to bomb the wall &quot;, 3);</span>
+            } else {
+<span class="nc" id="L126">                GameMessageHandler.StopMessage();</span>
+<span class="nc bnc" id="L127" title="All 2 branches missed.">                for (int i = 0; i &lt; items.size(); i++) {</span>
+<span class="nc" id="L128">                    Item item = items.get(i);</span>
+<span class="nc bnc" id="L129" title="All 2 branches missed.">                    if (item instanceof C4 c4) {</span>
+<span class="nc" id="L130">                        items.remove(i);</span>
+<span class="nc" id="L131">                        c4.placeBomb(c4, hitbox);</span>
+<span class="nc" id="L132">                        break;</span>
+                    }
+                }
+            }
+        }
+        // normalise to have consistent speed regardless of direction, and then scale by
+        // move speed and time
+<span class="nc" id="L139">        Vector2 desiredVelocity = getInputVector().nor().scl(speed * deltaTime);</span>
+        // Velocity after accounting for collision with walls
+<span class="nc" id="L141">        Vector2 resolvedVelocity = CollideWithWalls(desiredVelocity);</span>
+        // The resultant velocity is applied to the player
+<span class="nc" id="L143">        position.add(resolvedVelocity.x, resolvedVelocity.y);</span>
+        // Handle animation
+<span class="nc bnc" id="L145" title="All 2 branches missed.">        if (resolvedVelocity.len2() &lt;= 0.01) {</span>
+<span class="nc" id="L146">            playerSprite.setTexture(idleTexture);</span>
+        } else {
+<span class="nc" id="L148">            animation_frame += deltaTime * animation_speed * (speed / baseSpeed);</span>
+<span class="nc bnc" id="L149" title="All 2 branches missed.">            if (Math.floor(animation_frame) &gt;= animation.length) {</span>
+<span class="nc" id="L150">                animation_frame = 0;</span>
+            }
+<span class="nc" id="L152">            playerSprite.setTexture(animation[(int) Math.floor(animation_frame)]);</span>
+        }
+<span class="nc bnc" id="L154" title="All 2 branches missed.">        playerSprite.setFlip(resolvedVelocity.x &lt; 0, false);</span>
+        // Simulate &quot;drag&quot; on items using velocity
+<span class="nc" id="L156">        displayItems(resolvedVelocity.x);</span>
+<span class="nc" id="L157">        setCount();</span>
+<span class="nc" id="L158">    }</span>
+
+    public Vector2 CollideWithWalls(Vector2 desiredVelocity) {
+<span class="nc" id="L161">        Vector2 newVelocity = new Vector2(desiredVelocity.x, desiredVelocity.y);</span>
+        // Check the hitbox a frame forwards in the X direction. If this caused a
+        // collision, cancel the X velocity
+<span class="nc" id="L164">        hitbox.setPosition(position.x + desiredVelocity.x - hitbox.getWidth() / 2f,</span>
+<span class="nc" id="L165">                position.y - hitbox.getHeight() / 2f);</span>
+<span class="nc bnc" id="L166" title="All 2 branches missed.">        if (Game.isCollidingWithLayer(hitbox, CollisionLayer.WALL)) {</span>
+<span class="nc" id="L167">            newVelocity.x = 0;</span>
+        }
+        // Check the hitbox a frame forwards in the Y direction. If this caused a
+        // collision, cancel the Y velocity
+<span class="nc" id="L171">        hitbox.setPosition(position.x - hitbox.getWidth() / 2f,</span>
+<span class="nc" id="L172">                position.y + desiredVelocity.y - hitbox.getHeight() / 2f);</span>
+<span class="nc bnc" id="L173" title="All 2 branches missed.">        if (Game.isCollidingWithLayer(hitbox, CollisionLayer.WALL)) {</span>
+<span class="nc" id="L174">            newVelocity.y = 0;</span>
+        }
+<span class="nc" id="L176">        return newVelocity;</span>
+    }
+
+    @Override
+    public void render(SpriteBatch batch) {
+<span class="nc" id="L181">        playerSprite.setPosition(position.x - playerSprite.getWidth() / 2f,</span>
+<span class="nc" id="L182">                position.y - playerSprite.getWidth() / 2f + 40f);</span>
+<span class="nc" id="L183">        playerSprite.draw(batch);</span>
+
+<span class="nc" id="L185">        System.out.println(&quot;X: &quot; + position.x + &quot; Y: &quot; + position.y);</span>
+<span class="nc" id="L186">    }</span>
+
+    /**
+     * Get the desired direction that the player wants to move in from using the
+     * arrow keys or WASD.
+     *
+     * @return A vector representing the players desired move direction, that has a
+     *         magnitude of &lt;=1.
+     */
+    public Vector2 getInputVector() {
+<span class="nc" id="L196">        Vector2 direction = new Vector2();</span>
+        // Check which keys are being pressed on each frame and move the sprite
+        // accordingly.
+<span class="nc bnc" id="L199" title="All 4 branches missed.">        if (Gdx.input.isKeyPressed(Input.Keys.RIGHT) || Gdx.input.isKeyPressed(Input.Keys.D)) {</span>
+<span class="nc" id="L200">            direction.add(1, 0);</span>
+        }
+<span class="nc bnc" id="L202" title="All 4 branches missed.">        if (Gdx.input.isKeyPressed(Input.Keys.LEFT) || Gdx.input.isKeyPressed(Input.Keys.A)) {</span>
+<span class="nc" id="L203">            direction.add(-1, 0);</span>
+        }
+<span class="nc bnc" id="L205" title="All 4 branches missed.">        if (Gdx.input.isKeyPressed(Input.Keys.UP) || Gdx.input.isKeyPressed(Input.Keys.W)) {</span>
+<span class="nc" id="L206">            direction.add(0, 1);</span>
+        }
+<span class="nc bnc" id="L208" title="All 4 branches missed.">        if (Gdx.input.isKeyPressed(Input.Keys.DOWN) || Gdx.input.isKeyPressed(Input.Keys.S)) {</span>
+<span class="nc" id="L209">            direction.add(0, -1);</span>
+        }
+<span class="nc" id="L211">        return direction;</span>
+    }
+
+    /**
+     * Speeds the player up temporarily.
+     */
+    public void speedUp() {
+<span class="nc" id="L218">        speed += 100f;</span>
+<span class="nc" id="L219">        achievements.achieveAchievement(&quot;Sugar Rush!&quot;);</span>
+<span class="nc" id="L220">        events.add(&quot;SpdUP&quot;);</span>
+<span class="nc" id="L221">    }</span>
+
+    // Teleports the player to a random location
+    public void teleportRandom() {
+<span class="nc" id="L225">        position.set(teleportLocations.get((int) (Math.random() * 7 + 1))); // generates random number from 1-7</span>
+<span class="nc" id="L226">        events.add(&quot;TP&quot;);</span>
+<span class="nc" id="L227">    }</span>
+
+    // Slows down the player temporarily
+    public void slowDown() {
+<span class="nc" id="L231">        speed = 0;</span>
+<span class="nc" id="L232">        events.add(&quot;SpdDOWN&quot;);</span>
+<span class="nc" id="L233">    }</span>
+
+    public void giveKey() {
+<span class="nc" id="L236">        keyCounter += 1;</span>
+<span class="nc" id="L237">        this.hasKey = true;</span>
+<span class="nc" id="L238">        events.add(&quot;GetKey&quot;);</span>
+<span class="nc" id="L239">    }</span>
+
+    public void removeKey() {
+<span class="nc bnc" id="L242" title="All 2 branches missed.">        for (int i = 0; i &lt; items.size(); i++) {</span>
+<span class="nc bnc" id="L243" title="All 2 branches missed.">            if (&quot;key&quot;.equals(items.get(i).itemType)) {</span>
+<span class="nc" id="L244">                items.get(i).setAsNotExist();</span>
+<span class="nc" id="L245">                items.remove(i);</span>
+<span class="nc" id="L246">                break;</span>
+            }
+        }
+<span class="nc" id="L249">        keyCounter -= 1;</span>
+<span class="nc bnc" id="L250" title="All 2 branches missed.">        if (keyCounter == 0) {</span>
+<span class="nc" id="L251">            this.hasKey = false;</span>
+        }
+<span class="nc" id="L253">    }</span>
+
+    public static boolean hasKey(Player player) {
+<span class="nc" id="L256">        return player.hasKey;</span>
+    }
+
+    public void displayItems(float drag) {
+<span class="nc bnc" id="L260" title="All 2 branches missed.">        for (int i = 0; i &lt; items.size(); i++) {</span>
+<span class="nc bnc" id="L261" title="All 2 branches missed.">            if (items.get(i) instanceof C4) {</span>
+<span class="nc" id="L262">                items.get(i).position.set(position.x - 15 - drag * i * 2.9f, position.y + 30);</span>
+            } else {
+<span class="nc" id="L264">                items.get(i).position.set(position.x - 15 - drag * i * 2.9f, position.y + 55 + i * 20);</span>
+            }
+        }
+<span class="nc" id="L267">    }</span>
+
+    public void AddItem(Item newItem) {
+<span class="nc" id="L270">        items.add(newItem);</span>
+<span class="nc" id="L271">    }</span>
+
+    public boolean HasItem(String itemType) {
+<span class="nc bnc" id="L274" title="All 2 branches missed.">        for (int i = 0; i &lt; items.size(); i++) {</span>
+<span class="nc bnc" id="L275" title="All 2 branches missed.">            if (Objects.equals(items.get(i).itemType, itemType)) {</span>
+<span class="nc" id="L276">                return true;</span>
+            }
+        }
+<span class="nc" id="L279">        return false;</span>
+    }
+
+    /**
+     *
+     * @param itemType
+     * @return
+     */
+    public boolean TakeItem(String itemType) {
+<span class="nc" id="L288">        int itemToRemove = -1;</span>
+<span class="nc" id="L289">        events.add(&quot;TakeItem&quot;);</span>
+<span class="nc bnc" id="L290" title="All 2 branches missed.">        for (int i = 0; i &lt; items.size(); i++) {</span>
+<span class="nc bnc" id="L291" title="All 2 branches missed.">            if (Objects.equals(items.get(i).itemType, itemType)) {</span>
+<span class="nc" id="L292">                itemToRemove = i;</span>
+<span class="nc" id="L293">                break;</span>
+            }
+        }
+<span class="nc bnc" id="L296" title="All 2 branches missed.">        if (itemToRemove != -1) {</span>
+<span class="nc" id="L297">            items.remove(itemToRemove);</span>
+<span class="nc" id="L298">            return true;</span>
+        } else {
+<span class="nc" id="L300">            return false;</span>
+        }
+    }
+
+    public void setCount() {
+<span class="nc" id="L305">        Game.getTimer().setEventCounter(this.events.size());</span>
+<span class="nc" id="L306">    }</span>
+
+    @Override
+    public CollisionLayer getCollisionLayer() {
+<span class="nc" id="L310">        return CollisionLayer.PLAYER;</span>
+    }
+
+    @Override
+    public Boolean isCollidingWith(Rectangle collisionCheck) {
+<span class="nc" id="L315">        return hitbox.overlaps(collisionCheck);</span>
+    }
+
+    @Override
+    public Boolean isCollisionEnabled() {
+<span class="nc" id="L320">        return true;</span>
+    }
+
+    private static HashMap&lt;Integer, Vector2&gt; defineTeleportLocations() {
+<span class="nc" id="L324">        HashMap&lt;Integer, Vector2&gt; teleportLocations = new HashMap&lt;&gt;();</span>
+
+<span class="nc" id="L326">        teleportLocations.put(1, new Vector2(4090, 500)); // Spawn</span>
+<span class="nc" id="L327">        teleportLocations.put(2, new Vector2(2560, 7040)); // Top Left (Key Room)</span>
+<span class="nc" id="L328">        teleportLocations.put(3, new Vector2(448, 3840)); // Middle Left</span>
+<span class="nc" id="L329">        teleportLocations.put(4, new Vector2(6848, 4096)); // Middle Right</span>
+<span class="nc" id="L330">        teleportLocations.put(5, new Vector2(7808, 6656)); // Top Right (Key Room)</span>
+<span class="nc" id="L331">        teleportLocations.put(6, new Vector2(6848, 1920)); // Bottom Right</span>
+<span class="nc" id="L332">        teleportLocations.put(7, new Vector2(1280, 1216)); // Bottom Left</span>
+<span class="nc" id="L333">        return teleportLocations;</span>
+    }
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.13.202504020838</span></div></body></html>

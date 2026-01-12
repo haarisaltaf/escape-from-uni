@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<testsuite name="com.escapefromuni.ui.ScoreManagerTest" tests="15" skipped="0" failures="0" errors="0" timestamp="2026-01-12T10:47:58.610Z" hostname="nas-10-241-29-231.york.ac.uk" time="0.043">
+  <properties/>
+  <testcase name="testTimeRemainingTooLargeReturnsZero()" classname="com.escapefromuni.ui.ScoreManagerTest" time="0.019"/>
+  <testcase name="testTimeRemainingNegativeInReturnsZero()" classname="com.escapefromuni.ui.ScoreManagerTest" time="0.001"/>
+  <testcase name="testNoAchievementsWin()" classname="com.escapefromuni.ui.ScoreManagerTest" time="0.0"/>
+  <testcase name="testTimeRemainingAtMaxReturnsZero()" classname="com.escapefromuni.ui.ScoreManagerTest" time="0.001"/>
+  <testcase name="testSingleAchievement()" classname="com.escapefromuni.ui.ScoreManagerTest" time="0.001"/>
+  <testcase name="testAllAchievementsWin()" classname="com.escapefromuni.ui.ScoreManagerTest" time="0.001"/>
+  <testcase name="testTimeRemainingZeroInReturnsZero()" classname="com.escapefromuni.ui.ScoreManagerTest" time="0.001"/>
+  <testcase name="testAllAchievementsNoWin()" classname="com.escapefromuni.ui.ScoreManagerTest" time="0.0"/>
+  <testcase name="testNoAchievementsNoWin()" classname="com.escapefromuni.ui.ScoreManagerTest" time="0.001"/>
+  <testcase name="testWinGivesExactly100()" classname="com.escapefromuni.ui.ScoreManagerTest" time="0.001"/>
+  <testcase name="testOneSecondRemaining()" classname="com.escapefromuni.ui.ScoreManagerTest" time="0.002"/>
+  <testcase name="testEmptyAchievements()" classname="com.escapefromuni.ui.ScoreManagerTest" time="0.001"/>
+  <testcase name="testSomeAchievementsNoWin()" classname="com.escapefromuni.ui.ScoreManagerTest" time="0.0"/>
+  <testcase name="testTimeRemainingAtBoundary()" classname="com.escapefromuni.ui.ScoreManagerTest" time="0.001"/>
+  <testcase name="testSomeAchievementsWin()" classname="com.escapefromuni.ui.ScoreManagerTest" time="0.001"/>
+  <system-out><![CDATA[]]></system-out>
+  <system-err><![CDATA[]]></system-err>
+</testsuite>

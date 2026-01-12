@@ -1,0 +1,724 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>Game.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">core</a> &gt; <a href="index.source.html" class="el_package">com.escapefromuni.main</a> &gt; <span class="el_source">Game.java</span></div><h1>Game.java</h1><pre class="source lang-java linenums">package com.escapefromuni.main;
+
+import com.badlogic.gdx.ApplicationAdapter;
+import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.Input;
+import com.badlogic.gdx.audio.Music;
+import com.badlogic.gdx.graphics.Texture;
+import com.badlogic.gdx.graphics.g2d.Sprite;
+import com.badlogic.gdx.graphics.g2d.SpriteBatch;
+import com.badlogic.gdx.math.Rectangle;
+import com.badlogic.gdx.math.Vector2;
+import com.badlogic.gdx.math.Vector3;
+import com.badlogic.gdx.utils.ScreenUtils;
+import com.escapefromuni.main.collectables.Key;
+import com.escapefromuni.main.collectables.TimeStop;
+import com.escapefromuni.main.collectables.SpeedCollectable;
+import com.escapefromuni.main.collectables.NauseaCollectable;
+import com.escapefromuni.main.collectables.DeathCollectable;
+import com.escapefromuni.main.collectables.SlowCollectable;
+import com.escapefromuni.main.collectables.BinocularsItem;
+import com.escapefromuni.main.collectables.TeleportCollectable;
+import com.escapefromuni.main.collectables.C4;
+import com.escapefromuni.main.components.CameraComponent;
+import com.escapefromuni.main.components.CollisionComponent;
+import com.escapefromuni.main.components.RenderableComponent;
+import com.escapefromuni.main.components.UIComponent;
+import com.escapefromuni.main.ui.GameMessageHandler;
+import com.escapefromuni.main.ui.GameTimer;
+import com.escapefromuni.main.ui.Leaderboard;
+import com.escapefromuni.main.ui.Achievements;
+import com.escapefromuni.main.ui.ScoreManager;
+
+import com.badlogic.gdx.graphics.g2d.BitmapFont;
+import com.badlogic.gdx.scenes.scene2d.Stage;
+import com.badlogic.gdx.scenes.scene2d.ui.TextField;
+import com.badlogic.gdx.scenes.scene2d.ui.Skin;
+
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Vector;
+
+/**
+ * {@link com.badlogic.gdx.ApplicationListener} implementation shared by all
+ * platforms.
+ */
+<span class="nc" id="L47">public class Game extends ApplicationAdapter {</span>
+    private SpriteBatch batch;
+    Sprite titleImage;
+    Sprite playButton;
+    Sprite controlsHelp;
+    Sprite pausedSprite;
+    Sprite quitButton;
+    Sprite winImage;
+    Sprite loseImage;
+    Sprite enterName;
+    private Texture background;
+
+    Music music;
+<span class="nc" id="L60">    HashMap&lt;String, Vector2&gt; locations = defineLocations();</span>
+
+    private Stage stage;
+    private TextField nameInput;
+<span class="nc" id="L64">    private boolean showingInput = true;</span>
+
+    public static GameTimer timer;
+    private static CameraComponent activeCamera;
+<span class="nc" id="L68">    public static GameState gameState = GameState.MENU;</span>
+
+<span class="nc" id="L70">    static List&lt;GameObject&gt; gameObjects = new ArrayList&lt;&gt;();</span>
+<span class="nc" id="L71">    static List&lt;RenderableComponent&gt; renderableComponents = new ArrayList&lt;&gt;();</span>
+<span class="nc" id="L72">    static List&lt;UIComponent&gt; uiComponents = new ArrayList&lt;&gt;();</span>
+<span class="nc" id="L73">    static HashMap&lt;CollisionComponent.CollisionLayer, List&lt;CollisionComponent&gt;&gt; collidingComponents = new HashMap&lt;&gt;();</span>
+
+    // Leaderboard
+    private BitmapFont font;
+<span class="nc" id="L77">    public Leaderboard leaderboard = new Leaderboard();</span>
+<span class="nc" id="L78">    public String name = &quot;longboi&quot;;</span>
+<span class="nc" id="L79">    public Achievements achievements = new Achievements();</span>
+    public String top5;
+
+    // SCORING
+<span class="nc" id="L83">    public ScoreManager scoreManager = new ScoreManager();</span>
+    private float score;
+<span class="nc" id="L85">    private Boolean isFinished = false;</span>
+
+<span class="nc" id="L87">    private static Player player = null;</span>
+
+    @Override
+    public void create() {
+<span class="nc" id="L91">        batch = new SpriteBatch();</span>
+
+<span class="nc" id="L93">	background = new Texture(&quot;background.png&quot;);</span>
+
+        // Create menu sprites
+<span class="nc" id="L96">        titleImage = new Sprite(new Texture(Gdx.files.internal(&quot;titleGraphic.png&quot;)));</span>
+<span class="nc" id="L97">        playButton = new Sprite(new Texture(Gdx.files.internal(&quot;playButton.png&quot;)));</span>
+<span class="nc" id="L98">        controlsHelp = new Sprite(new Texture(Gdx.files.internal(&quot;controlsHelp.png&quot;)));</span>
+<span class="nc" id="L99">        controlsHelp.setScale(1.5f);</span>
+<span class="nc" id="L100">        pausedSprite = new Sprite(new Texture(Gdx.files.internal(&quot;pausedGraphic.png&quot;)));</span>
+<span class="nc" id="L101">        quitButton = new Sprite(new Texture(Gdx.files.internal(&quot;quitButton.png&quot;)));</span>
+<span class="nc" id="L102">        winImage = new Sprite(new Texture(Gdx.files.internal(&quot;winImage.png&quot;)));</span>
+<span class="nc" id="L103">        loseImage = new Sprite(new Texture(Gdx.files.internal(&quot;loseImage.png&quot;)));</span>
+<span class="nc" id="L104">        enterName = new Sprite(new Texture(Gdx.files.internal(&quot;Enter-Your-Name.png&quot;)));</span>
+<span class="nc" id="L105">        enterName.setScale(0.5f);</span>
+
+        // adding leaderboard
+<span class="nc" id="L108">        font = new BitmapFont();</span>
+<span class="nc" id="L109">        font.setColor(1, 1, 1, 1);</span>
+<span class="nc" id="L110">        font.getData().setScale(2f);</span>
+<span class="nc" id="L111">        leaderboard.init();</span>
+<span class="nc" id="L112">        achievements.init();</span>
+
+        // text/ name input
+<span class="nc" id="L115">        stage = new Stage();</span>
+<span class="nc" id="L116">        Skin skin = new Skin(Gdx.files.internal(&quot;uiskin.json&quot;));</span>
+<span class="nc" id="L117">        nameInput = new TextField(&quot;&quot;, skin);</span>
+<span class="nc" id="L118">        nameInput.setSize(350, 40);</span>
+
+<span class="nc" id="L120">        nameInput.setTextFieldListener((textField, c) -&gt; {</span>
+<span class="nc bnc" id="L121" title="All 4 branches missed.">            if (c == '\n' || c == '\r') {</span>
+<span class="nc" id="L122">                name = textField.getText();</span>
+<span class="nc" id="L123">                showingInput = false;</span>
+<span class="nc" id="L124">                System.out.println(name);</span>
+            }
+<span class="nc" id="L126">        });</span>
+
+<span class="nc" id="L128">        stage.addActor(nameInput);</span>
+
+        // Create the Game World:
+<span class="nc" id="L131">        var camera = new CameraController(null);</span>
+<span class="nc" id="L132">        addGameObject(camera);</span>
+<span class="nc" id="L133">        SetActiveCamera(camera);</span>
+
+        // Layout UI once using current window size
+<span class="nc" id="L136">        layoutMenu(Gdx.graphics.getWidth(), Gdx.graphics.getHeight());</span>
+
+        // Add the player
+<span class="nc" id="L139">        player = new Player(locations.get(&quot;player_start&quot;));</span>
+<span class="nc" id="L140">        player.setAchievements(achievements);</span>
+<span class="nc" id="L141">        addGameObject(player);</span>
+<span class="nc" id="L142">        camera.SetTarget(player);</span>
+
+        // Add the Map
+<span class="nc" id="L145">        addGameObject(new GameMap(camera));</span>
+<span class="nc" id="L146">        addGameObject(new GameTimer(new Vector2(-0.9f, 0.9f)));</span>
+<span class="nc" id="L147">        addGameObject(new GameMessageHandler(new Vector2(0, 0.2f)));</span>
+<span class="nc" id="L148">        addGameObject(new TimeStop(locations.get(&quot;timestop_top_right&quot;), achievements));</span>
+<span class="nc" id="L149">        addGameObject(new TimeStop(locations.get(&quot;timestop_hidden_room&quot;), achievements));</span>
+
+<span class="nc" id="L151">        addGameObject(new SpeedCollectable(locations.get(&quot;speed_north_west&quot;)));</span>
+<span class="nc" id="L152">        addGameObject(new SpeedCollectable(locations.get(&quot;speed_near_start&quot;)));</span>
+<span class="nc" id="L153">        addGameObject(new SpeedCollectable(locations.get(&quot;speed_near_npc&quot;)));</span>
+        // addGameObject(new SpeedCollectable(locations.get(&quot;speed_middle_entrance&quot;)));
+<span class="nc" id="L155">        addGameObject(new SpeedCollectable(locations.get(&quot;speed_middle_north&quot;)));</span>
+<span class="nc" id="L156">        addGameObject(new SpeedCollectable(locations.get(&quot;speed_west&quot;)));</span>
+        // addGameObject(new SpeedCollectable(locations.get(&quot;speed_east&quot;)));
+<span class="nc" id="L158">        addGameObject(new SpeedCollectable(locations.get(&quot;speed_north_east&quot;)));</span>
+        // addGameObject(new SpeedCollectable(locations.get(&quot;speed_middle_west&quot;)));
+<span class="nc" id="L160">        addGameObject(new SpeedCollectable(locations.get(&quot;speed_north_west&quot;)));</span>
+<span class="nc" id="L161">        addGameObject(new SpeedCollectable(locations.get(&quot;speed_middle_west_2&quot;)));</span>
+<span class="nc" id="L162">        addGameObject(new SpeedCollectable(locations.get(&quot;speed_middle_west_3&quot;)));</span>
+<span class="nc" id="L163">        addGameObject(new SpeedCollectable(locations.get(&quot;speed_middle_west_4&quot;)));</span>
+<span class="nc" id="L164">        addGameObject(new SpeedCollectable(locations.get(&quot;speed_middle_west_5&quot;)));</span>
+
+<span class="nc" id="L166">        addGameObject(new BinocularsItem(locations.get(&quot;binoculars&quot;), achievements));</span>
+<span class="nc" id="L167">        addGameObject(new BinocularsItem(locations.get(&quot;binoculars_near_npc&quot;), achievements));</span>
+<span class="nc" id="L168">        addGameObject(new BinocularsItem(locations.get(&quot;binoculars_2&quot;), achievements));</span>
+<span class="nc" id="L169">        addGameObject(new BinocularsItem(locations.get(&quot;binoculars_3&quot;), achievements));</span>
+<span class="nc" id="L170">        addGameObject(new BinocularsItem(locations.get(&quot;binoculars_4&quot;), achievements));</span>
+<span class="nc" id="L171">        addGameObject(new BinocularsItem(locations.get(&quot;binoculars_5&quot;), achievements));</span>
+<span class="nc" id="L172">        addGameObject(new BinocularsItem(locations.get(&quot;binoculars_6&quot;), achievements));</span>
+<span class="nc" id="L173">        addGameObject(new BinocularsItem(locations.get(&quot;binoculars_7&quot;), achievements));</span>
+
+<span class="nc" id="L175">        addGameObject(new NPC(locations.get(&quot;npc_central_hub&quot;), &quot;npc1.png&quot;, &quot;key&quot;));</span>
+<span class="nc" id="L176">        addGameObject(new NPC(locations.get(&quot;Bomb_Sign&quot;), &quot;BombSign.png&quot;, &quot;bomb&quot;));</span>
+<span class="nc" id="L177">        addGameObject(new NPC(locations.get(&quot;Glasses_Sign&quot;), &quot;GlassesSign.png&quot;, &quot;glasses&quot;));</span>
+
+
+<span class="nc" id="L180">        addGameObject(new Key(locations.get(&quot;key_1&quot;)));</span>
+<span class="nc" id="L181">        addGameObject(new Key(locations.get(&quot;key_2&quot;)));</span>
+        // addGameObject(new Key(locations.get(&quot;key_3&quot;)));
+        // addGameObject(new Key(locations.get(&quot;key_4&quot;)));
+        // addGameObject(new Key(locations.get(&quot;key_5&quot;)));
+        // addGameObject(new Key(locations.get(&quot;key_6&quot;)));
+        // addGameObject(new Key(locations.get(&quot;key_7&quot;)));
+
+<span class="nc" id="L188">        addGameObject(new C4(locations.get(&quot;c4&quot;)));</span>
+<span class="nc" id="L189">        addGameObject(new C4(locations.get(&quot;c4_east&quot;)));</span>
+
+<span class="nc" id="L191">        addGameObject(new NauseaCollectable(locations.get(&quot;nausea&quot;), achievements));</span>
+<span class="nc" id="L192">        addGameObject(new NauseaCollectable(locations.get(&quot;nausea_2&quot;), achievements));</span>
+<span class="nc" id="L193">        addGameObject(new NauseaCollectable(locations.get(&quot;nausea_3&quot;), achievements));</span>
+<span class="nc" id="L194">        addGameObject(new NauseaCollectable(locations.get(&quot;nausea_4&quot;), achievements));</span>
+<span class="nc" id="L195">        addGameObject(new NauseaCollectable(locations.get(&quot;nausea_5&quot;), achievements));</span>
+<span class="nc" id="L196">        addGameObject(new NauseaCollectable(locations.get(&quot;nausea_6&quot;), achievements));</span>
+<span class="nc" id="L197">        addGameObject(new NauseaCollectable(locations.get(&quot;nausea_7&quot;), achievements));</span>
+<span class="nc" id="L198">        addGameObject(new NauseaCollectable(locations.get(&quot;nausea_8&quot;), achievements));</span>
+<span class="nc" id="L199">        addGameObject(new NauseaCollectable(locations.get(&quot;nausea_9&quot;), achievements));</span>
+<span class="nc" id="L200">        addGameObject(new NauseaCollectable(locations.get(&quot;nausea_10&quot;), achievements));</span>
+<span class="nc" id="L201">        addGameObject(new NauseaCollectable(locations.get(&quot;nausea_11&quot;), achievements));</span>
+<span class="nc" id="L202">        addGameObject(new NauseaCollectable(locations.get(&quot;nausea_12&quot;), achievements));</span>
+
+        
+
+<span class="nc" id="L206">        addGameObject(new DeathCollectable(locations.get(&quot;death&quot;)));</span>
+<span class="nc" id="L207">        addGameObject(new DeathCollectable(locations.get(&quot;death_2&quot;)));</span>
+<span class="nc" id="L208">        addGameObject(new DeathCollectable(locations.get(&quot;death_3&quot;)));</span>
+<span class="nc" id="L209">        addGameObject(new DeathCollectable(locations.get(&quot;death_4&quot;)));</span>
+<span class="nc" id="L210">        addGameObject(new DeathCollectable(locations.get(&quot;death_5&quot;)));</span>
+<span class="nc" id="L211">        addGameObject(new DeathCollectable(locations.get(&quot;death_6&quot;)));</span>
+<span class="nc" id="L212">        addGameObject(new DeathCollectable(locations.get(&quot;death_7&quot;)));</span>
+<span class="nc" id="L213">        addGameObject(new DeathCollectable(locations.get(&quot;death_8&quot;)));</span>
+
+<span class="nc" id="L215">        addGameObject(new TeleportCollectable(locations.get(&quot;tp&quot;)));</span>
+        
+<span class="nc" id="L217">        addGameObject(new SlowCollectable(locations.get(&quot;slow_1&quot;)));</span>
+<span class="nc" id="L218">        addGameObject(new SlowCollectable(locations.get(&quot;slow_2&quot;)));</span>
+<span class="nc" id="L219">        addGameObject(new SlowCollectable(locations.get(&quot;slow_3&quot;)));</span>
+<span class="nc" id="L220">        addGameObject(new SlowCollectable(locations.get(&quot;slow_4&quot;)));</span>
+<span class="nc" id="L221">        addGameObject(new SlowCollectable(locations.get(&quot;slow_5&quot;)));</span>
+<span class="nc" id="L222">        addGameObject(new SlowCollectable(locations.get(&quot;slow_6&quot;)));</span>
+<span class="nc" id="L223">        addGameObject(new SlowCollectable(locations.get(&quot;slow_7&quot;)));</span>
+<span class="nc" id="L224">        addGameObject(new SlowCollectable(locations.get(&quot;slow_8&quot;)));</span>
+<span class="nc" id="L225">        addGameObject(new SlowCollectable(locations.get(&quot;slow_9&quot;)));</span>
+<span class="nc" id="L226">        addGameObject(new SlowCollectable(locations.get(&quot;slow_10&quot;)));</span>
+<span class="nc" id="L227">        addGameObject(new SlowCollectable(locations.get(&quot;slow_11&quot;)));</span>
+
+
+        // Set up music
+<span class="nc" id="L231">        music = Gdx.audio.newMusic(Gdx.files.internal(&quot;Music/Dungeon.wav&quot;));</span>
+<span class="nc" id="L232">        music.setLooping(true);</span>
+<span class="nc" id="L233">        music.setVolume(0.5f);</span>
+<span class="nc" id="L234">        music.play();</span>
+<span class="nc" id="L235">    }</span>
+
+    /**
+     * Reposition UI sprites (and the name input) based on the current window size.
+     */
+    private void layoutMenu(int width, int height) {
+<span class="nc" id="L241">        titleImage.setPosition(</span>
+<span class="nc" id="L242">                (width - titleImage.getTexture().getWidth()) / 2f,</span>
+<span class="nc" id="L243">                (height * 1.5f - titleImage.getTexture().getHeight()) / 2f);</span>
+
+<span class="nc" id="L245">        playButton.setPosition(</span>
+<span class="nc" id="L246">                (width - playButton.getTexture().getWidth()) / 2f,</span>
+<span class="nc" id="L247">                (height / 2f - playButton.getTexture().getHeight()) / 2f);</span>
+
+<span class="nc" id="L249">        controlsHelp.setPosition(</span>
+<span class="nc" id="L250">                (width - controlsHelp.getTexture().getWidth()) / 2f,</span>
+<span class="nc" id="L251">                (height - controlsHelp.getTexture().getHeight()) / 2f - 100f);</span>
+
+<span class="nc" id="L253">        pausedSprite.setPosition(</span>
+<span class="nc" id="L254">                (width - pausedSprite.getTexture().getWidth()) / 2f,</span>
+<span class="nc" id="L255">                (height * 1.5f - pausedSprite.getTexture().getHeight()) / 2f);</span>
+
+<span class="nc" id="L257">        quitButton.setPosition(</span>
+<span class="nc" id="L258">                (width - quitButton.getTexture().getWidth()) / 2f,</span>
+<span class="nc" id="L259">                (height / 2f - quitButton.getTexture().getHeight()) / 2f);</span>
+
+<span class="nc" id="L261">        winImage.setPosition(</span>
+<span class="nc" id="L262">                (width - winImage.getTexture().getWidth()) / 2f,</span>
+<span class="nc" id="L263">                (height * 1.5f - winImage.getTexture().getHeight()) / 2f + 60);</span>
+
+<span class="nc" id="L265">        loseImage.setPosition(</span>
+<span class="nc" id="L266">                (width - loseImage.getTexture().getWidth()) / 2f,</span>
+<span class="nc" id="L267">                (height * 1.5f - loseImage.getTexture().getHeight()) / 2f + 60);</span>
+
+<span class="nc" id="L269">        nameInput.setPosition(width / 3f, 10);</span>
+	
+<span class="nc" id="L271">	enterName.setPosition(5, 5);</span>
+<span class="nc" id="L272">    }</span>
+
+    @Override
+    public void resize(int width, int height) {
+<span class="nc bnc" id="L276" title="All 2 branches missed.">        if (stage != null) {</span>
+<span class="nc" id="L277">            stage.getViewport().update(width, height, true);</span>
+        }
+
+<span class="nc bnc" id="L280" title="All 2 branches missed.">        if (activeCamera != null) {</span>
+<span class="nc" id="L281">            activeCamera.getCamera().viewportWidth = width;</span>
+<span class="nc" id="L282">            activeCamera.getCamera().viewportHeight = height;</span>
+<span class="nc" id="L283">            activeCamera.getCamera().update();</span>
+        }
+
+<span class="nc" id="L286">        layoutMenu(width, height);</span>
+<span class="nc" id="L287">    }</span>
+
+    @Override
+    public void render() {
+<span class="nc bnc" id="L291" title="All 6 branches missed.">        switch (gameState) {</span>
+            case MENU: {
+<span class="nc" id="L293">                int w = Gdx.graphics.getWidth();</span>
+<span class="nc" id="L294">                int h = Gdx.graphics.getHeight();</span>
+
+<span class="nc" id="L296">                activeCamera.getCamera().zoom = 1f;</span>
+<span class="nc" id="L297">                activeCamera.getCamera().position.set(w / 2f, h / 2f, 0);</span>
+<span class="nc" id="L298">                activeCamera.getCamera().update();</span>
+<span class="nc" id="L299">                batch.setProjectionMatrix(activeCamera.getCamera().combined);</span>
+
+                // Convert click from screen coords -&gt; world coords, so it works at any
+                // resolution/aspect
+<span class="nc" id="L303">                Vector3 mouseWorld = new Vector3(Gdx.input.getX(), Gdx.input.getY(), 0);</span>
+<span class="nc" id="L304">                activeCamera.getCamera().unproject(mouseWorld);</span>
+
+<span class="nc bnc" id="L306" title="All 2 branches missed.">                if (Gdx.input.isButtonJustPressed(Input.Buttons.LEFT)) {</span>
+<span class="nc bnc" id="L307" title="All 2 branches missed.">                    if (playButton.getBoundingRectangle().contains(mouseWorld.x, mouseWorld.y)) {</span>
+<span class="nc" id="L308">                        gameState = GameState.PLAYING;</span>
+<span class="nc" id="L309">                        GameMessageHandler.ShowMessage(&quot;WASD to move\nESC to pause&quot;, 3);</span>
+                    }
+                }
+
+<span class="nc" id="L313">                ScreenUtils.clear(1f, 1f, 1f, 1f);</span>
+<span class="nc" id="L314">                top5 = leaderboard.getTopFive();</span>
+
+<span class="nc" id="L316">                batch.begin();</span>
+<span class="nc" id="L317">		batch.draw(background, 0, 0, Gdx.graphics.getWidth(), Gdx.graphics.getHeight());</span>
+<span class="nc" id="L318">                titleImage.draw(batch);</span>
+<span class="nc" id="L319">                playButton.draw(batch);</span>
+<span class="nc" id="L320">                controlsHelp.draw(batch);</span>
+<span class="nc" id="L321">		enterName.draw(batch);</span>
+<span class="nc" id="L322">                font.draw(batch, top5, 10, 700);</span>
+<span class="nc" id="L323">                batch.end();</span>
+
+<span class="nc bnc" id="L325" title="All 2 branches missed.">                if (showingInput) {</span>
+<span class="nc" id="L326">                    Gdx.input.setInputProcessor(stage);</span>
+<span class="nc" id="L327">                    stage.setKeyboardFocus(nameInput);</span>
+<span class="nc" id="L328">                    stage.act();</span>
+<span class="nc" id="L329">                    stage.draw();</span>
+                }
+                break;
+            }
+
+            case PLAYING: {
+<span class="nc bnc" id="L335" title="All 2 branches missed.">                if (Gdx.input.isKeyJustPressed(111)) {</span>
+<span class="nc" id="L336">                    gameState = GameState.PAUSED;</span>
+                }
+<span class="nc" id="L338">                ScreenUtils.clear(0.15f, 0.15f, 0.2f, 1f);</span>
+
+<span class="nc" id="L340">                float deltaTime = Gdx.graphics.getDeltaTime();</span>
+<span class="nc bnc" id="L341" title="All 2 branches missed.">                for (var gameObject : gameObjects) {</span>
+<span class="nc" id="L342">                    gameObject.update(deltaTime);</span>
+<span class="nc" id="L343">                }</span>
+
+<span class="nc" id="L345">                activeCamera.updateCamera(batch);</span>
+
+<span class="nc" id="L347">                batch.begin();</span>
+<span class="nc bnc" id="L348" title="All 2 branches missed.">                for (var renderable : renderableComponents) {</span>
+<span class="nc" id="L349">                    renderable.render(batch);</span>
+<span class="nc" id="L350">                }</span>
+
+<span class="nc" id="L352">                Vector2 screenSize = new Vector2(Gdx.graphics.getWidth(), Gdx.graphics.getHeight());</span>
+<span class="nc bnc" id="L353" title="All 2 branches missed.">                for (var ui : uiComponents) {</span>
+<span class="nc" id="L354">                    ui.positionOnScreen(activeCamera.getCameraPosition(), screenSize, activeCamera.getCamera().zoom);</span>
+<span class="nc" id="L355">                    ui.render(batch);</span>
+<span class="nc" id="L356">                }</span>
+<span class="nc" id="L357">                batch.end();</span>
+<span class="nc" id="L358">                break;</span>
+            }
+
+            case PAUSED: {
+<span class="nc bnc" id="L362" title="All 2 branches missed.">                if (Gdx.input.isKeyJustPressed(111)) {</span>
+<span class="nc" id="L363">                    gameState = GameState.PLAYING;</span>
+                }
+
+<span class="nc" id="L366">                quitButton.setPosition(</span>
+<span class="nc" id="L367">                        activeCamera.getCameraPosition().x - 200,</span>
+<span class="nc" id="L368">                        activeCamera.getCameraPosition().y - 250);</span>
+
+<span class="nc" id="L370">                Vector3 mouse = new Vector3(Gdx.input.getX(), Gdx.input.getY(), 0);</span>
+<span class="nc" id="L371">                activeCamera.getCamera().unproject(mouse);</span>
+
+<span class="nc bnc" id="L373" title="All 2 branches missed.">                if (Gdx.input.isButtonJustPressed(Input.Buttons.LEFT)) {</span>
+<span class="nc bnc" id="L374" title="All 2 branches missed.">                    if (quitButton.getBoundingRectangle().contains(mouse.x, mouse.y)) {</span>
+<span class="nc" id="L375">                        Gdx.app.exit();</span>
+                    }
+                }
+
+<span class="nc" id="L379">                ScreenUtils.clear(1f, 1f, 1f, 1f);</span>
+
+<span class="nc" id="L381">                batch.begin();</span>
+<span class="nc" id="L382">                pausedSprite.setPosition(activeCamera.getCameraPosition().x - 200,</span>
+<span class="nc" id="L383">                        activeCamera.getCameraPosition().y + 50);</span>
+<span class="nc" id="L384">                pausedSprite.draw(batch);</span>
+
+<span class="nc" id="L386">                quitButton.draw(batch);</span>
+<span class="nc" id="L387">                batch.end();</span>
+
+<span class="nc" id="L389">                break;</span>
+            }
+
+            case WIN: {
+<span class="nc bnc" id="L393" title="All 2 branches missed.">                if (!isFinished) {</span>
+<span class="nc" id="L394">                    score = scoreManager.calculateScore(achievements.getAchieved(), timer.GetTime(), true);</span>
+<span class="nc" id="L395">                    leaderboard.appendToLeaderboard(name, score);</span>
+<span class="nc" id="L396">                    isFinished = true;</span>
+                }
+
+<span class="nc" id="L399">                String time = GameTimer.GetTimeString(timer.GetTime());</span>
+
+<span class="nc" id="L401">                activeCamera.getCamera().zoom = 1f;</span>
+<span class="nc" id="L402">                activeCamera.getCamera().position.set(</span>
+<span class="nc" id="L403">                        Gdx.graphics.getWidth() / 2f,</span>
+<span class="nc" id="L404">                        Gdx.graphics.getHeight() / 2f,</span>
+                        0);
+<span class="nc" id="L406">                activeCamera.getCamera().update();</span>
+<span class="nc" id="L407">                batch.setProjectionMatrix(activeCamera.getCamera().combined);</span>
+
+<span class="nc" id="L409">                float cx = activeCamera.getCamera().position.x;</span>
+<span class="nc" id="L410">                float cy = activeCamera.getCamera().position.y;</span>
+
+<span class="nc" id="L412">                quitButton.setPosition(cx - quitButton.getWidth() / 2f, cy - 250f);</span>
+
+<span class="nc" id="L414">                Vector3 mouse = new Vector3(Gdx.input.getX(), Gdx.input.getY(), 0);</span>
+<span class="nc" id="L415">                activeCamera.getCamera().unproject(mouse);</span>
+
+                // Click quit
+<span class="nc bnc" id="L418" title="All 2 branches missed.">                if (Gdx.input.isButtonJustPressed(Input.Buttons.LEFT)) {</span>
+<span class="nc bnc" id="L419" title="All 2 branches missed.">                    if (quitButton.getBoundingRectangle().contains(mouse.x, mouse.y)) {</span>
+<span class="nc" id="L420">                        Gdx.app.exit();</span>
+                    }
+                }
+
+<span class="nc" id="L424">                ScreenUtils.clear(0.25f, 0.75f, 0f, 1f);</span>
+
+<span class="nc" id="L426">                batch.begin();</span>
+<span class="nc" id="L427">		batch.draw(background, 0, 0, Gdx.graphics.getWidth(), Gdx.graphics.getHeight());</span>
+<span class="nc" id="L428">                winImage.draw(batch);</span>
+<span class="nc" id="L429">                quitButton.draw(batch);</span>
+
+<span class="nc" id="L431">                GameMessageHandler.ShowMessage(&quot;Time left : &quot; + time, 1);</span>
+<span class="nc" id="L432">                GameMessageHandler.instance.positionOnScreen(</span>
+                        new Vector2(0, 0),
+<span class="nc" id="L434">                        new Vector2(Gdx.graphics.getWidth(), Gdx.graphics.getHeight()),</span>
+                        1);
+<span class="nc" id="L436">                GameMessageHandler.instance.render(batch);</span>
+<span class="nc" id="L437">                font.draw(batch, top5 + &quot;\nCurrentScore: &quot; + (int) score, 10, 700);</span>
+<span class="nc" id="L438">                batch.end();</span>
+
+<span class="nc" id="L440">                break;</span>
+            }
+
+            case LOSE: {
+<span class="nc bnc" id="L444" title="All 2 branches missed.">                if (!isFinished) {</span>
+<span class="nc" id="L445">                    score = scoreManager.calculateScore(achievements.getAchieved(), timer.GetTime(), false);</span>
+<span class="nc" id="L446">                    leaderboard.appendToLeaderboard(name, score);</span>
+<span class="nc" id="L447">                    isFinished = true;</span>
+                }
+
+<span class="nc" id="L450">                activeCamera.getCamera().zoom = 1f;</span>
+<span class="nc" id="L451">                activeCamera.getCamera().position.set(</span>
+<span class="nc" id="L452">                        Gdx.graphics.getWidth() / 2f,</span>
+<span class="nc" id="L453">                        Gdx.graphics.getHeight() / 2f,</span>
+                        0);
+<span class="nc" id="L455">                activeCamera.getCamera().update();</span>
+<span class="nc" id="L456">                batch.setProjectionMatrix(activeCamera.getCamera().combined);</span>
+
+<span class="nc" id="L458">                quitButton.setPosition(</span>
+<span class="nc" id="L459">                        activeCamera.getCameraPosition().x - 200,</span>
+<span class="nc" id="L460">                        activeCamera.getCameraPosition().y - 250);</span>
+
+<span class="nc" id="L462">                Vector3 mouse = new Vector3(Gdx.input.getX(), Gdx.input.getY(), 0);</span>
+<span class="nc" id="L463">                activeCamera.getCamera().unproject(mouse);</span>
+
+<span class="nc bnc" id="L465" title="All 2 branches missed.">                if (Gdx.input.isButtonJustPressed(Input.Buttons.LEFT)) {</span>
+<span class="nc bnc" id="L466" title="All 2 branches missed.">                    if (quitButton.getBoundingRectangle().contains(mouse.x, mouse.y)) {</span>
+<span class="nc" id="L467">                        Gdx.app.exit();</span>
+                    }
+                }
+
+<span class="nc" id="L471">                ScreenUtils.clear(1f, 1f, 1f, 1f);</span>
+
+<span class="nc" id="L473">                batch.begin();</span>
+<span class="nc" id="L474">		batch.draw(background, 0, 0, Gdx.graphics.getWidth(), Gdx.graphics.getHeight());</span>
+<span class="nc" id="L475">                loseImage.draw(batch);</span>
+<span class="nc" id="L476">                font.draw(batch, top5 + &quot;\nCurrentScore: &quot; + (int) score, 10, 700);</span>
+<span class="nc" id="L477">                quitButton.draw(batch);</span>
+<span class="nc" id="L478">                batch.end();</span>
+<span class="nc" id="L479">                break;</span>
+            }
+        }
+<span class="nc" id="L482">    }</span>
+
+    @Override
+    public void dispose() {
+<span class="nc" id="L486">        batch.dispose();</span>
+<span class="nc" id="L487">        stage.dispose();</span>
+<span class="nc" id="L488">	background.dispose();</span>
+<span class="nc bnc" id="L489" title="All 2 branches missed.">        for (var gameObject : gameObjects) {</span>
+<span class="nc" id="L490">            gameObject.dispose();</span>
+<span class="nc" id="L491">        }</span>
+<span class="nc" id="L492">    }</span>
+
+    /**
+     * Checks a rectangle hitbox against the array of all hitboxes inside a certain
+     * collision layer, and then
+     * returns true if there are any overlapping hitboxes
+     * 
+     * @param hitbox A rectangle which is compared against every hitbox inside a
+     *               layer
+     * @param type   The type of layer which is checked
+     * @return True if a CollisionComponent's hitbox overlaps the input, false
+     *         otherwise.
+     */
+
+    public static Boolean isCollidingWithLayer(Rectangle hitbox, CollisionComponent.CollisionLayer type) {
+<span class="nc bnc" id="L507" title="All 2 branches missed.">        if (!collidingComponents.containsKey(type))</span>
+<span class="nc" id="L508">            return false;</span>
+<span class="nc bnc" id="L509" title="All 2 branches missed.">        for (CollisionComponent collider : collidingComponents.get(type)) {</span>
+<span class="nc bnc" id="L510" title="All 2 branches missed.">            if (!collider.getCollisionLayer().equals(type))</span>
+<span class="nc" id="L511">                throw new IllegalArgumentException(&quot;Layer cannot change after added to game.&quot;);</span>
+<span class="nc bnc" id="L512" title="All 4 branches missed.">            if (collider.isCollisionEnabled() &amp;&amp; collider.isCollidingWith(hitbox))</span>
+<span class="nc" id="L513">                return true;</span>
+<span class="nc" id="L514">        }</span>
+<span class="nc" id="L515">        return false;</span>
+    }
+
+    /**
+     * Returns a list of all overlapping hitboxes inside a certain collision layer,
+     * from
+     * a given Rectangle hitbox which is used to compare against.
+     * 
+     * @param hitbox A rectangle which is compared against every hitbox inside the
+     *               layer
+     * @param type   The type of layer which is checked
+     * @return An arrayList of GameObjects including all CollisionComponents that
+     *         collided with the hitbox.
+     */
+    public static ArrayList&lt;GameObject&gt; getAllCollidingObjects(Rectangle hitbox,
+            CollisionComponent.CollisionLayer type) {
+<span class="nc bnc" id="L531" title="All 2 branches missed.">        if (!collidingComponents.containsKey(type))</span>
+<span class="nc" id="L532">            return null;</span>
+<span class="nc" id="L533">        ArrayList&lt;GameObject&gt; overlappingGameObjects = new ArrayList&lt;&gt;();</span>
+<span class="nc bnc" id="L534" title="All 2 branches missed.">        for (CollisionComponent collider : collidingComponents.get(type)) {</span>
+<span class="nc bnc" id="L535" title="All 2 branches missed.">            if (!collider.getCollisionLayer().equals(type))</span>
+<span class="nc" id="L536">                throw new IllegalArgumentException(&quot;Layer cannot change after added to game.&quot;);</span>
+<span class="nc bnc" id="L537" title="All 4 branches missed.">            if (collider.isCollisionEnabled() &amp;&amp; collider.isCollidingWith(hitbox)) {</span>
+<span class="nc" id="L538">                overlappingGameObjects.add((GameObject) collider);</span>
+            }
+<span class="nc" id="L540">        }</span>
+<span class="nc" id="L541">        return overlappingGameObjects;</span>
+    }
+
+    /**
+     * Returns the first overlapping hitbox inside a certain collision layer, from
+     * a given Rectangle hitbox which is used to compare against. This function is
+     * useful if you know that a layer will only contain one gameObject, i.e. the
+     * Player layer (should) only be used for the player class.
+     * 
+     * @param hitbox A rectangle which is compared against every hitbox inside the
+     *               layer
+     * @param type   The type of layer which is checked
+     * @return The CollisionComponent that collided with the hitbox.
+     */
+    public static GameObject getFirstCollidingObjectInLayer(Rectangle hitbox, CollisionComponent.CollisionLayer type) {
+<span class="nc bnc" id="L556" title="All 2 branches missed.">        if (!collidingComponents.containsKey(type))</span>
+<span class="nc" id="L557">            return null;</span>
+<span class="nc bnc" id="L558" title="All 2 branches missed.">        for (CollisionComponent collider : collidingComponents.get(type)) {</span>
+<span class="nc bnc" id="L559" title="All 2 branches missed.">            if (!collider.getCollisionLayer().equals(type))</span>
+<span class="nc" id="L560">                throw new IllegalArgumentException(&quot;Layer cannot change after added to game.&quot;);</span>
+<span class="nc bnc" id="L561" title="All 4 branches missed.">            if (collider.isCollisionEnabled() &amp;&amp; collider.isCollidingWith(hitbox)) {</span>
+<span class="nc" id="L562">                return (GameObject) collider;</span>
+            }
+<span class="nc" id="L564">        }</span>
+<span class="nc" id="L565">        return null;</span>
+    }
+
+    /**
+     * Set's the camera that the Game is actively using as the main game camera.
+     * Changing the active camera could be useful for cutscenes etc. There can
+     * only be one active camera at a time.
+     * 
+     * @param newActiveCamera The new CameraComponent which replaces the old active
+     *                        camera.
+     */
+    public static void SetActiveCamera(CameraComponent newActiveCamera) {
+<span class="nc" id="L577">        activeCamera = newActiveCamera;</span>
+<span class="nc" id="L578">    }</span>
+
+    /**
+     * Returns the camera that the Game is actively using as the main game camera.
+     * 
+     * @return The new CameraComponent which replaces the old active camera.
+     */
+    public static CameraComponent GetActiveCamera() {
+<span class="nc" id="L586">        return activeCamera;</span>
+    }
+
+    public static Player getPlayer() {
+<span class="nc" id="L590">        return player;</span>
+    }
+
+    /**
+     * Adds a gameObject to the game world and runs the start() procedure.
+     *
+     * @param gameObject The gameObject to add.
+     */
+    public void addGameObject(GameObject gameObject) {
+<span class="nc" id="L599">        gameObjects.add(gameObject);</span>
+
+<span class="nc bnc" id="L601" title="All 2 branches missed.">        if (gameObject instanceof UIComponent uiObject) {</span>
+<span class="nc" id="L602">            uiComponents.add(uiObject);</span>
+<span class="nc bnc" id="L603" title="All 2 branches missed.">        } else if (gameObject instanceof RenderableComponent renderObject) {</span>
+<span class="nc" id="L604">            renderableComponents.add(renderObject);</span>
+        }
+
+<span class="nc bnc" id="L607" title="All 2 branches missed.">        if (gameObject instanceof CollisionComponent collisionObject) {</span>
+<span class="nc" id="L608">            var layer = collisionObject.getCollisionLayer();</span>
+<span class="nc bnc" id="L609" title="All 2 branches missed.">            if (!collidingComponents.containsKey(layer)) {</span>
+<span class="nc" id="L610">                collidingComponents.put(layer, new ArrayList&lt;&gt;());</span>
+            }
+<span class="nc" id="L612">            collidingComponents.get(layer).add(collisionObject);</span>
+        }
+
+<span class="nc bnc" id="L615" title="All 2 branches missed.">        if (gameObject.getClass() == GameTimer.class) {</span>
+<span class="nc" id="L616">            timer = (GameTimer) gameObject;</span>
+        }
+
+<span class="nc" id="L619">        gameObject.start();</span>
+<span class="nc" id="L620">    }</span>
+
+<span class="nc" id="L622">    public enum GameState {</span>
+<span class="nc" id="L623">        MENU, PLAYING, PAUSED, WIN, LOSE</span>
+    }
+
+    public static GameTimer getTimer() {
+<span class="nc" id="L627">        return timer;</span>
+    }
+
+    private static HashMap&lt;String, Vector2&gt; defineLocations() {
+<span class="nc" id="L631">        HashMap&lt;String, Vector2&gt; locations = new HashMap&lt;&gt;();</span>
+
+        // Player Start Location
+<span class="nc" id="L634">        locations.put(&quot;player_start&quot;, new Vector2(4090, 500));</span>
+
+        // Power-ups
+<span class="nc" id="L637">        locations.put(&quot;speed_north_west&quot;, new Vector2(442, 1848));</span>
+<span class="nc" id="L638">        locations.put(&quot;speed_west&quot;, new Vector2(768, 2432));</span>
+<span class="nc" id="L639">        locations.put(&quot;speed_near_start&quot;, new Vector2(2950, 1280));</span>
+        // locations.put(&quot;speed_middle_entrance&quot;, new Vector2(3584, 7040));
+        // locations.put(&quot;speed_middle_west&quot;, new Vector2(4352, 7296));
+<span class="nc" id="L642">        locations.put(&quot;speed_middle_north&quot;, new Vector2(3072, 7296));</span>
+        // locations.put(&quot;speed_east&quot;, new Vector2(7680, 6784));
+<span class="nc" id="L644">        locations.put(&quot;speed_near_npc&quot;, new Vector2(3614, 2286));</span>
+<span class="nc" id="L645">        locations.put(&quot;speed_north_east&quot;, new Vector2(7178, 5731));</span>
+<span class="nc" id="L646">        locations.put(&quot;speed_north_west&quot;, new Vector2(2365, 6050));</span>
+<span class="nc" id="L647">        locations.put(&quot;speed_middle_west_2&quot;, new Vector2(829, 4925));</span>
+<span class="nc" id="L648">        locations.put(&quot;speed_middle_west_3&quot;, new Vector2(941, 6192));</span>
+<span class="nc" id="L649">        locations.put(&quot;speed_middle_west_4&quot;, new Vector2(1207, 6192));</span>
+<span class="nc" id="L650">        locations.put(&quot;speed_middle_west_5&quot;, new Vector2(1792, 6192));</span>
+
+<span class="nc" id="L652">        locations.put(&quot;binoculars&quot;, new Vector2(7363, 1069));</span>
+<span class="nc" id="L653">        locations.put(&quot;binoculars_near_npc&quot;, new Vector2(4512, 3162));</span>
+<span class="nc" id="L654">        locations.put(&quot;binoculars_2&quot;, new Vector2(1345, 3502));</span>
+<span class="nc" id="L655">        locations.put(&quot;binoculars_3&quot;, new Vector2(301, 4650));</span>
+<span class="nc" id="L656">        locations.put(&quot;binoculars_4&quot;, new Vector2(1842, 5420));</span>
+<span class="nc" id="L657">        locations.put(&quot;binoculars_5&quot;, new Vector2(701, 6452));</span>
+<span class="nc" id="L658">        locations.put(&quot;binoculars_6&quot;, new Vector2(701, 6452));</span>
+<span class="nc" id="L659">        locations.put(&quot;binoculars_7&quot;, new Vector2(1206, 6957));</span>
+
+<span class="nc" id="L661">        locations.put(&quot;timestop_top_right&quot;, new Vector2(6850, 1308));</span>
+<span class="nc" id="L662">        locations.put(&quot;timestop_hidden_room&quot;, new Vector2(7167, 3460));</span>
+        // NPC
+<span class="nc" id="L664">        locations.put(&quot;npc_central_hub&quot;, new Vector2(4096, 4096));</span>
+<span class="nc" id="L665">        locations.put(&quot;Bomb_Sign&quot;, new Vector2(4675, 804));</span>
+<span class="nc" id="L666">        locations.put(&quot;Glasses_Sign&quot;, new Vector2(3427, 988));</span>
+
+
+        // Keys
+<span class="nc" id="L670">        locations.put(&quot;key_1&quot;, new Vector2(2658, 6925));</span>
+<span class="nc" id="L671">        locations.put(&quot;key_2&quot;, new Vector2(7000, 6640));</span>
+        // locations.put(&quot;key_3&quot;, new Vector2(1222, 4643));
+        // locations.put(&quot;key_4&quot;, new Vector2(316, 2969));
+        // locations.put(&quot;key_5&quot;, new Vector2(5292, 4018));
+        // locations.put(&quot;key_6&quot;, new Vector2(4929, 1196));
+        // locations.put(&quot;key_7&quot;, new Vector2(2832, 6568));
+
+        // C4
+<span class="nc" id="L679">        locations.put(&quot;c4&quot;, new Vector2(3648, 293));</span>
+<span class="nc" id="L680">        locations.put(&quot;c4_east&quot;, new Vector2(7859, 5119));</span>
+
+        // Debuffs
+<span class="nc" id="L683">        locations.put(&quot;nausea&quot;, new Vector2(1474, 1704));</span>
+<span class="nc" id="L684">        locations.put(&quot;nausea_2&quot;, new Vector2(6599, 1072));</span>
+<span class="nc" id="L685">        locations.put(&quot;nausea_3&quot;, new Vector2(7721, 2343));</span>
+<span class="nc" id="L686">        locations.put(&quot;nausea_4&quot;, new Vector2(6590, 1985));</span>
+<span class="nc" id="L687">        locations.put(&quot;nausea_5&quot;, new Vector2(6859, 3756));</span>
+<span class="nc" id="L688">        locations.put(&quot;nausea_6&quot;, new Vector2(7736, 3512));</span>
+<span class="nc" id="L689">        locations.put(&quot;nausea_7&quot;, new Vector2(7485, 4686));</span>
+<span class="nc" id="L690">        locations.put(&quot;nausea_8&quot;, new Vector2(6853, 5406));</span>
+<span class="nc" id="L691">        locations.put(&quot;nausea_9&quot;, new Vector2(7486, 5406));</span>
+<span class="nc" id="L692">        locations.put(&quot;nausea_10&quot;, new Vector2(7735, 5939));</span>
+<span class="nc" id="L693">        locations.put(&quot;nausea_11&quot;, new Vector2(7485, 4686));</span>
+<span class="nc" id="L694">        locations.put(&quot;nausea_12&quot;, new Vector2(6859, 6184));</span>
+        
+<span class="nc" id="L696">        locations.put(&quot;death&quot;, new Vector2(1866, 314));</span>
+<span class="nc" id="L697">        locations.put(&quot;death_2&quot;, new Vector2(189, 5681));</span>
+<span class="nc" id="L698">        locations.put(&quot;death_3&quot;, new Vector2(826, 4507));</span>
+<span class="nc" id="L699">        locations.put(&quot;death_4&quot;, new Vector2(7141, 2880));</span>
+<span class="nc" id="L700">        locations.put(&quot;death_5&quot;, new Vector2(8012, 2096));</span>
+<span class="nc" id="L701">        locations.put(&quot;death_6&quot;, new Vector2(7173, 2852));</span>
+<span class="nc" id="L702">        locations.put(&quot;death_7&quot;, new Vector2(7611, 4255));</span>
+<span class="nc" id="L703">        locations.put(&quot;death_8&quot;, new Vector2(7993, 5423));</span>
+
+<span class="nc" id="L705">        locations.put(&quot;slow_1&quot;, new Vector2(2488, 1325));</span>
+<span class="nc" id="L706">        locations.put(&quot;slow_2&quot;, new Vector2(1701, 1475));</span>
+<span class="nc" id="L707">        locations.put(&quot;slow_3&quot;, new Vector2(1477, 2727));</span>
+<span class="nc" id="L708">        locations.put(&quot;slow_4&quot;, new Vector2(4958, 232));</span>
+<span class="nc" id="L709">        locations.put(&quot;slow_5&quot;, new Vector2(5804, 660));</span>
+<span class="nc" id="L710">        locations.put(&quot;slow_6&quot;, new Vector2(6082, 1325));</span>
+<span class="nc" id="L711">        locations.put(&quot;slow_7&quot;, new Vector2(6201, 2100));</span>
+<span class="nc" id="L712">        locations.put(&quot;slow_8&quot;, new Vector2(7143, 2879));</span>
+<span class="nc" id="L713">        locations.put(&quot;slow_8&quot;, new Vector2(7466, 3759));</span>
+<span class="nc" id="L714">        locations.put(&quot;slow_9&quot;, new Vector2(7957, 3246));</span>
+<span class="nc" id="L715">        locations.put(&quot;slow_10&quot;, new Vector2(8001, 4532));</span>
+<span class="nc" id="L716">        locations.put(&quot;slow_11&quot;, new Vector2(6893, 5870));</span>
+
+        // Hidden Events
+<span class="nc" id="L719">        locations.put(&quot;tp&quot;, new Vector2(4183, 943));</span>
+
+<span class="nc" id="L721">        return locations;</span>
+    }
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.13.202504020838</span></div></body></html>

@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>CollisionComponent.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">core</a> &gt; <a href="index.source.html" class="el_package">com.escapefromuni.main.components</a> &gt; <span class="el_source">CollisionComponent.java</span></div><h1>CollisionComponent.java</h1><pre class="source lang-java linenums">package com.escapefromuni.main.components;
+
+import com.badlogic.gdx.math.Rectangle;
+
+/**
+ * GameObjects which implement CollisionComponent have hitboxes that can be detected
+ * by other GameObjects for functionality such as walls or triggers. Each collision
+ * component must have a layer assigned to it which specifies which type of checks
+ * the object is used for. For example, anything that the player is supposed to collide
+ * with (i.e. stop when touching) would have a CollisionComponent in the WALL layer.
+ */
+public interface CollisionComponent extends BaseComponent{
+    /**
+     * Returns the collision layer that this object belongs to. When the Game makes a query
+     * for overlapping objects belonging a certain layer, If this CollisionComponent is inside
+     * that layer then isCollidingWith() will be called given collision is enabled.
+     * There is currently no functionality for CollisionLayer to change once it's added to
+     * the Game, this function must return a single value which doesn't change.
+     * @return The CollisionLayer that this object belongs to.
+     */
+    public CollisionLayer getCollisionLayer();
+
+    /**
+     * Calculates whether a Rectangle hitbox overlaps with this CollisionComponent.
+     * @param hitboxCheck The hitbox which this CollisionComponent needs to check against.
+     * @return A boolean value, True meaning that the gameObject is overlapping the
+     * hitboxCheck, and False if the hitbox is not touching the gameObject.
+     */
+    public Boolean isCollidingWith(Rectangle hitboxCheck);
+
+    /**
+     * Is Collision enabled on this object. If collision is not enabled, then when the
+     * Game makes a query for any overlapping objects, the gameObject will not be checked.
+     * @return A boolean value representing whether this object should be checked for collision
+     * or not.
+     */
+    public Boolean isCollisionEnabled();
+<span class="nc" id="L38">    public enum CollisionLayer{</span>
+<span class="nc" id="L39">        NONE,WALL,COLLECTIBLE, NPC, PLAYER</span>
+    }
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.13.202504020838</span></div></body></html>

@@ -1,0 +1,60 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>GameMessageHandler.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">core</a> &gt; <a href="index.source.html" class="el_package">com.escapefromuni.main.ui</a> &gt; <span class="el_source">GameMessageHandler.java</span></div><h1>GameMessageHandler.java</h1><pre class="source lang-java linenums">package com.escapefromuni.main.ui;
+
+import com.badlogic.gdx.graphics.g2d.BitmapFont;
+import com.badlogic.gdx.graphics.g2d.SpriteBatch;
+import com.badlogic.gdx.math.Vector2;
+import com.escapefromuni.main.Game;
+
+public class GameMessageHandler extends UIElement{
+    BitmapFont font;
+    public static GameMessageHandler instance;
+    float time;
+    String message;
+<span class="nc" id="L13">    Boolean visible = false;</span>
+
+    public GameMessageHandler(Vector2 relativeScreenPosition){
+<span class="nc" id="L16">        super(relativeScreenPosition);</span>
+<span class="nc" id="L17">        instance = this;</span>
+<span class="nc" id="L18">        font = new BitmapFont();</span>
+<span class="nc" id="L19">    }</span>
+
+    @Override
+    public void update(float deltaTime){
+<span class="nc bnc" id="L23" title="All 2 branches missed.">        if(Game.gameState == Game.GameState.PLAYING) {</span>
+<span class="nc" id="L24">            time -= deltaTime;</span>
+<span class="nc bnc" id="L25" title="All 2 branches missed.">            if (time &lt; 0){</span>
+<span class="nc" id="L26">                visible = false;</span>
+            }
+        }
+<span class="nc" id="L29">    }</span>
+
+    /**
+     * Displays a message onto the screen. This can be good for simple text messages or
+     * output that you want to display onto the screen. This will also overwrite any
+     * previous messages that are currently displaying on screen but haven't disappeared
+     * yet.
+     * @param message A standard string text message.
+     * @param time How long the message remains on screen, in seconds.
+     */
+    public static void ShowMessage(String message,float time){
+<span class="nc" id="L40">        instance.time = time;</span>
+<span class="nc" id="L41">        instance.message = message;</span>
+<span class="nc" id="L42">        instance.visible = true;</span>
+<span class="nc" id="L43">    }</span>
+
+    public static void StopMessage() {
+<span class="nc" id="L46">        instance.visible = false;</span>
+<span class="nc" id="L47">    }</span>
+
+    @Override
+    public void render(SpriteBatch batch) {
+<span class="nc bnc" id="L51" title="All 2 branches missed.">        if (visible)</span>
+<span class="nc" id="L52">            font.draw(batch,message, position.x,position.y);</span>
+<span class="nc" id="L53">    }</span>
+    @Override
+    public void positionOnScreen(Vector2 cameraPosition, Vector2 screenSize,float zoom) {
+<span class="nc" id="L56">        super.positionOnScreen(cameraPosition,screenSize,zoom);</span>
+<span class="nc" id="L57">        font.getData().setScale(3 * zoom);</span>
+<span class="nc" id="L58">    }</span>
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.13.202504020838</span></div></body></html>

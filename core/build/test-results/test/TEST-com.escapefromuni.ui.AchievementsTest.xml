@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<testsuite name="com.escapefromuni.ui.AchievementsTest" tests="20" skipped="0" failures="0" errors="0" timestamp="2026-01-12T10:47:58.690Z" hostname="nas-10-241-29-231.york.ac.uk" time="0.775">
+  <properties/>
+  <testcase name="testAchieveTheWorld()" classname="com.escapefromuni.ui.AchievementsTest" time="0.724"/>
+  <testcase name="testGetAchievedReturnsCorrectCount()" classname="com.escapefromuni.ui.AchievementsTest" time="0.001"/>
+  <testcase name="testGetAchievedStartAllFalse()" classname="com.escapefromuni.ui.AchievementsTest" time="0.001"/>
+  <testcase name="testAchieveAchievementDoesNotAffectOtherAchievements()" classname="com.escapefromuni.ui.AchievementsTest" time="0.0"/>
+  <testcase name="testGetAchievementsNotEmpty()" classname="com.escapefromuni.ui.AchievementsTest" time="0.001"/>
+  <testcase name="testInitAllAchievementsStartFalse()" classname="com.escapefromuni.ui.AchievementsTest" time="0.001"/>
+  <testcase name="testInitCreatesAllAchievements()" classname="com.escapefromuni.ui.AchievementsTest" time="0.001"/>
+  <testcase name="testAchieveAchievementCallsMessageHandlerCorrectly()" classname="com.escapefromuni.ui.AchievementsTest" time="0.018"/>
+  <testcase name="testGetAchievements()" classname="com.escapefromuni.ui.AchievementsTest" time="0.001"/>
+  <testcase name="testAchieveSugarRush()" classname="com.escapefromuni.ui.AchievementsTest" time="0.001"/>
+  <testcase name="testAchieveContacts()" classname="com.escapefromuni.ui.AchievementsTest" time="0.0"/>
+  <testcase name="testInitContainsExpectedAchievementNames()" classname="com.escapefromuni.ui.AchievementsTest" time="0.0"/>
+  <testcase name="testAchieveNanaPng()" classname="com.escapefromuni.ui.AchievementsTest" time="0.0"/>
+  <testcase name="testAchieveAchievementDoesNotCallMessageForAlreadyAchieved()" classname="com.escapefromuni.ui.AchievementsTest" time="0.008"/>
+  <testcase name="testAchieveAllPurposeTelescope()" classname="com.escapefromuni.ui.AchievementsTest" time="0.001"/>
+  <testcase name="testInitCalledTwiceDoesNotDuplicate()" classname="com.escapefromuni.ui.AchievementsTest" time="0.0"/>
+  <testcase name="testAchieveSugarCrash()" classname="com.escapefromuni.ui.AchievementsTest" time="0.0"/>
+  <testcase name="testGetAchievedMarksAsAchieved()" classname="com.escapefromuni.ui.AchievementsTest" time="0.0"/>
+  <testcase name="testAchieveAllAchievements()" classname="com.escapefromuni.ui.AchievementsTest" time="0.001"/>
+  <testcase name="testAchieveAchievementReturnsFalseIfAlreadyAchieved()" classname="com.escapefromuni.ui.AchievementsTest" time="0.0"/>
+  <system-out><![CDATA[Already Achieved
+Already Achieved
+]]></system-out>
+  <system-err><![CDATA[]]></system-err>
+</testsuite>

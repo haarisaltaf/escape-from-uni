@@ -1,0 +1,287 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>GameMap.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">core</a> &gt; <a href="index.source.html" class="el_package">com.escapefromuni.main</a> &gt; <span class="el_source">GameMap.java</span></div><h1>GameMap.java</h1><pre class="source lang-java linenums">package com.escapefromuni.main;
+
+import com.badlogic.gdx.graphics.g2d.SpriteBatch;
+import com.badlogic.gdx.maps.tiled.TiledMap;
+import com.badlogic.gdx.maps.tiled.TiledMapTile;
+import com.badlogic.gdx.maps.tiled.TiledMapTileLayer;
+import com.badlogic.gdx.maps.tiled.TiledMapTileSet;
+import com.badlogic.gdx.maps.tiled.TmxMapLoader;
+import com.badlogic.gdx.maps.tiled.renderers.OrthogonalTiledMapRenderer;
+import com.badlogic.gdx.math.Rectangle;
+import com.escapefromuni.main.components.CameraComponent;
+import com.escapefromuni.main.components.CollisionComponent;
+import com.escapefromuni.main.components.RenderableComponent;
+import com.escapefromuni.main.ui.GameMessageHandler;
+
+import java.util.ArrayList;
+
+public class GameMap extends GameObject implements RenderableComponent, CollisionComponent {
+    public static TiledMap TestMap;
+    OrthogonalTiledMapRenderer renderer;
+    CameraComponent cameraComponent;
+<span class="nc" id="L22">    public static ArrayList&lt;Rectangle&gt; CollisionMap = new ArrayList&lt;&gt;(150);</span>
+<span class="nc" id="L23">    public static boolean KeyWallExists = true;</span>
+<span class="nc" id="L24">    public static boolean BombWallExists = true;</span>
+
+    /**
+     * Create a renderer object to load the map.
+     * Utilises the game camera created at the start of the program
+     */
+<span class="nc" id="L30">    public GameMap(CameraComponent cameraComponent) {</span>
+<span class="nc" id="L31">        TestMap = new TmxMapLoader().load(&quot;TestMap.tmx&quot;);</span>
+
+<span class="nc" id="L33">        addCollisionTileAtWorld(TestMap, 3492f, 1054f, 34, 4f, CollisionMap);</span>
+<span class="nc" id="L34">        addCollisionTileAtWorld(TestMap, 3620f, 1054f, 34, 4f, CollisionMap);</span>
+<span class="nc" id="L35">        addCollisionTileAtWorld(TestMap, 3748f, 1054f, 34, 4f, CollisionMap);</span>
+<span class="nc" id="L36">        addCollisionTileAtWorld(TestMap, 3876f, 1054f, 34, 4f, CollisionMap);</span>
+<span class="nc" id="L37">        generateCollisionMap();</span>
+<span class="nc" id="L38">        renderer = new OrthogonalTiledMapRenderer(TestMap, 4f);</span>
+<span class="nc" id="L39">        this.cameraComponent = cameraComponent;</span>
+<span class="nc" id="L40">        renderer.setView(cameraComponent.getCamera());</span>
+<span class="nc" id="L41">    }</span>
+
+    /**
+     * Simple method to dispose of the renderer at the end of the program
+     */
+    @Override
+    public void dispose() {
+<span class="nc" id="L48">        renderer.dispose();</span>
+<span class="nc" id="L49">    }</span>
+
+    @Override
+    public void render(SpriteBatch batch) {
+<span class="nc" id="L53">        renderer.setView(cameraComponent.getCamera());</span>
+<span class="nc" id="L54">        renderer.render();</span>
+<span class="nc" id="L55">    }</span>
+
+    /**
+     * Generates the collision that map uses for e.g. walls.
+     * Tiles in the &quot;Collision&quot; Tiled layer with ID 1 are considered
+     * 'Collision Tiles' with a square hitbox overlapping the entire tile
+     */
+    public void generateCollisionMap() {
+<span class="nc" id="L63">        TiledMapTileLayer collisionLayer = (TiledMapTileLayer) this.TestMap.getLayers().get(&quot;Collision&quot;);</span>
+<span class="nc bnc" id="L64" title="All 2 branches missed.">        for (int x = 0; x &lt; collisionLayer.getWidth(); x++) {</span>
+<span class="nc bnc" id="L65" title="All 2 branches missed.">            for (int y = 0; y &lt; collisionLayer.getHeight(); y++) {</span>
+<span class="nc" id="L66">                TiledMapTileLayer.Cell cell = collisionLayer.getCell(x, y);</span>
+                // Ignore blank (invalid) tiles
+<span class="nc bnc" id="L68" title="All 2 branches missed.">                if (cell == null)</span>
+<span class="nc" id="L69">                    continue;</span>
+                // The tile indicating the collision map has ID = 5
+<span class="nc" id="L71">                System.out.println(cell.getTile().getId());</span>
+<span class="nc bnc" id="L72" title="All 2 branches missed.">                if (cell.getTile().getId() == 1) {</span>
+<span class="nc" id="L73">                    System.out.println(&quot;Adding new rect&quot;);</span>
+<span class="nc" id="L74">                    CollisionMap.add(new Rectangle(x * 128, y * 128, 128, 128));</span>
+                }
+            }
+        }
+<span class="nc" id="L78">    }</span>
+
+    @Override
+    public CollisionLayer getCollisionLayer() {
+<span class="nc" id="L82">        return CollisionLayer.WALL;</span>
+    }
+
+    @Override
+    public Boolean isCollidingWith(Rectangle hitboxCheck) {
+<span class="nc bnc" id="L87" title="All 2 branches missed.">        for (Rectangle rect : CollisionMap) {</span>
+<span class="nc bnc" id="L88" title="All 2 branches missed.">            if (rect.overlaps(hitboxCheck)) {</span>
+<span class="nc" id="L89">                return true;</span>
+            }
+<span class="nc" id="L91">        }</span>
+<span class="nc" id="L92">        return false;</span>
+    }
+
+    @Override
+    public Boolean isCollisionEnabled() {
+<span class="nc" id="L97">        return true;</span>
+    }
+
+    public static void addCollisionTileAtWorld(
+            TiledMap map,
+            float worldX,
+            float worldY,
+            int tileIdInWallsTileset,
+            float renderScale,
+            ArrayList&lt;Rectangle&gt; collisionMap) {
+<span class="nc" id="L107">        TiledMapTileLayer layer = (TiledMapTileLayer) map.getLayers().get(&quot;Map&quot;);</span>
+<span class="nc bnc" id="L108" title="All 2 branches missed.">        if (layer == null) {</span>
+<span class="nc" id="L109">            System.out.println(&quot;Layer 'Map' NOT FOUND&quot;);</span>
+<span class="nc" id="L110">            return;</span>
+        }
+
+<span class="nc" id="L113">        float tw = layer.getTileWidth();</span>
+<span class="nc" id="L114">        float th = layer.getTileHeight();</span>
+
+<span class="nc" id="L116">        int tileX = (int) (worldX / (tw * renderScale));</span>
+<span class="nc" id="L117">        int tileY = (int) (worldY / (th * renderScale));</span>
+
+<span class="nc bnc" id="L119" title="All 8 branches missed.">        if (tileX &lt; 0 || tileY &lt; 0 || tileX &gt;= layer.getWidth() || tileY &gt;= layer.getHeight()) {</span>
+<span class="nc" id="L120">            System.out.println(&quot;OUT OF BOUNDS&quot;);</span>
+<span class="nc" id="L121">            return;</span>
+        }
+
+<span class="nc" id="L124">        TiledMapTileSet walls = map.getTileSets().getTileSet(&quot;Walls&quot;);</span>
+<span class="nc bnc" id="L125" title="All 2 branches missed.">        if (walls == null) {</span>
+<span class="nc" id="L126">            System.out.println(&quot;Tileset 'Walls' NOT FOUND&quot;);</span>
+<span class="nc" id="L127">            return;</span>
+        }
+
+<span class="nc" id="L130">        TiledMapTile tile = walls.getTile(tileIdInWallsTileset);</span>
+<span class="nc bnc" id="L131" title="All 2 branches missed.">        if (tile == null) {</span>
+<span class="nc" id="L132">            System.out.println(&quot;No tile found in 'Walls' for id=&quot; + tileIdInWallsTileset);</span>
+<span class="nc" id="L133">            return;</span>
+        }
+
+<span class="nc" id="L136">        TiledMapTileLayer.Cell cell = new TiledMapTileLayer.Cell();</span>
+<span class="nc" id="L137">        cell.setTile(tile);</span>
+<span class="nc" id="L138">        layer.setCell(tileX, tileY, cell);</span>
+
+<span class="nc" id="L140">        TiledMapTileLayer collisionLayer = (TiledMapTileLayer) map.getLayers().get(&quot;Collision&quot;);</span>
+
+<span class="nc bnc" id="L142" title="All 2 branches missed.">        if (collisionLayer == null) {</span>
+<span class="nc" id="L143">            System.out.println(&quot;Collision layer NOT FOUND&quot;);</span>
+<span class="nc" id="L144">            return;</span>
+        }
+
+<span class="nc" id="L147">        TiledMapTileSet collisionTileset = map.getTileSets().getTileSet(&quot;Collision&quot;);</span>
+
+<span class="nc bnc" id="L149" title="All 2 branches missed.">        if (collisionTileset == null) {</span>
+<span class="nc" id="L150">            System.out.println(&quot;Collision tileset NOT FOUND&quot;);</span>
+<span class="nc" id="L151">            return;</span>
+        }
+
+<span class="nc" id="L154">        TiledMapTile collisionTile = collisionTileset.getTile(1);</span>
+
+<span class="nc bnc" id="L156" title="All 2 branches missed.">        if (collisionTile == null) {</span>
+<span class="nc" id="L157">            System.out.println(&quot;Collision tile ID 1 NOT FOUND&quot;);</span>
+<span class="nc" id="L158">            return;</span>
+        }
+
+<span class="nc" id="L161">        TiledMapTileLayer.Cell collisionCell = new TiledMapTileLayer.Cell();</span>
+<span class="nc" id="L162">        collisionCell.setTile(collisionTile);</span>
+
+<span class="nc" id="L164">        collisionLayer.setCell(tileX, tileY, collisionCell);</span>
+
+<span class="nc" id="L166">        var rect = new Rectangle(tileX * 128, tileY * 128, 128, 128);</span>
+<span class="nc" id="L167">        collisionMap.add(rect);</span>
+
+<span class="nc" id="L169">        System.out.println(&quot;Placed tile + collision at &quot; + tileX + &quot;,&quot; + tileY);</span>
+<span class="nc" id="L170">    }</span>
+
+    public static boolean isPlayerNearAnyPlacedWall(
+            Rectangle playerHitbox,
+            float nearDistance) {
+
+        // HARD-CODED WALL RECTS
+<span class="nc" id="L177">        Rectangle[] placedWallRects = new Rectangle[] {</span>
+                new Rectangle(3492f, 1054f, 128f, 128f),
+                new Rectangle(3620f, 1054f, 128f, 128f),
+                new Rectangle(3748f, 1054f, 128f, 128f),
+                new Rectangle(3876f, 1054f, 128f, 128f)
+        };
+
+<span class="nc" id="L184">        Rectangle expanded = new Rectangle();</span>
+
+<span class="nc bnc" id="L186" title="All 2 branches missed.">        for (Rectangle wall : placedWallRects) {</span>
+<span class="nc" id="L187">            expanded.set(</span>
+                    wall.x - nearDistance,
+                    wall.y - nearDistance,
+                    wall.width + nearDistance * 2f,
+                    wall.height + nearDistance * 2f);
+
+<span class="nc bnc" id="L193" title="All 2 branches missed.">            if (expanded.overlaps(playerHitbox)) {</span>
+<span class="nc" id="L194">                return true;</span>
+            }
+        }
+
+<span class="nc" id="L198">        return false;</span>
+    }
+
+    public static boolean isPlayerNearBombableWall(Rectangle playerHitbox, float nearDistance) {
+
+<span class="nc" id="L203">        Rectangle wall = new Rectangle(4720f, 851f, 128f, 128f);</span>
+
+<span class="nc" id="L205">        Rectangle expanded = new Rectangle(</span>
+                wall.x - nearDistance,
+                wall.y - nearDistance,
+                wall.width + nearDistance * 2f,
+                wall.height + nearDistance * 2f);
+
+<span class="nc bnc" id="L211" title="All 2 branches missed.">        if (expanded.overlaps(playerHitbox)) {</span>
+<span class="nc" id="L212">            return true;</span>
+        }
+
+<span class="nc" id="L215">        return false;</span>
+    }
+
+    public static void removeHardcodedPlacedWalls() {
+<span class="nc bnc" id="L219" title="All 2 branches missed.">        if (TestMap == null) {</span>
+<span class="nc" id="L220">            return;</span>
+        }
+
+<span class="nc" id="L223">        float[][] POS = {</span>
+                { 3492f, 1054f },
+                { 3620f, 1054f },
+                { 3748f, 1054f },
+                { 3876f, 1054f }
+        };
+
+<span class="nc" id="L230">        TiledMapTileLayer mapLayer = (TiledMapTileLayer) TestMap.getLayers().get(&quot;Map&quot;);</span>
+<span class="nc" id="L231">        TiledMapTileLayer collisionLayer = (TiledMapTileLayer) TestMap.getLayers().get(&quot;Collision&quot;);</span>
+<span class="nc bnc" id="L232" title="All 4 branches missed.">        if (mapLayer == null || collisionLayer == null) {</span>
+<span class="nc" id="L233">            return;</span>
+        }
+
+<span class="nc" id="L236">        float tw = mapLayer.getTileWidth();</span>
+<span class="nc" id="L237">        float th = mapLayer.getTileHeight();</span>
+
+<span class="nc bnc" id="L239" title="All 2 branches missed.">        for (float[] p : POS) {</span>
+<span class="nc" id="L240">            float worldX = p[0], worldY = p[1];</span>
+
+<span class="nc" id="L242">            int tileX = (int) (worldX / (tw * 4f));</span>
+<span class="nc" id="L243">            int tileY = (int) (worldY / (th * 4f));</span>
+
+<span class="nc" id="L245">            mapLayer.setCell(tileX, tileY, null);</span>
+<span class="nc" id="L246">            collisionLayer.setCell(tileX, tileY, null);</span>
+
+<span class="nc" id="L248">            float rx = tileX * tw * 4f;</span>
+<span class="nc" id="L249">            float ry = tileY * th * 4f;</span>
+<span class="nc" id="L250">            float rw = tw * 4f;</span>
+<span class="nc" id="L251">            float rh = th * 4f;</span>
+
+<span class="nc bnc" id="L253" title="All 8 branches missed.">            CollisionMap.removeIf(r -&gt; r.x == rx &amp;&amp; r.y == ry &amp;&amp; r.width == rw &amp;&amp; r.height == rh);</span>
+        }
+
+<span class="nc" id="L256">        KeyWallExists = false;</span>
+<span class="nc" id="L257">    }</span>
+
+    public static void removeBombWall() {
+<span class="nc" id="L260">        TiledMapTileLayer mapLayer = (TiledMapTileLayer) TestMap.getLayers().get(&quot;Map&quot;);</span>
+<span class="nc" id="L261">        TiledMapTileLayer collisionLayer = (TiledMapTileLayer) TestMap.getLayers().get(&quot;Collision&quot;);</span>
+<span class="nc" id="L262">        float tw = mapLayer.getTileWidth();</span>
+<span class="nc" id="L263">        float th = mapLayer.getTileHeight();</span>
+<span class="nc" id="L264">        int tileX = (int) (4848f / (tw * 4f));</span>
+<span class="nc" id="L265">        int tileY = (int) (851f / (th * 4f));</span>
+
+<span class="nc" id="L267">        mapLayer.setCell(tileX, tileY, null);</span>
+<span class="nc" id="L268">        collisionLayer.setCell(tileX, tileY, null);</span>
+
+<span class="nc" id="L270">        float rx = tileX * tw * 4f;</span>
+<span class="nc" id="L271">        float ry = tileY * th * 4f;</span>
+<span class="nc" id="L272">        float rw = tw * 4f;</span>
+<span class="nc" id="L273">        float rh = th * 4f;</span>
+<span class="nc bnc" id="L274" title="All 8 branches missed.">        CollisionMap.removeIf(r -&gt; r.x == rx &amp;&amp; r.y == ry &amp;&amp; r.width == rw &amp;&amp; r.height == rh);</span>
+<span class="nc" id="L275">        BombWallExists = false;</span>
+<span class="nc" id="L276">    }</span>
+
+    public static boolean DoesKeyWallExists() {
+<span class="nc" id="L279">        return KeyWallExists;</span>
+    }
+    
+    public static boolean DoesBombWallExists() {
+<span class="nc" id="L283">        return BombWallExists;</span>
+    }
+
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.13.202504020838</span></div></body></html>

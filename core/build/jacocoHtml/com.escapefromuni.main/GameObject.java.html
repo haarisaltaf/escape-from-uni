@@ -1,0 +1,58 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>GameObject.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">core</a> &gt; <a href="index.source.html" class="el_package">com.escapefromuni.main</a> &gt; <span class="el_source">GameObject.java</span></div><h1>GameObject.java</h1><pre class="source lang-java linenums">package com.escapefromuni.main;
+
+import com.badlogic.gdx.math.Vector2;
+import com.escapefromuni.main.components.BaseComponent;
+
+public abstract class GameObject{
+
+    /**
+     * The objects position in 2D.
+     */
+    public Vector2 position;
+    /**
+     * The objects rotation in (degrees?)
+     */
+    public float rotation;
+	/**
+	Called when this GameObject is initialised.
+	*/
+<span class="nc" id="L19">	public void start(){}</span>
+    /**
+	Updates the GameObject for a single frame.
+	@param deltaTime : The time in ms since the last update
+	*/
+<span class="nc" id="L24">	public void update(float deltaTime){}</span>
+
+    /**
+     * Handles functionality once this GameObject is disposed.
+     */
+<span class="nc" id="L29">    public void dispose(){}</span>
+
+    /**
+     * Checks whether this GameObject extends a particular component type
+     * @return returns True if this GameObject has the component, false otherwise.
+     * @param &lt;C&gt; The component type, which must extend from BaseComponent.
+     */
+    public &lt;C extends BaseComponent&gt; boolean HasComponent(){
+<span class="nc" id="L37">        return BaseComponent.class.isAssignableFrom(this.getClass());</span>
+    }
+<span class="fc" id="L39">    public GameObject(){</span>
+<span class="fc" id="L40">        position = new Vector2(0,0);</span>
+<span class="fc" id="L41">        rotation = 0;</span>
+<span class="fc" id="L42">    }</span>
+<span class="nc" id="L43">    public GameObject(Vector2 position, float rotation){</span>
+<span class="nc bnc" id="L44" title="All 8 branches missed.">        if ((0 &gt; position.x || position.x &gt; 8192) || (0 &gt; position.y || position.y&gt; 8192)) {</span>
+<span class="nc" id="L45">            position = new Vector2(0,0);</span>
+        }
+<span class="nc" id="L47">        this.position = position;</span>
+<span class="nc" id="L48">        this.rotation = rotation;</span>
+<span class="nc" id="L49">    }</span>
+<span class="nc" id="L50">    public GameObject(Vector2 position){</span>
+<span class="nc bnc" id="L51" title="All 8 branches missed.">        if ((0 &gt; position.x || position.x &gt; 8192) || (0 &gt; position.y || position.y&gt; 8192)) {</span>
+<span class="nc" id="L52">            position = new Vector2(0,0);</span>
+        }
+<span class="nc" id="L54">        this.position = position;</span>
+<span class="nc" id="L55">        this.rotation = 0;</span>
+<span class="nc" id="L56">    }</span>
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.13.202504020838</span></div></body></html>
