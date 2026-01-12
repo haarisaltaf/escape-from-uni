@@ -53,8 +53,8 @@ public class ScoreManagerTest {
 	@Test
 	void testTimeRemainingAtBoundary() {
 		scoreManager = new ScoreManager();
-		float result = scoreManager.calculateScore(noAchievements, 299.9f, false);
-		assertEquals(299.9f, result, 0.01f);
+		int result = scoreManager.calculateScore(noAchievements, 299.9f, false);
+		assertEquals(300, result, 0.01f);
 	}
 
 	@Test
