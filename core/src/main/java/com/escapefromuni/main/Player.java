@@ -181,6 +181,8 @@ public class Player extends GameObject implements RenderableComponent, Collision
         playerSprite.setPosition(position.x - playerSprite.getWidth() / 2f,
                 position.y - playerSprite.getWidth() / 2f + 40f);
         playerSprite.draw(batch);
+
+        System.out.println("X: " + position.x + " Y: " + position.y);
     }
 
     /**

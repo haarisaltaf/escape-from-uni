@@ -560,7 +560,7 @@ public class Game extends ApplicationAdapter {
         locations.put("player_start", new Vector2(4090, 500));
 
         // Power-ups
-        locations.put("speed_north_west", new Vector2(512, 1920));
+        locations.put("speed_north_west", new Vector2(442, 1848));
         locations.put("speed_west", new Vector2(768, 2432));
         locations.put("speed_near_start", new Vector2(2950, 1280));
         locations.put("speed_middle_entrance", new Vector2(3584, 7040));
@@ -568,7 +568,7 @@ public class Game extends ApplicationAdapter {
         locations.put("speed_middle_north", new Vector2(3072, 7296));
         locations.put("speed_east", new Vector2(7680, 6784));
 
-        locations.put("binoculars", new Vector2(2750, 600));
+        locations.put("binoculars", new Vector2(7363, 1069));
         locations.put("timestop_top_right", new Vector2(6850, 1308));
 
         // NPC
@@ -576,16 +576,16 @@ public class Game extends ApplicationAdapter {
 
         // Keys
         locations.put("key_1", new Vector2(2000, 1000));
-        locations.put("key_2", new Vector2(2300, 1000));
-        locations.put("key_3", new Vector2(2600, 1000));
-        locations.put("key_4", new Vector2(2900, 1000));
+        locations.put("key_2", new Vector2(4929, 1196));
+        locations.put("key_3", new Vector2(1222, 4643));
+        locations.put("key_4", new Vector2(316, 2969));
 
         // C4
-        locations.put("c4", new Vector2(3200, 1000));
+        locations.put("c4", new Vector2(3648, 293));
 
         // Debuffs
-        locations.put("nausea", new Vector2(2500, 400));
-        locations.put("death", new Vector2(2750, 400));
+        locations.put("nausea", new Vector2(1474, 1704));
+        locations.put("death", new Vector2(1866, 314));
 
         // Hidden Events
         locations.put("tp", new Vector2(4090, 800));
