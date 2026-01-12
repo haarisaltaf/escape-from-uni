@@ -31,7 +31,6 @@ TestMap.tmx
 TestMap_old.tmx
 TestSet.tsx
 TestTileset.png
-Thumbs.db
 Tileset1.png
 Tileset1.png.kra
 TimeStop.png
