@@ -216,7 +216,7 @@ public class Player extends GameObject implements RenderableComponent, Collision
      */
     public void speedUp() {
         speed += 100f;
-        achievements.achieveAchievement("Sugar Crash!!");
+        achievements.achieveAchievement("Sugar Rush!");
         events.add("SpdUP");
     }
 

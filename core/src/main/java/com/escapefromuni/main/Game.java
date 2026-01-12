@@ -137,6 +137,7 @@ public class Game extends ApplicationAdapter {
         addGameObject(new GameTimer(new Vector2(-0.9f, 0.9f)));
         addGameObject(new GameMessageHandler(new Vector2(0, 0.2f)));
         addGameObject(new TimeStop(locations.get("timestop_top_right"), achievements));
+        addGameObject(new TimeStop(locations.get("timestop_hidden_room"), achievements));
 
         addGameObject(new SpeedCollectable(locations.get("speed_north_west")));
         addGameObject(new SpeedCollectable(locations.get("speed_near_start")));
@@ -584,6 +585,7 @@ public class Game extends ApplicationAdapter {
         locations.put("binoculars", new Vector2(7363, 1069));
         locations.put("binoculars_near_npc", new Vector2(4512, 3162));
         locations.put("timestop_top_right", new Vector2(6850, 1308));
+        locations.put("timestop_hidden_room", new Vector2(7167, 3460));
 
         // NPC
         locations.put("npc_central_hub", new Vector2(4096, 4096));

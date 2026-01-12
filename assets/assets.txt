@@ -1,5 +1,6 @@
 BearTrap.png
 Binoculars.png
+Bomb.png
 Collision.png
 Collision.tsx
 Key.png

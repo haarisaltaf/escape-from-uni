@@ -15,7 +15,7 @@ public class C4 extends Item implements RenderableComponent {
     static boolean bombPickedUp = false;
     static boolean shouldRender = true;
     public C4(Vector2 givenPosition) {
-        super(givenPosition, "Binoculars.png", "C4");
+        super(givenPosition, "Bomb.png", "C4");
     }
 
     @Override
