@@ -221,12 +221,10 @@ public class GameMap extends GameObject implements RenderableComponent, Collisio
 
             int tileX = (int) (worldX / (tw * 4f));
             int tileY = (int) (worldY / (th * 4f));
-
-            // remove cells
+            
             mapLayer.setCell(tileX, tileY, null);
             collisionLayer.setCell(tileX, tileY, null);
 
-            // remove rects matching this tile
             float rx = tileX * tw * 4f;
             float ry = tileY * th * 4f;
             float rw = tw * 4f;
