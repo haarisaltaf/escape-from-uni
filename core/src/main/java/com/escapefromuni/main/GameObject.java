@@ -41,10 +41,16 @@ public abstract class GameObject{
         rotation = 0;
     }
     public GameObject(Vector2 position, float rotation){
+        if ((0 > position.x || position.x > 8192) || (0 > position.y || position.y> 8192)) {
+            position = new Vector2(0,0);
+        }
         this.position = position;
         this.rotation = rotation;
     }
     public GameObject(Vector2 position){
+        if ((0 > position.x || position.x > 8192) || (0 > position.y || position.y> 8192)) {
+            position = new Vector2(0,0);
+        }
         this.position = position;
         this.rotation = 0;
     }

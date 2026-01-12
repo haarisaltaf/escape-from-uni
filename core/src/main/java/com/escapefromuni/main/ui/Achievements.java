@@ -29,7 +29,6 @@ public class Achievements {
 
 	public Boolean achieveAchievement(String achievement) {
 		if (ACHIEVEMENTS.get(achievement) == false) {
-			// TODO: FIX FOR SCREEN POSITION
 			GameMessageHandler.ShowMessage("ACHIEVEMENT GET!\n" + achievement,5); 
 			ACHIEVEMENTS.put(achievement, true);
 			return true;
@@ -39,15 +38,6 @@ public class Achievements {
 		} else {
 			System.out.println("Ensure correct achievement name is used.");
 			return false;
-		}
-	}
-
-	public void testAchievement() {
-		HashMap<String, Boolean> all = getAchievements();
-		if (achieveAchievement("Contacts")) {
-			System.out.println("Achieved Successfully");
-		} else {
-			System.out.println("Failed to Achieve");
 		}
 	}
 }
