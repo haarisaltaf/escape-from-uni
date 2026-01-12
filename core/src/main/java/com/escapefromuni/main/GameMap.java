@@ -11,6 +11,8 @@ import com.badlogic.gdx.math.Rectangle;
 import com.escapefromuni.main.components.CameraComponent;
 import com.escapefromuni.main.components.CollisionComponent;
 import com.escapefromuni.main.components.RenderableComponent;
+import com.escapefromuni.main.ui.GameMessageHandler;
+
 import java.util.ArrayList;
 
 public class GameMap extends GameObject implements RenderableComponent, CollisionComponent {
@@ -195,6 +197,23 @@ public class GameMap extends GameObject implements RenderableComponent, Collisio
         return false;
     }
 
+    public static boolean isPlayerNearBombableWall(Rectangle playerHitbox, float nearDistance) {
+
+        Rectangle wall = new Rectangle(4720f, 851f, 128f, 128f);
+
+        Rectangle expanded = new Rectangle(
+                wall.x - nearDistance,
+                wall.y - nearDistance,
+                wall.width + nearDistance * 2f,
+                wall.height + nearDistance * 2f);
+
+        if (expanded.overlaps(playerHitbox)) {
+            return true;
+        }
+
+        return false;
+    }
+
     public static void removeHardcodedPlacedWalls() {
         if (TestMap == null) {
             return;
@@ -221,7 +240,7 @@ public class GameMap extends GameObject implements RenderableComponent, Collisio
 
             int tileX = (int) (worldX / (tw * 4f));
             int tileY = (int) (worldY / (th * 4f));
-            
+
             mapLayer.setCell(tileX, tileY, null);
             collisionLayer.setCell(tileX, tileY, null);
 
@@ -235,7 +254,26 @@ public class GameMap extends GameObject implements RenderableComponent, Collisio
 
         KeyWallExists = false;
     }
-    
+
+    public static void removeBombWall() {
+        TiledMapTileLayer mapLayer = (TiledMapTileLayer) TestMap.getLayers().get("Map");
+        TiledMapTileLayer collisionLayer = (TiledMapTileLayer) TestMap.getLayers().get("Collision");
+        float tw = mapLayer.getTileWidth();
+        float th = mapLayer.getTileHeight();
+        int tileX = (int) (4848f / (tw * 4f));
+        int tileY = (int) (851f / (th * 4f));
+
+        mapLayer.setCell(tileX, tileY, null);
+        collisionLayer.setCell(tileX, tileY, null);
+
+        float rx = tileX * tw * 4f;
+        float ry = tileY * th * 4f;
+        float rw = tw * 4f;
+        float rh = th * 4f;
+        CollisionMap.removeIf(r -> r.x == rx && r.y == ry && r.width == rw && r.height == rh);
+
+    }
+
     public static boolean DoesKeyWallExists() {
         return KeyWallExists;
     }
