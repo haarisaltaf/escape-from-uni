@@ -118,7 +118,7 @@ public class Player extends GameObject implements RenderableComponent, Collision
 
         }
 
-        if (C4.doesPlayerHaveBomb() && GameMap.isPlayerNearBombableWall(hitbox, 80f)) {
+        if (C4.doesPlayerHaveBomb() && GameMap.isPlayerNearBombableWall(hitbox, 80f) && GameMap.DoesBombWallExists()) {
 
             if (!Gdx.input.isKeyJustPressed(Input.Keys.E)) {
                 GameMessageHandler.ShowMessage("Press E to bomb the wall ", 3);

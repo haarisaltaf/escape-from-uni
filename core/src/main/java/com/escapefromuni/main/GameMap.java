@@ -21,6 +21,7 @@ public class GameMap extends GameObject implements RenderableComponent, Collisio
     CameraComponent cameraComponent;
     public static ArrayList<Rectangle> CollisionMap = new ArrayList<>(150);
     public static boolean KeyWallExists = true;
+    public static boolean BombWallExists = true;
 
     /**
      * Create a renderer object to load the map.
@@ -271,11 +272,15 @@ public class GameMap extends GameObject implements RenderableComponent, Collisio
         float rw = tw * 4f;
         float rh = th * 4f;
         CollisionMap.removeIf(r -> r.x == rx && r.y == ry && r.width == rw && r.height == rh);
-
+        BombWallExists = false;
     }
 
     public static boolean DoesKeyWallExists() {
         return KeyWallExists;
+    }
+    
+    public static boolean DoesBombWallExists() {
+        return BombWallExists;
     }
 
 }
