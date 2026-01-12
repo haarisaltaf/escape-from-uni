@@ -4,6 +4,7 @@ Bomb.png
 BombSign.png
 Collision.png
 Collision.tsx
+GlassesSign.png
 Key.png
 Leaderboard.txt
 Music/Dungeon.wav
