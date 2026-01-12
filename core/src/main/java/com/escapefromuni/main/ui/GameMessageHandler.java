@@ -42,6 +42,10 @@ public class GameMessageHandler extends UIElement{
         instance.visible = true;
     }
 
+    public static void StopMessage() {
+        instance.visible = false;
+    }
+
     @Override
     public void render(SpriteBatch batch) {
         if (visible)

@@ -7,6 +7,7 @@ import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.math.Vector2;
+import com.escapefromuni.main.collectables.C4;
 import com.escapefromuni.main.collectables.Collectable;
 import com.escapefromuni.main.collectables.Item;
 import com.escapefromuni.main.components.CollisionComponent;
@@ -115,6 +116,23 @@ public class Player extends GameObject implements RenderableComponent, Collision
             GameMap.removeHardcodedPlacedWalls();
             removeKey();
 
+        }
+
+        if (C4.doesPlayerHaveBomb() && GameMap.isPlayerNearBombableWall(hitbox, 80f)) {
+
+            if (!Gdx.input.isKeyJustPressed(Input.Keys.E)) {
+                GameMessageHandler.ShowMessage("Press E to bomb the wall ", 3);
+            } else {
+                GameMessageHandler.StopMessage();
+                for (int i = 0; i < items.size(); i++) {
+                    Item item = items.get(i);
+                    if (item instanceof C4 c4) {
+                        items.remove(i);
+                        c4.placeBomb(c4, hitbox);
+                        break;
+                    }
+                }
+            }
         }
         // normalise to have consistent speed regardless of direction, and then scale by
         // move speed and time
@@ -237,7 +255,6 @@ public class Player extends GameObject implements RenderableComponent, Collision
     }
 
     public void displayItems(float drag) {
-        System.out.println(items.size());
         for (int i = 0; i < items.size(); i++) {
 
             items.get(i).position.set(position.x - 15 - drag * i * 2.9f, position.y + 55 + i * 20);
