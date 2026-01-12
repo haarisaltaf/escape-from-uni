@@ -28,7 +28,7 @@ public class Player extends GameObject implements RenderableComponent, Collision
     Sprite playerSprite;
     // Player speed attribute makes it possible to alter speed during the game.
     boolean hasKey = false;
-    float baseSpeed = 1000f;
+    float baseSpeed = 700f;
     float speed = baseSpeed;
     // How fast the player's speed returns to normal
     float speedRecovery = 45f;
@@ -91,7 +91,7 @@ public class Player extends GameObject implements RenderableComponent, Collision
         }
         // If you drink too much coffee/soda, you get the unexpected event of a 'sugar
         // crash' where your speed slows down
-        if (speed > baseSpeed * 2.5f) {
+        if (speed > (baseSpeed + 300f)) {
             speed = 0;
             // GameMessageHandler.ShowMessage("Sugar Crash!",5);
             achievements.achieveAchievement("Sugar Crash!!");

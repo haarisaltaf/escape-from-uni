@@ -18,6 +18,7 @@ import com.escapefromuni.main.collectables.NauseaCollectable;
 import com.escapefromuni.main.collectables.DeathCollectable;
 import com.escapefromuni.main.collectables.SlowCollectable;
 import com.escapefromuni.main.collectables.BinocularsItem;
+import com.escapefromuni.main.collectables.TeleportCollectable;
 import com.escapefromuni.main.collectables.C4;
 import com.escapefromuni.main.components.CameraComponent;
 import com.escapefromuni.main.components.CollisionComponent;
@@ -37,6 +38,7 @@ import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Vector;
 
 /**
  * {@link com.badlogic.gdx.ApplicationListener} implementation shared by all
@@ -149,11 +151,23 @@ public class Game extends ApplicationAdapter {
         addGameObject(new SpeedCollectable(locations.get("speed_north_east")));
         addGameObject(new SpeedCollectable(locations.get("speed_middle_west")));
         addGameObject(new SpeedCollectable(locations.get("speed_north_west")));
+        addGameObject(new SpeedCollectable(locations.get("speed_middle_west_2")));
+        addGameObject(new SpeedCollectable(locations.get("speed_middle_west_3")));
+        addGameObject(new SpeedCollectable(locations.get("speed_middle_west_4")));
+        addGameObject(new SpeedCollectable(locations.get("speed_middle_west_5")));
 
         addGameObject(new BinocularsItem(locations.get("binoculars"), achievements));
         addGameObject(new BinocularsItem(locations.get("binoculars_near_npc"), achievements));
+        addGameObject(new BinocularsItem(locations.get("binoculars_2"), achievements));
+        addGameObject(new BinocularsItem(locations.get("binoculars_3"), achievements));
+        addGameObject(new BinocularsItem(locations.get("binoculars_4"), achievements));
+        addGameObject(new BinocularsItem(locations.get("binoculars_5"), achievements));
+        addGameObject(new BinocularsItem(locations.get("binoculars_6"), achievements));
+        addGameObject(new BinocularsItem(locations.get("binoculars_7"), achievements));
 
         addGameObject(new NPC(locations.get("npc_central_hub"), "npc1.png", "key"));
+        addGameObject(new NPC(locations.get("Bomb_Sign"), "BombSign.png", "bomb"));
+
 
         addGameObject(new Key(locations.get("key_1")));
         addGameObject(new Key(locations.get("key_2")));
@@ -167,9 +181,43 @@ public class Game extends ApplicationAdapter {
         addGameObject(new C4(locations.get("c4_east")));
 
         addGameObject(new NauseaCollectable(locations.get("nausea"), achievements));
+        addGameObject(new NauseaCollectable(locations.get("nausea_2"), achievements));
+        addGameObject(new NauseaCollectable(locations.get("nausea_3"), achievements));
+        addGameObject(new NauseaCollectable(locations.get("nausea_4"), achievements));
+        addGameObject(new NauseaCollectable(locations.get("nausea_5"), achievements));
+        addGameObject(new NauseaCollectable(locations.get("nausea_6"), achievements));
+        addGameObject(new NauseaCollectable(locations.get("nausea_7"), achievements));
+        addGameObject(new NauseaCollectable(locations.get("nausea_8"), achievements));
+        addGameObject(new NauseaCollectable(locations.get("nausea_9"), achievements));
+        addGameObject(new NauseaCollectable(locations.get("nausea_10"), achievements));
+        addGameObject(new NauseaCollectable(locations.get("nausea_11"), achievements));
+        addGameObject(new NauseaCollectable(locations.get("nausea_12"), achievements));
+
+        
+
         addGameObject(new DeathCollectable(locations.get("death")));
         addGameObject(new DeathCollectable(locations.get("death_2")));
-        addGameObject(new SlowCollectable(locations.get("tp")));
+        addGameObject(new DeathCollectable(locations.get("death_3")));
+        addGameObject(new DeathCollectable(locations.get("death_4")));
+        addGameObject(new DeathCollectable(locations.get("death_5")));
+        addGameObject(new DeathCollectable(locations.get("death_6")));
+        addGameObject(new DeathCollectable(locations.get("death_7")));
+        addGameObject(new DeathCollectable(locations.get("death_8")));
+
+        addGameObject(new TeleportCollectable(locations.get("tp")));
+        
+        addGameObject(new SlowCollectable(locations.get("slow_1")));
+        addGameObject(new SlowCollectable(locations.get("slow_2")));
+        addGameObject(new SlowCollectable(locations.get("slow_3")));
+        addGameObject(new SlowCollectable(locations.get("slow_4")));
+        addGameObject(new SlowCollectable(locations.get("slow_5")));
+        addGameObject(new SlowCollectable(locations.get("slow_6")));
+        addGameObject(new SlowCollectable(locations.get("slow_7")));
+        addGameObject(new SlowCollectable(locations.get("slow_8")));
+        addGameObject(new SlowCollectable(locations.get("slow_9")));
+        addGameObject(new SlowCollectable(locations.get("slow_10")));
+        addGameObject(new SlowCollectable(locations.get("slow_11")));
+
 
         // Set up music
         music = Gdx.audio.newMusic(Gdx.files.internal("Music/Dungeon.wav"));
@@ -411,7 +459,7 @@ public class Game extends ApplicationAdapter {
                 batch.begin();
                 loseImage.draw(batch);
                 quitButton.draw(batch);
-                font.draw(batch, "CURRENT SCORE: " + score, 10, 700);
+                font.draw(batch, "CURRENT SCORE: " + (int) score, 10, 700);
                 batch.end();
 
                 break;
@@ -581,17 +629,28 @@ public class Game extends ApplicationAdapter {
         locations.put("speed_near_npc", new Vector2(3614, 2286));
         locations.put("speed_north_east", new Vector2(7178, 5731));
         locations.put("speed_north_west", new Vector2(2365, 6050));
+        locations.put("speed_middle_west_2", new Vector2(829, 4925));
+        locations.put("speed_middle_west_3", new Vector2(941, 6192));
+        locations.put("speed_middle_west_4", new Vector2(1207, 6192));
+        locations.put("speed_middle_west_5", new Vector2(1792, 6192));
 
         locations.put("binoculars", new Vector2(7363, 1069));
         locations.put("binoculars_near_npc", new Vector2(4512, 3162));
+        locations.put("binoculars_2", new Vector2(1345, 3502));
+        locations.put("binoculars_3", new Vector2(301, 4650));
+        locations.put("binoculars_4", new Vector2(1842, 5420));
+        locations.put("binoculars_5", new Vector2(701, 6452));
+        locations.put("binoculars_6", new Vector2(701, 6452));
+        locations.put("binoculars_7", new Vector2(1206, 6957));
+
         locations.put("timestop_top_right", new Vector2(6850, 1308));
         locations.put("timestop_hidden_room", new Vector2(7167, 3460));
-
         // NPC
         locations.put("npc_central_hub", new Vector2(4096, 4096));
+        locations.put("Bomb_Sign", new Vector2(4675, 804));
 
         // Keys
-        locations.put("key_1", new Vector2(2000, 1000));
+        locations.put("key_1", new Vector2(2000, 1080));
         locations.put("key_2", new Vector2(4929, 1196));
         locations.put("key_3", new Vector2(1222, 4643));
         locations.put("key_4", new Vector2(316, 2969));
@@ -605,11 +664,42 @@ public class Game extends ApplicationAdapter {
 
         // Debuffs
         locations.put("nausea", new Vector2(1474, 1704));
+        locations.put("nausea_2", new Vector2(6599, 1072));
+        locations.put("nausea_3", new Vector2(7721, 2343));
+        locations.put("nausea_4", new Vector2(6590, 1985));
+        locations.put("nausea_5", new Vector2(6859, 3756));
+        locations.put("nausea_6", new Vector2(7736, 3512));
+        locations.put("nausea_7", new Vector2(7485, 4686));
+        locations.put("nausea_8", new Vector2(6853, 5406));
+        locations.put("nausea_9", new Vector2(7486, 5406));
+        locations.put("nausea_10", new Vector2(7735, 5939));
+        locations.put("nausea_11", new Vector2(7485, 4686));
+        locations.put("nausea_12", new Vector2(6859, 6184));
+        
         locations.put("death", new Vector2(1866, 314));
         locations.put("death_2", new Vector2(189, 5681));
+        locations.put("death_3", new Vector2(826, 4507));
+        locations.put("death_4", new Vector2(7141, 2880));
+        locations.put("death_5", new Vector2(8012, 2096));
+        locations.put("death_6", new Vector2(7173, 2852));
+        locations.put("death_7", new Vector2(7611, 4255));
+        locations.put("death_8", new Vector2(7993, 5423));
+
+        locations.put("slow_1", new Vector2(2488, 1325));
+        locations.put("slow_2", new Vector2(1701, 1475));
+        locations.put("slow_3", new Vector2(1477, 2727));
+        locations.put("slow_4", new Vector2(4958, 232));
+        locations.put("slow_5", new Vector2(5804, 660));
+        locations.put("slow_6", new Vector2(6082, 1325));
+        locations.put("slow_7", new Vector2(6201, 2100));
+        locations.put("slow_8", new Vector2(7143, 2879));
+        locations.put("slow_8", new Vector2(7466, 3759));
+        locations.put("slow_9", new Vector2(7957, 3246));
+        locations.put("slow_10", new Vector2(8001, 4532));
+        locations.put("slow_11", new Vector2(6893, 5870));
 
         // Hidden Events
-        locations.put("tp", new Vector2(4090, 800));
+        locations.put("tp", new Vector2(4183, 943));
 
         return locations;
     }

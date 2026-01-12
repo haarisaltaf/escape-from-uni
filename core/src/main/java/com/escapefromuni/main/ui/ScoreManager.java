@@ -8,7 +8,7 @@ public class ScoreManager {
 	private float startTime = 300;
 	private int achievementsChange = 10;
 
-	public float calculateScore(Collection<Boolean> Achievements, float timeRemaining, Boolean ifWon) {
+	public int calculateScore(Collection<Boolean> Achievements, float timeRemaining, Boolean ifWon) {
 		// given a list of booleans to iterate over to check if they
 		// are true/ achieved
 		for (Boolean Achievement : Achievements) {
@@ -19,9 +19,9 @@ public class ScoreManager {
 		if (timeRemaining <= 0 || timeRemaining > 300) {return 0;}
 
 		if (ifWon) {
-			return Score + timeRemaining + 100;
+			return (int) (Score + timeRemaining + 100);
 		} else {
-			return Score + timeRemaining;
+			return (int) (Score + timeRemaining);
 		}
 	}
 }
