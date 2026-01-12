@@ -14,6 +14,12 @@ import java.io.FileReader;
 public class Leaderboard {
 	// NOTE: line numbers are added in reading the file rather than stored in text.
 	String LEADERBOARD_LOCATION;
+        public Leaderboard() {}
+
+        public Leaderboard(String filePath) {
+           this.LEADERBOARD_LOCATION = filePath;
+        }
+
 	public void init() {
 		try {
 			LEADERBOARD_LOCATION = System.getProperty("user.dir") + "/Leaderboard.txt";

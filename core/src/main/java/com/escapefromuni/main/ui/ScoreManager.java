@@ -13,15 +13,17 @@ public class ScoreManager {
 		// are true/ achieved
 		for (Boolean Achievement : Achievements) {
 			if (Achievement) {
-				Score += achievementsChange;
+			    score += achievementsChange;
 			}
 		}
-		if (timeRemaining <= 0 || timeRemaining > 300) {return 0;}
-
+		if (timeRemaining <= 0 || timeRemaining > 300) {
+			return 0;
+		}
 		if (ifWon) {
 			return (int) (Score + timeRemaining + 100);
 		} else {
 			return (int) (Score + timeRemaining);
+
 		}
 	}
 }
