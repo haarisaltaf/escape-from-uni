@@ -22,13 +22,23 @@ public abstract class Collectable extends GameObject implements RenderableCompon
         this.position = position;
     }
     public Collectable(Vector2 position, String imagePath){
+        if ((0 > position.x || position.x > 8192) || (0 > position.y || position.y> 8192)) {
+            position = new Vector2(0,0);
+        }
         this.position = position;
         this.imagePath = imagePath;
     }
 
     @Override
     public void start() {
-        this.collecitibleTexture = new Texture(Gdx.files.internal(imagePath));
+        try {
+            this.collecitibleTexture = new Texture(Gdx.files.internal(imagePath));
+        }
+        catch(Exception e){
+            imagePath = "defaultCollectible.png";
+            this.imagePath = imagePath;
+            this.collecitibleTexture = new Texture(Gdx.files.internal(imagePath));
+        }
         this.collectibleSprite = new Sprite(collecitibleTexture);
         collectibleSprite.setScale(4);
         hitbox = new Rectangle(position.x, position.y,collectibleSprite.getWidth(),collectibleSprite.getHeight());
@@ -55,6 +65,10 @@ public abstract class Collectable extends GameObject implements RenderableCompon
     @Override
     public CollisionLayer getCollisionLayer() {
         return CollisionLayer.COLLECTIBLE;
+    }
+
+    public String getImagePath() {
+        return this.imagePath;
     }
 
     @Override
