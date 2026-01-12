@@ -6,13 +6,12 @@ longboi - 377
 longboi - 377
 longboi - 377
 yooooooooooooooooooooo - 375
-<<<<<<< HEAD
-longboi - 0
-=======
 longboi - 374
 longboi - 355
 longboi - 285
 longboi - 283
+longboi - 166
+longboi - 0
 longboi - 0
 longboi - 0
 longboi - 0
@@ -22,4 +21,4 @@ longboi - 0
 longboi - 0
 longboi - 0
 me - 0
->>>>>>> 98e29c09136b46b4d57674459f4ae83bd8a030a5
+longboi - 21
