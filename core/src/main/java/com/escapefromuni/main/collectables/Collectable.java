@@ -17,6 +17,7 @@ public abstract class Collectable extends GameObject implements RenderableCompon
     Sprite collectibleSprite;
     Rectangle hitbox;
     boolean active = true;
+    boolean exists = true;
 
     public Collectable(Vector2 position){
         this.position = position;
