@@ -167,7 +167,7 @@ public class Game extends ApplicationAdapter {
 
         addGameObject(new NPC(locations.get("npc_central_hub"), "npc1.png", "key"));
         addGameObject(new NPC(locations.get("Bomb_Sign"), "BombSign.png", "bomb"));
-        addGameObject(new NPC(locations.get("Bomb_Sign"), "GlassesSign.png", "glasses"));
+        addGameObject(new NPC(locations.get("Glasses_Sign"), "GlassesSign.png", "glasses"));
 
 
         addGameObject(new Key(locations.get("key_1")));
@@ -649,7 +649,7 @@ public class Game extends ApplicationAdapter {
         // NPC
         locations.put("npc_central_hub", new Vector2(4096, 4096));
         locations.put("Bomb_Sign", new Vector2(4675, 804));
-        locations.put("Glasses_Sign", new Vector2(3427, 958));
+        locations.put("Glasses_Sign", new Vector2(3427, 988));
 
 
         // Keys
