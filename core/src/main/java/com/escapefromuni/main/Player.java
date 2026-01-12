@@ -80,9 +80,9 @@ public class Player extends GameObject implements RenderableComponent, Collision
 
     @Override
     public void update(float deltaTime) {
-        if (Gdx.input.isKeyPressed(Input.Keys.R)) {
-            position.set(4090, 500);
-        }
+        // if (Gdx.input.isKeyPressed(Input.Keys.R)) {
+        //     position.set(4090, 2800);
+        // }
         // Speed slowly returns to the base movement speed
         if (speed > baseSpeed) {
             speed = Math.max(speed - deltaTime * speedRecovery, baseSpeed);

@@ -151,12 +151,12 @@ public class Game extends ApplicationAdapter {
         addGameObject(new SpeedCollectable(locations.get("speed_north_west")));
         addGameObject(new SpeedCollectable(locations.get("speed_near_start")));
         addGameObject(new SpeedCollectable(locations.get("speed_near_npc")));
-        addGameObject(new SpeedCollectable(locations.get("speed_middle_entrance")));
+        // addGameObject(new SpeedCollectable(locations.get("speed_middle_entrance")));
         addGameObject(new SpeedCollectable(locations.get("speed_middle_north")));
         addGameObject(new SpeedCollectable(locations.get("speed_west")));
-        addGameObject(new SpeedCollectable(locations.get("speed_east")));
+        // addGameObject(new SpeedCollectable(locations.get("speed_east")));
         addGameObject(new SpeedCollectable(locations.get("speed_north_east")));
-        addGameObject(new SpeedCollectable(locations.get("speed_middle_west")));
+        // addGameObject(new SpeedCollectable(locations.get("speed_middle_west")));
         addGameObject(new SpeedCollectable(locations.get("speed_north_west")));
         addGameObject(new SpeedCollectable(locations.get("speed_middle_west_2")));
         addGameObject(new SpeedCollectable(locations.get("speed_middle_west_3")));
@@ -179,11 +179,11 @@ public class Game extends ApplicationAdapter {
 
         addGameObject(new Key(locations.get("key_1")));
         addGameObject(new Key(locations.get("key_2")));
-        addGameObject(new Key(locations.get("key_3")));
-        addGameObject(new Key(locations.get("key_4")));
-        addGameObject(new Key(locations.get("key_5")));
-        addGameObject(new Key(locations.get("key_6")));
-        addGameObject(new Key(locations.get("key_7")));
+        // addGameObject(new Key(locations.get("key_3")));
+        // addGameObject(new Key(locations.get("key_4")));
+        // addGameObject(new Key(locations.get("key_5")));
+        // addGameObject(new Key(locations.get("key_6")));
+        // addGameObject(new Key(locations.get("key_7")));
 
         addGameObject(new C4(locations.get("c4")));
         addGameObject(new C4(locations.get("c4_east")));
@@ -379,7 +379,6 @@ public class Game extends ApplicationAdapter {
                 ScreenUtils.clear(1f, 1f, 1f, 1f);
 
                 batch.begin();
-		batch.draw(background, 0, 0, Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
                 pausedSprite.setPosition(activeCamera.getCameraPosition().x - 200,
                         activeCamera.getCameraPosition().y + 50);
                 pausedSprite.draw(batch);
@@ -428,7 +427,6 @@ public class Game extends ApplicationAdapter {
 		batch.draw(background, 0, 0, Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
                 winImage.draw(batch);
                 quitButton.draw(batch);
-                font.draw(batch, top5, 10, 700);
 
                 GameMessageHandler.ShowMessage("Time left : " + time, 1);
                 GameMessageHandler.instance.positionOnScreen(
@@ -436,7 +434,7 @@ public class Game extends ApplicationAdapter {
                         new Vector2(Gdx.graphics.getWidth(), Gdx.graphics.getHeight()),
                         1);
                 GameMessageHandler.instance.render(batch);
-                font.draw(batch, "CURRENT SCORE: " + (int) score, 50, 700);
+                font.draw(batch, top5 + "\nCurrentScore: " + (int) score, 10, 700);
                 batch.end();
 
                 break;
@@ -473,10 +471,10 @@ public class Game extends ApplicationAdapter {
                 ScreenUtils.clear(1f, 1f, 1f, 1f);
 
                 batch.begin();
+		batch.draw(background, 0, 0, Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
                 loseImage.draw(batch);
+                font.draw(batch, top5 + "\nCurrentScore: " + (int) score, 10, 700);
                 quitButton.draw(batch);
-                font.draw(batch, "CURRENT SCORE: " + (int) score, 50, 700);
-                font.draw(batch, top5, 10, 700);
                 batch.end();
                 break;
             }
@@ -639,10 +637,10 @@ public class Game extends ApplicationAdapter {
         locations.put("speed_north_west", new Vector2(442, 1848));
         locations.put("speed_west", new Vector2(768, 2432));
         locations.put("speed_near_start", new Vector2(2950, 1280));
-        locations.put("speed_middle_entrance", new Vector2(3584, 7040));
-        locations.put("speed_middle_west", new Vector2(4352, 7296));
+        // locations.put("speed_middle_entrance", new Vector2(3584, 7040));
+        // locations.put("speed_middle_west", new Vector2(4352, 7296));
         locations.put("speed_middle_north", new Vector2(3072, 7296));
-        locations.put("speed_east", new Vector2(7680, 6784));
+        // locations.put("speed_east", new Vector2(7680, 6784));
         locations.put("speed_near_npc", new Vector2(3614, 2286));
         locations.put("speed_north_east", new Vector2(7178, 5731));
         locations.put("speed_north_west", new Vector2(2365, 6050));
@@ -669,13 +667,13 @@ public class Game extends ApplicationAdapter {
 
 
         // Keys
-        locations.put("key_1", new Vector2(2000, 1080));
-        locations.put("key_2", new Vector2(4929, 1196));
-        locations.put("key_3", new Vector2(1222, 4643));
-        locations.put("key_4", new Vector2(316, 2969));
-        locations.put("key_5", new Vector2(5292, 4018));
-        locations.put("key_6", new Vector2(7762, 1615));
-        locations.put("key_7", new Vector2(2832, 6568));
+        locations.put("key_1", new Vector2(2658, 6925));
+        locations.put("key_2", new Vector2(7000, 6640));
+        // locations.put("key_3", new Vector2(1222, 4643));
+        // locations.put("key_4", new Vector2(316, 2969));
+        // locations.put("key_5", new Vector2(5292, 4018));
+        // locations.put("key_6", new Vector2(4929, 1196));
+        // locations.put("key_7", new Vector2(2832, 6568));
 
         // C4
         locations.put("c4", new Vector2(3648, 293));
