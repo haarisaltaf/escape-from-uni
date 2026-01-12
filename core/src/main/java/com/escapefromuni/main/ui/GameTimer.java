@@ -20,6 +20,7 @@ public class GameTimer extends UIElement {
         font = new BitmapFont();
     }
 
+
     /**
      * If the game time drops below zero the GameState is set to lose.
      * 
@@ -42,6 +43,8 @@ public class GameTimer extends UIElement {
      * @return A formatted string in the form MM:SS
      */
     public static String GetTimeString(float timeSeconds) {
+	if (timeSeconds <= 0) { return "00:00"; }
+
         float minutes = (timeSeconds % 3600) / 60;
         float seconds = timeSeconds % 60;
 
@@ -88,4 +91,11 @@ public class GameTimer extends UIElement {
         this.eventCounter = eventCounter;
     }
 
+    public void setTimerPaused(boolean isPaused) {
+	timerPaused = isPaused;
+    }
+
+    public Boolean getTimerPaused() {
+	return timerPaused;
+    }
 }
