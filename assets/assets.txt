@@ -5,6 +5,7 @@ BombSign.png
 Collision.png
 Collision.tsx
 Enter-Your-Name.png
+GlassesSign.png
 Key.png
 Leaderboard.txt
 Music/Dungeon.wav
@@ -32,6 +33,7 @@ TestMap.tmx
 TestMap_old.tmx
 TestSet.tsx
 TestTileset.png
+Thumbs.db
 Tileset1.png
 Tileset1.png.kra
 TimeStop.png
