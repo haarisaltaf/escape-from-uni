@@ -137,15 +137,21 @@ public class Game extends ApplicationAdapter {
         addGameObject(new GameTimer(new Vector2(-0.9f, 0.9f)));
         addGameObject(new GameMessageHandler(new Vector2(0, 0.2f)));
         addGameObject(new TimeStop(locations.get("timestop_top_right"), achievements));
+        addGameObject(new TimeStop(locations.get("timestop_hidden_room"), achievements));
 
         addGameObject(new SpeedCollectable(locations.get("speed_north_west")));
         addGameObject(new SpeedCollectable(locations.get("speed_near_start")));
+        addGameObject(new SpeedCollectable(locations.get("speed_near_npc")));
         addGameObject(new SpeedCollectable(locations.get("speed_middle_entrance")));
         addGameObject(new SpeedCollectable(locations.get("speed_middle_north")));
         addGameObject(new SpeedCollectable(locations.get("speed_west")));
         addGameObject(new SpeedCollectable(locations.get("speed_east")));
+        addGameObject(new SpeedCollectable(locations.get("speed_north_east")));
         addGameObject(new SpeedCollectable(locations.get("speed_middle_west")));
+        addGameObject(new SpeedCollectable(locations.get("speed_north_west")));
+
         addGameObject(new BinocularsItem(locations.get("binoculars"), achievements));
+        addGameObject(new BinocularsItem(locations.get("binoculars_near_npc"), achievements));
 
         addGameObject(new NPC(locations.get("npc_central_hub"), "npc1.png", "key"));
 
@@ -153,11 +159,16 @@ public class Game extends ApplicationAdapter {
         addGameObject(new Key(locations.get("key_2")));
         addGameObject(new Key(locations.get("key_3")));
         addGameObject(new Key(locations.get("key_4")));
+        addGameObject(new Key(locations.get("key_5")));
+        addGameObject(new Key(locations.get("key_6")));
+        addGameObject(new Key(locations.get("key_7")));
 
         addGameObject(new C4(locations.get("c4")));
+        addGameObject(new C4(locations.get("c4_east")));
 
         addGameObject(new NauseaCollectable(locations.get("nausea"), achievements));
         addGameObject(new DeathCollectable(locations.get("death")));
+        addGameObject(new DeathCollectable(locations.get("death_2")));
         addGameObject(new SlowCollectable(locations.get("tp")));
 
         // Set up music
@@ -567,9 +578,14 @@ public class Game extends ApplicationAdapter {
         locations.put("speed_middle_west", new Vector2(4352, 7296));
         locations.put("speed_middle_north", new Vector2(3072, 7296));
         locations.put("speed_east", new Vector2(7680, 6784));
+        locations.put("speed_near_npc", new Vector2(3614, 2286));
+        locations.put("speed_north_east", new Vector2(7178, 5731));
+        locations.put("speed_north_west", new Vector2(2365, 6050));
 
         locations.put("binoculars", new Vector2(7363, 1069));
+        locations.put("binoculars_near_npc", new Vector2(4512, 3162));
         locations.put("timestop_top_right", new Vector2(6850, 1308));
+        locations.put("timestop_hidden_room", new Vector2(7167, 3460));
 
         // NPC
         locations.put("npc_central_hub", new Vector2(4096, 4096));
@@ -579,13 +595,18 @@ public class Game extends ApplicationAdapter {
         locations.put("key_2", new Vector2(4929, 1196));
         locations.put("key_3", new Vector2(1222, 4643));
         locations.put("key_4", new Vector2(316, 2969));
+        locations.put("key_5", new Vector2(5292, 4018));
+        locations.put("key_6", new Vector2(7762, 1615));
+        locations.put("key_7", new Vector2(2832, 6568));
 
         // C4
         locations.put("c4", new Vector2(3648, 293));
+        locations.put("c4_east", new Vector2(7859, 5119));
 
         // Debuffs
         locations.put("nausea", new Vector2(1474, 1704));
         locations.put("death", new Vector2(1866, 314));
+        locations.put("death_2", new Vector2(189, 5681));
 
         // Hidden Events
         locations.put("tp", new Vector2(4090, 800));

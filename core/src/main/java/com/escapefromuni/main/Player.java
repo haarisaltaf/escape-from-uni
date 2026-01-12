@@ -28,7 +28,7 @@ public class Player extends GameObject implements RenderableComponent, Collision
     Sprite playerSprite;
     // Player speed attribute makes it possible to alter speed during the game.
     boolean hasKey = false;
-    float baseSpeed = 300f;
+    float baseSpeed = 1000f;
     float speed = baseSpeed;
     // How fast the player's speed returns to normal
     float speedRecovery = 45f;
@@ -118,7 +118,7 @@ public class Player extends GameObject implements RenderableComponent, Collision
 
         }
 
-        if (C4.doesPlayerHaveBomb() && GameMap.isPlayerNearBombableWall(hitbox, 80f)) {
+        if (C4.doesPlayerHaveBomb() && GameMap.isPlayerNearBombableWall(hitbox, 80f) && GameMap.DoesBombWallExists()) {
 
             if (!Gdx.input.isKeyJustPressed(Input.Keys.E)) {
                 GameMessageHandler.ShowMessage("Press E to bomb the wall ", 3);
@@ -216,7 +216,7 @@ public class Player extends GameObject implements RenderableComponent, Collision
      */
     public void speedUp() {
         speed += 100f;
-        achievements.achieveAchievement("Sugar Crash!!");
+        achievements.achieveAchievement("Sugar Rush!");
         events.add("SpdUP");
     }
 
@@ -258,8 +258,11 @@ public class Player extends GameObject implements RenderableComponent, Collision
 
     public void displayItems(float drag) {
         for (int i = 0; i < items.size(); i++) {
-
-            items.get(i).position.set(position.x - 15 - drag * i * 2.9f, position.y + 55 + i * 20);
+            if (items.get(i) instanceof C4) {
+                items.get(i).position.set(position.x - 15 - drag * i * 2.9f, position.y + 30);
+            } else {
+                items.get(i).position.set(position.x - 15 - drag * i * 2.9f, position.y + 55 + i * 20);
+            }
         }
     }
 
